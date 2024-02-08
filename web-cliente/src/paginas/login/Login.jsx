@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from "../../hooks/useAuth";
+import apiService from '../../servicios/api-service';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -16,11 +17,16 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const result = await apiService.post('/Users/login', {
+      email: username,
+      password,
+    });
+    console.log(result);
     // Aquí puedes agregar la lógica para autenticar al usuario
-    console.log('Username:', username);
-    console.log('Password:', password);
+    // console.log('Username:', username);
+    // console.log('Password:', password);
 
-    await login({ username });
+    // await login({ username });
   };
 
   return (
