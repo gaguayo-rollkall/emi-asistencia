@@ -22,6 +22,6 @@ dotnet run --project src\Web
 
 - Client
 ```
-cd web-app
-npm start
+cd web-cliente
+npm run dev
 ```
