@@ -1,0 +1,30 @@
+# v1.0.0 Fernando Magrosoto V.
+version: "3.7"
+
+services:
+  servidor-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: acceso2023
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  phpmyadmin:
+    depends_on:
+      - servidor-mysql
+    image: phpmyadmin:apache
+    restart: always
+    environment:
+      PMA_HOST: servidor-mysql
+      PMA_USER: root
+      PMA_PASSWORD: acceso2023
+    ports:
+      - "5000:80"
+
+volumes:
+  mysqlbds:
+
+networks:
+  default:
