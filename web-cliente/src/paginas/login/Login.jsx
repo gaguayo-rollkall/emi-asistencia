@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import toast from 'react-hot-toast';
+
 import { useAuth } from "../../hooks/useAuth";
 import apiService from '../../servicios/api-service';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const handleUsernameChange = (e) => {
@@ -16,17 +19,25 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await apiService.post('/Users/login', {
-      email: username,
-      password,
-    });
-    console.log(result);
-    // Aquí puedes agregar la lógica para autenticar al usuario
-    // console.log('Username:', username);
-    // console.log('Password:', password);
+    try {
+      e.preventDefault();
 
-    // await login({ username });
+      setIsLoading(true);
+
+      const token = await apiService.post('/Users/login', {
+        email: username,
+        password,
+      });
+
+      console.log('Username:', username);
+      console.log('Password:', password);
+
+      await login({ username, token });
+    } catch {
+      toast.error('Hubo un problema con las credenciales.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -76,7 +87,7 @@ export default function Login() {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Iniciar sesión
+              {isLoading ? <span className="loading loading-spinner"></span> : 'Iniciar sesión'}
             </button>
           </div>
         </form>
