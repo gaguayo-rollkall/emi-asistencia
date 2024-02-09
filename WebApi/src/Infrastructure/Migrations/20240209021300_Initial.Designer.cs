@@ -11,7 +11,7 @@ using WebApi.Infrastructure.Data;
 namespace WebApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240208000654_Initial")]
+    [Migration("20240209021300_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -150,11 +150,201 @@ namespace WebApi.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WebApi.Domain.Entities.Asistencia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RFID")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Asistencias");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.Carrera", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carreras");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.CarreraPeriodo", b =>
+                {
+                    b.Property<Guid>("CarreraId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PeriodoAcademicoId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("CarreraId", "PeriodoAcademicoId");
+
+                    b.HasIndex("PeriodoAcademicoId");
+
+                    b.ToTable("CarreraPeriodos");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.Estudiante", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RFID")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estudiantes");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.Evento", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Inicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Eventos");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.PeriodoAcademico", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Gestion")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Periodo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PeriodoAcademicos");
+                });
+
             modelBuilder.Entity("WebApi.Domain.Entities.TodoItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetime(6)");
@@ -171,8 +361,8 @@ namespace WebApi.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ListId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Note")
                         .HasColumnType("longtext");
@@ -197,9 +387,9 @@ namespace WebApi.Infrastructure.Migrations
 
             modelBuilder.Entity("WebApi.Domain.Entities.TodoList", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetime(6)");
@@ -338,6 +528,25 @@ namespace WebApi.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebApi.Domain.Entities.CarreraPeriodo", b =>
+                {
+                    b.HasOne("WebApi.Domain.Entities.Carrera", "Carrera")
+                        .WithMany("CarreraPeriodos")
+                        .HasForeignKey("CarreraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApi.Domain.Entities.PeriodoAcademico", "PeriodoAcademico")
+                        .WithMany("CarreraPeriodos")
+                        .HasForeignKey("PeriodoAcademicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrera");
+
+                    b.Navigation("PeriodoAcademico");
+                });
+
             modelBuilder.Entity("WebApi.Domain.Entities.TodoItem", b =>
                 {
                     b.HasOne("WebApi.Domain.Entities.TodoList", "List")
@@ -353,8 +562,8 @@ namespace WebApi.Infrastructure.Migrations
                 {
                     b.OwnsOne("WebApi.Domain.ValueObjects.Colour", "Colour", b1 =>
                         {
-                            b1.Property<int>("TodoListId")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("TodoListId")
+                                .HasColumnType("char(36)");
 
                             b1.Property<string>("Code")
                                 .IsRequired()
@@ -370,6 +579,16 @@ namespace WebApi.Infrastructure.Migrations
 
                     b.Navigation("Colour")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.Carrera", b =>
+                {
+                    b.Navigation("CarreraPeriodos");
+                });
+
+            modelBuilder.Entity("WebApi.Domain.Entities.PeriodoAcademico", b =>
+                {
+                    b.Navigation("CarreraPeriodos");
                 });
 
             modelBuilder.Entity("WebApi.Domain.Entities.TodoList", b =>

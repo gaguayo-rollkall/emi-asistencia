@@ -22,19 +22,19 @@ public class TodoLists : EndpointGroupBase
         return await sender.Send(new GetTodosQuery());
     }
 
-    public async Task<int> CreateTodoList(ISender sender, CreateTodoListCommand command)
+    public async Task<Guid> CreateTodoList(ISender sender, CreateTodoListCommand command)
     {
         return await sender.Send(command);
     }
 
-    public async Task<IResult> UpdateTodoList(ISender sender, int id, UpdateTodoListCommand command)
+    public async Task<IResult> UpdateTodoList(ISender sender, Guid id, UpdateTodoListCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
         return Results.NoContent();
     }
 
-    public async Task<IResult> DeleteTodoList(ISender sender, int id)
+    public async Task<IResult> DeleteTodoList(ISender sender, Guid id)
     {
         await sender.Send(new DeleteTodoListCommand(id));
         return Results.NoContent();
