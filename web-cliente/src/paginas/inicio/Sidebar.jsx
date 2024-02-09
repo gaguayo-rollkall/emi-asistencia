@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import SimpleBar from "simplebar-react";
+import { useNavigate } from 'react-router-dom';
+
 import "simplebar-react/dist/simplebar.min.css";
 import { sidebarStructure } from "./structure";
 
@@ -12,6 +14,8 @@ import ConfiguracionIcon from './icons/configuracion.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
+  const navigate = useNavigate();
+
   const username = "Escuela Militar de Ingenieria";
   const company = "Sistema de Asistencia";
   const profilePic =
@@ -35,6 +39,7 @@ const Sidebar = ({ setExpand }) => {
 
   const handleNavigate = (path) => {
     setActiveName(path);
+    navigate(path);
   };
 
   const handleToggle = (name) => {

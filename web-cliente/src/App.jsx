@@ -12,6 +12,7 @@ import { ProtectedRoute } from './routes/ProtectedRoute';
 import './App.css'
 import Inicio from './paginas/inicio/Inicio';
 import Login from './paginas/login/Login';
+import Carreras from './paginas/carreras/Carreras'
 
 function App() {
   return (
@@ -27,7 +28,12 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="contact" element={<div>Hello</div>} />
+            <Route path="dashboard" element={<></>} />
+            <Route path="carreras" element={<Carreras />} />
+            <Route path="periodos" element={<></>} />
+            <Route path="calendario" element={<></>} />
+            <Route path="estudiantes" element={<></>} />
+            <Route path="rfid" element={<></>} />
           </Route>
         </Routes>
       </AuthProvider>

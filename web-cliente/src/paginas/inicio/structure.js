@@ -2,7 +2,7 @@ const sidebarStructure = [
   {
     id: "dashboard",
     title: "Reportes",
-    name: "dasbor",
+    name: "dashboard",
     parent: true,
     icon: "dasbor",
     link: "/dashboard"
@@ -12,35 +12,40 @@ const sidebarStructure = [
     title: 'Carreras',
     name: 'carreras',
     parent: true,
-    icon: 'carreras'
+    icon: 'carreras',
+    link: "/carreras"
   },
   {
     id: 'periodo',
     title: 'Periodos Academicos',
-    name: 'periodo',
+    name: 'periodos',
     parent: true,
-    icon: 'periodo'
+    icon: 'periodo',
+    link: "/periodos"
   },
   {
     id: 'calendario',
     title: 'Calendario',
     name: 'calendario',
     parent: true,
-    icon: 'calendario'
+    icon: 'calendario',
+    link: "/calendario"
   },
   {
     id: 'estudiantes',
     title: 'Estudiantes',
     name: 'estudiantes',
     parent: true,
-    icon: 'estudiantes'
+    icon: 'estudiantes',
+    link: "/estudiantes"
   },
   {
     id: 'configuracion',
     title: 'Registro RFID',
-    name: 'configuracion',
+    name: 'rfid',
     parent: true,
-    icon: 'configuracion'
+    icon: 'configuracion',
+    link: "/rfid"
   },
 ]
 
