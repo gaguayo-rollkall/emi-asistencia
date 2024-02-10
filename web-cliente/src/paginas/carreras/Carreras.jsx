@@ -3,18 +3,68 @@ import toast from 'react-hot-toast';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
+import { mostrarValidaciontes } from '../../servicios/validaciones';
+
+const URL = '/carreras';
 
 export default function Carreras() {
   const modalRef = useRef();
+  const modalDeleteRef = useRef();
+
   const [carreras, setCarreras] = useState([]);
+  const [seleccionado, setSeleccionado] = useState({});
 
   const agregarNuevo = () => {
+    setSeleccionado({ nombre: '' })
     modalRef.current?.showModal();
+  }
+
+  const editar = (item) => {
+    setSeleccionado(item);
+    modalRef.current?.showModal();
+  }
+
+  const guardar = async (e) => {
+    try {
+      e?.preventDefault();
+
+      if (!seleccionado.nombre?.trim()) {
+        return;
+      }
+
+      var url = seleccionado.id ? `${URL}/${seleccionado.id}` : URL;
+      var action = seleccionado.id ? 'put' : 'post';
+
+      await apiService[action](url, seleccionado);
+      setSeleccionado({});
+      await cargarCarreras();
+      modalRef.current?.close();
+    } catch (error) {
+      const { response: { data: { errors } } } = error;
+
+      if (errors) {
+        mostrarValidaciontes(errors);
+      }
+
+      console.error('Guardar', error);
+    }
+  }
+
+  const borrar = async () => {
+    try {
+      await apiService.delete(`${URL}/${seleccionado.id}`);
+      await cargarCarreras();
+
+      modalDeleteRef.current.close()
+    } catch (error) {
+      console.error('Borrar', error);
+      toast.error('No se pudo borrar la carrera');
+    }
   }
 
   const cargarCarreras = useCallback(async () => {
     try {
-      const data = await apiService.get('/carreras');
+      const data = await apiService.get(URL);
       setCarreras(data);
     } catch (error) {
       console.error('Cargar Carreras', error);
@@ -63,13 +113,16 @@ export default function Carreras() {
                   </tr>
                 </thead>
                 <tbody>
-                  {carreras.map(({ id, nombre }, index) => (
-                    <tr key={id}>
+                  {carreras.map((item, index) => (
+                    <tr key={item.id}>
                       <th>{index + 1}</th>
-                      <td>{nombre}</td>
+                      <td>{item.nombre}</td>
                       <td className="">
-                        <button className="btn btn-sm btn-outline btn-primary">Editar</button>
-                        <button className="btn btn-sm btn-outline btn-error ml-4">Borrar</button>
+                        <button className="btn btn-sm btn-outline btn-primary" onClick={() => editar(item)}>Editar</button>
+                        <button className="btn btn-sm btn-outline btn-error ml-4" onClick={() => {
+                          setSeleccionado(item);
+                          modalDeleteRef.current.showModal();
+                        }}>Borrar</button>
                       </td>
                     </tr>
                   ))}
@@ -81,13 +134,33 @@ export default function Carreras() {
 
         <dialog ref={modalRef} className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Carrera</h3>
+            <form className="mt-1 grid grid-cols-1" onSubmit={guardar}>
+              <div className="col-span-full">
+                <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">Nombre</label>
+                <div className="mt-2">
+                  <input type="text" placeholder="Nombre de la Carrera" className="input input-bordered w-full"
+                    value={seleccionado.nombre}
+                    onChange={({ target: { value: nombre } }) => setSeleccionado((p) => ({ ...p, nombre }))} />
+                </div>
+              </div>
+            </form>
 
-
-
-            <div className="flex justify-center gap-4">
-              <button className="btn btn-primary">Guardar</button>
+            <div className="flex justify-center gap-4 mt-6">
+              <button className="btn btn-primary" onClick={() => guardar()}>Guardar</button>
               <button className="btn" onClick={() => modalRef.current.close()}>Cerrar</button>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog ref={modalDeleteRef} className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Borrar {seleccionado.nombre}?</h3>
+            <p className="py-4">Se eliminara el registro de la base de datos.</p>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn btn-error" onClick={() => borrar()}>Borrar</button>
+                <button className="btn ml-4" onClick={() => modalDeleteRef.current.close()}>Close</button>
+              </form>
             </div>
           </div>
         </dialog>
