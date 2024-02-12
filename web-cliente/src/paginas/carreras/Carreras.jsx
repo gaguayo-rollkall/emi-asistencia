@@ -3,13 +3,14 @@ import toast from 'react-hot-toast';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
-import { mostrarValidaciontes } from '../../servicios/validaciones';
+import Errores from '../../components/Errores';
 
 const URL = '/carreras';
 
 export default function Carreras() {
   const modalRef = useRef();
   const modalDeleteRef = useRef();
+  const [errors, setErrors] = useState({});
 
   const [carreras, setCarreras] = useState([]);
   const [seleccionado, setSeleccionado] = useState({});
@@ -43,7 +44,7 @@ export default function Carreras() {
       const { response: { data: { errors } } } = error;
 
       if (errors) {
-        mostrarValidaciontes(errors);
+        setErrors(errors);
       }
 
       console.error('Guardar', error);
@@ -149,6 +150,8 @@ export default function Carreras() {
               <button className="btn btn-primary" onClick={() => guardar()}>Guardar</button>
               <button className="btn" onClick={() => modalRef.current.close()}>Cerrar</button>
             </div>
+
+            <Errores errors={errors} />
           </div>
         </dialog>
 
