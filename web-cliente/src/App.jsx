@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast';
-import { L10n, setCulture } from '@syncfusion/ej2-base';
+import { L10n, loadCldr, setCulture } from '@syncfusion/ej2-base';
+
+import numberingSystems from 'cldr-data/supplemental/numberingSystems.json';
+import caGregorian from 'cldr-data/main/es/ca-gregorian.json';
+import numbers from 'cldr-data/main/es/numbers.json';
+import timeZoneNames from 'cldr-data/main/es/timeZoneNames.json';
+import languages from 'cldr-data/supplemental/numberingSystems.json';
 
 // import ErrorPage from './error-page';
 import { AuthProvider } from './hooks/useAuth'
@@ -13,11 +19,18 @@ import Inicio from './paginas/inicio/Inicio';
 import Login from './paginas/login/Login';
 import Carreras from './paginas/carreras/Carreras'
 import PeriodosAcademicos from './paginas/periodos/PeriodosAcademicos';
-// import Test from './paginas/Test';
+import Calendario from './paginas/calendario/Calendario';
 
 function App() {
   useEffect(() => {
-    L10n.load(sync);
+    L10n.load(sync)
+    loadCldr(
+      numberingSystems,
+      caGregorian,
+      numbers,
+      timeZoneNames,
+      languages,
+    )
     setCulture('es');
   }, []);
 
@@ -37,7 +50,7 @@ function App() {
             <Route path="dashboard" element={<></>} />
             <Route path="carreras" element={<Carreras />} />
             <Route path="periodos" element={<PeriodosAcademicos />} />
-            <Route path="calendario" element={<></>} />
+            <Route path="calendario" element={<Calendario />} />
             <Route path="estudiantes" element={<></>} />
             <Route path="rfid" element={<></>} />
           </Route>
