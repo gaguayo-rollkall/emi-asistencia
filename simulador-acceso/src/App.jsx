@@ -1,34 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useRef, useEffect } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+import logo from './assets/logo_emi.png';
 import './App.css'
 
+const ENTER_KEYS = ["13", "Enter"];
+
+const useEventListener = (eventName, handler, element = window) => {
+  const savedHandler = useRef();
+  useEffect(() => {
+    savedHandler.current = handler;
+  }, [handler]);
+  useEffect(() => {
+    const eventListener = (event) => savedHandler.current(event);
+    element.addEventListener(eventName, eventListener);
+    return () => {
+      element.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, element]);
+};
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [codigo, setCodigo] = useState('');
+  const [estado, setEstado] = useState('');
+  const [mensaje, setMensaje] = useState('Esperando ...');
+
+  const handler = ({ key }) => {
+    if (!ENTER_KEYS.includes(String(key))) {
+      setCodigo(c => c + key);
+    } else {
+      console.log(codigo);
+      setCodigo('');
+      setEstado('go');
+      setMensaje(`Bienvenido ${codigo}`)
+
+      setTimeout(() => {
+        setEstado('');
+        setMensaje('Esperando ...')
+      }, 2000);
+    }
+  };
+
+  useEventListener("keydown", handler);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main>
+      {/* <img src={logo} alt='logo' width={400} /> */}
+      <div className="encuadro">
+        <div className={`estado ${estado}`}></div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      <div className="welcome">
+        {mensaje}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 
