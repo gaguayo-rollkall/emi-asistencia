@@ -145,6 +145,60 @@
         ]
       }
     },
+    "/api/PeriodosAcademicos": {
+      "get": {
+        "tags": [
+          "PeriodosAcademicos"
+        ],
+        "operationId": "GetPeriodosAcademicos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PeriodoAcademicoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PeriodosAcademicos"
+        ],
+        "operationId": "CrearPeriodoAcademico",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearPeriodoAcademicoCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "guid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -928,6 +982,70 @@
           },
           "nombre": {
             "type": "string"
+          }
+        }
+      },
+      "PeriodoAcademicoDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gestion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "periodos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PeriodoDTO"
+            }
+          }
+        }
+      },
+      "PeriodoDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "gestion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "periodo": {
+            "type": "string"
+          }
+        }
+      },
+      "CrearPeriodoAcademicoCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "periodo": {
+            "type": "string"
+          },
+          "gestion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fechaInicio": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fechaFin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

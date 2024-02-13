@@ -21,7 +21,7 @@ public class Carreras : EndpointGroupBase
 
     public async Task<Guid> CrearCarreras(ISender sender, CrearCarreraCommand command) =>
         await sender.Send(command);
-    
+
     public async Task<IResult> ActualizarCarrera(ISender sender, Guid id, ActualizarCarreraCommand command)
     {
         if (id != command.Id) return Results.BadRequest();

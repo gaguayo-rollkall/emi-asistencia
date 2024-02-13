@@ -6,12 +6,12 @@ namespace Microsoft.Extensions.DependencyInjection.TodoLists.Queries.GetCarreras
 [Authorize]
 public record GetCarrerasQuery : IRequest<IList<CarreraDto>>;
 
-public class GetTodosQueryHandler : IRequestHandler<GetCarrerasQuery, IList<CarreraDto>>
+public class GetCarrerasQueryHandler : IRequestHandler<GetCarrerasQuery, IList<CarreraDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetTodosQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetCarrerasQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
