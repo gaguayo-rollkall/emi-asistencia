@@ -14,6 +14,7 @@
     "@syncfusion/ej2-react-buttons": "^24.2.3",
     "@syncfusion/ej2-react-dropdowns": "^24.2.5",
     "@syncfusion/ej2-react-grids": "^24.2.4",
+    "@syncfusion/ej2-react-inputs": "^24.2.5",
     "@syncfusion/ej2-react-popups": "^24.2.3",
     "@syncfusion/ej2-react-schedule": "^24.2.4",
     "cldr-data": "^36.0.1",

@@ -13,6 +13,7 @@ public interface IApplicationDbContext
     DbSet<Asistencia> Asistencias { get; }
     DbSet<Evento> Eventos { get; }
     DbSet<Curso> Cursos { get; }
+    DbSet<CursoEstudiante> CursoEstudiantes { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

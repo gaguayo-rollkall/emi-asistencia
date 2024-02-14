@@ -20,6 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Asistencia> Asistencias => Set<Asistencia>();
     public DbSet<Evento> Eventos => Set<Evento>();
     public DbSet<Curso> Cursos => Set<Curso>();
+    public DbSet<CursoEstudiante> CursoEstudiantes => Set<CursoEstudiante>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -32,6 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         Asistencia.Map(builder);
         Evento.Map(builder);
         Curso.Map(builder);
+        CursoEstudiante.Map(builder);
 
         base.OnModelCreating(builder);
     }
