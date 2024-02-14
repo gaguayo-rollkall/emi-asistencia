@@ -150,7 +150,7 @@ export default function PeriodosAcademicos() {
             <button className="btn" onClick={() => modalRef.current.close()}>Cerrar</button>
           </div>
 
-          <Errores errors={errors} />
+          <Errores errors={errors} cleanErrors={() => setErrors([])} />
         </div>
       </dialog>
     </main>

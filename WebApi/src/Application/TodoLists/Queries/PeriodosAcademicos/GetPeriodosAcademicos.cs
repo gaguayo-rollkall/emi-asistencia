@@ -31,6 +31,7 @@ public class GetPeriodosAcademicosQueryHandler : IRequestHandler<GetPeriodosAcad
                     FechaInicio = s.FechaInicio,
                     FechaFin = s.FechaFin,
                 })
+                .OrderBy(s => s.Periodo)
                 .ToList()
             })
             .ToListAsync(cancellationToken);

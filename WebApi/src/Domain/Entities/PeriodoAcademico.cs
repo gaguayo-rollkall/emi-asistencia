@@ -1,4 +1,6 @@
-﻿namespace WebApi.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WebApi.Domain.Entities;
 
 public class PeriodoAcademico : BaseAuditableEntity
 {
@@ -7,4 +9,11 @@ public class PeriodoAcademico : BaseAuditableEntity
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
     public ICollection<CarreraPeriodo> CarreraPeriodos { get; set; } = new List<CarreraPeriodo>();
+    public ICollection<Curso> Cursos { get; set; } = new List<Curso>();
+    
+    public static void Map(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PeriodoAcademico>()
+            .HasKey(s => s.Id);
+    }
 }

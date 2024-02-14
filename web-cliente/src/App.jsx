@@ -20,6 +20,8 @@ import Login from './paginas/login/Login';
 import Carreras from './paginas/carreras/Carreras'
 import PeriodosAcademicos from './paginas/periodos/PeriodosAcademicos';
 import Calendario from './paginas/calendario/Calendario';
+import Cursos from './paginas/cursos/Cursos';
+import Alumnos from './paginas/cursos/Alumnos';
 
 function App() {
   useEffect(() => {
@@ -51,6 +53,8 @@ function App() {
             <Route path="carreras" element={<Carreras />} />
             <Route path="periodos" element={<PeriodosAcademicos />} />
             <Route path="calendario" element={<Calendario />} />
+            <Route path="cursos" element={<Cursos />} />
+            <Route path="cursos/:id/alumnos" element={<Alumnos />} />
             <Route path="estudiantes" element={<></>} />
             <Route path="rfid" element={<></>} />
           </Route>

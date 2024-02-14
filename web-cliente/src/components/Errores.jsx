@@ -2,15 +2,8 @@ import { DialogComponent } from '@syncfusion/ej2-react-popups';
 
 /* eslint-disable react/prop-types */
 const ShowError = ({ validation }) => {
-  if (Array.isArray(validation)) {
-    return (
-      validation.map((v, i) => (
-        <span key={i}>
-          {v} <br />
-        </span>
-      ))
-    )
-  }
+  if (Array.isArray(validation))
+    return validation.join(', ')
 
   return validation;
 }
@@ -42,7 +35,12 @@ export default function Errores({
   };
 
   return (
-    <DialogComponent id="modalDialog" isModal={true} buttons={buttons} header="Revise la siguiente informacion" width="335px" content={() => (validations.map((v, i) => <ShowError key={i} validation={v} />))}
-      target="#root" visible={validations.length > 0} close={dialogClose} animationSettings={animationSettings}></DialogComponent>
+    <DialogComponent id="modalDialog" isModal={true} buttons={buttons} header="Revise la siguiente informacion" width="335px"
+      // content={() => {validations.map((v, i) => <ShowError key={i} validation={v} />)}}
+      content={ShowError({ validation: validations})}
+      target="#root"
+      visible={validations.length > 0}
+      close={dialogClose}
+      animationSettings={animationSettings} />
   )
 }

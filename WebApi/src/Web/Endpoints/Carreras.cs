@@ -13,7 +13,7 @@ public class Carreras : EndpointGroupBase
             .MapGet(GetCarreras)
             .MapPost(CrearCarreras)
             .MapPut(ActualizarCarrera, "{id}")
-            .MapDelete(BorrarCarrera, "{id}");;
+            .MapDelete(BorrarCarrera, "{id}");
     }
 
     public async Task<IList<CarreraDto>> GetCarreras(ISender sender) =>

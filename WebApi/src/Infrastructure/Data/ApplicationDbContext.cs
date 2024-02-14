@@ -19,23 +19,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Estudiante> Estudiantes => Set<Estudiante>();
     public DbSet<Asistencia> Asistencias => Set<Asistencia>();
     public DbSet<Evento> Eventos => Set<Evento>();
+    public DbSet<Curso> Cursos => Set<Curso>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         
-        builder.Entity<CarreraPeriodo>()
-            .HasKey(cp => new { cp.CarreraId, cp.PeriodoAcademicoId });
-
-        builder.Entity<CarreraPeriodo>()
-            .HasOne(cp => cp.Carrera)
-            .WithMany(c => c.CarreraPeriodos)
-            .HasForeignKey(cp => cp.CarreraId);
-
-        builder.Entity<CarreraPeriodo>()
-            .HasOne(cp => cp.PeriodoAcademico)
-            .WithMany(p => p.CarreraPeriodos)
-            .HasForeignKey(cp => cp.PeriodoAcademicoId);
+        Carrera.Map(builder);
+        PeriodoAcademico.Map(builder);
+        CarreraPeriodo.Map(builder);
+        Estudiante.Map(builder);
+        Asistencia.Map(builder);
+        Evento.Map(builder);
+        Curso.Map(builder);
 
         base.OnModelCreating(builder);
     }

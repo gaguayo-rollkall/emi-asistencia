@@ -11,6 +11,7 @@ import PeriodoIcon from './icons/periodo.svg?react';
 import CalendarioIcon from './icons/calendario.svg?react';
 import RegistroIcon from './icons/registro.svg?react';
 import ConfiguracionIcon from './icons/configuracion.svg?react';
+import CursosIcon from './icons/cursos.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
@@ -85,6 +86,7 @@ const Sidebar = ({ setExpand }) => {
     icons_map["calendario"] = <CalendarioIcon className="h-5 w-5 text-current"  />;
     icons_map["estudiantes"] = <RegistroIcon className="h-5 w-5 text-current"  />;
     icons_map["configuracion"] = <ConfiguracionIcon className="h-5 w-5 text-current"  />;
+    icons_map["cursos"] = <CursosIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 
