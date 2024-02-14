@@ -9,12 +9,10 @@ public record GetCarrerasQuery : IRequest<IList<CarreraDto>>;
 public class GetCarrerasQueryHandler : IRequestHandler<GetCarrerasQuery, IList<CarreraDto>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
 
-    public GetCarrerasQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetCarrerasQueryHandler(IApplicationDbContext context)
     {
         _context = context;
-        _mapper = mapper;
     }
 
     public async Task<IList<CarreraDto>> Handle(GetCarrerasQuery request, CancellationToken cancellationToken)

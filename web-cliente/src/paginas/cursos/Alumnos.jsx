@@ -11,6 +11,7 @@ export default function Alumnos() {
   const params = useParams();
   const uploadObj = useRef(null);
 
+  const [curso, setCurso] = useState({});
   const [estudiantes, setEstudiantes] = useState([]);
 
   const toolbarOptions = []
@@ -18,7 +19,7 @@ export default function Alumnos() {
 
   const processCSV = async (text) => {
     const estudiantes = [];
-    
+
     const lines = text.split('\r\n');
     lines.forEach(line => {
       const columns = line.split(',');
@@ -42,7 +43,7 @@ export default function Alumnos() {
         const text = e.target.result;
         processCSV(text);
       };
-    
+
       reader.readAsText(file.rawFile);
     } catch (error) {
       console.error('Subir', error);
@@ -54,7 +55,10 @@ export default function Alumnos() {
     try {
       if (!params.id) return;
 
+      const info = await apiService.get(`/cursos/${params.id}`)
       const data = await apiService.get('/estudiantes', { params: { cursoId: params.id } });
+
+      setCurso(info);
       setEstudiantes(data);
     } catch (error) {
       console.error('Estudiantes', error);
@@ -69,6 +73,15 @@ export default function Alumnos() {
   return (
     <main className="w-full h-full flex-grow p-6 relative">
       <Breadcrumbs items={['Inicio', 'Cursos', 'Estudiantes']} />
+
+      <div className="text-xl font-bold tracking-tight text-gray-900 sm:text-xl breadcrumbs">
+        <ul>
+          <li>{curso.carrera}</li>
+          <li>{curso.nombre}</li>
+          <li>{curso.gestion}</li>
+          <li>{curso.periodo}</li>
+        </ul>
+      </div>
 
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">

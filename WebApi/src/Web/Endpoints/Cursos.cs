@@ -10,12 +10,16 @@ public class Cursos : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapGet(GetCursos)
+            .MapGet(GetCurso, "{cursoId}")
             .MapPost(CrearActualizarCurso)
             .MapDelete(BorrarCurso, "{id}");
     }
 
     public async Task<IList<CursoDto>> GetCursos(ISender sender, Guid carreraId, Guid periodoId) =>
         await sender.Send(new GetCursosQuery(carreraId, periodoId));
+
+    public async Task<CursoDto?> GetCurso(ISender sender, Guid cursoId) =>
+        await sender.Send(new GetCursoQuery(cursoId));
     
     public async Task<Guid> CrearActualizarCurso(ISender sender, CrearCursoCommand command) =>
         await sender.Send(command);

@@ -196,6 +196,38 @@
         }
       }
     },
+    "/api/Cursos/{cursoId}": {
+      "get": {
+        "tags": [
+          "Cursos"
+        ],
+        "operationId": "GetCurso",
+        "parameters": [
+          {
+            "name": "cursoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CursoDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Cursos/{id}": {
       "delete": {
         "tags": [
@@ -282,6 +314,85 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Eventos": {
+      "get": {
+        "tags": [
+          "Eventos"
+        ],
+        "operationId": "GetEventos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventoDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Eventos"
+        ],
+        "operationId": "CrearEventos",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearEventoCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Eventos/{id}": {
+      "delete": {
+        "tags": [
+          "Eventos"
+        ],
+        "operationId": "BorrarEvento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -1161,6 +1272,19 @@
           },
           "nombre": {
             "type": "string"
+          },
+          "carrera": {
+            "type": "string",
+            "nullable": true
+          },
+          "gestion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "periodo": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1219,6 +1343,53 @@
             }
           }
         }
+      },
+      "EventoDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isAllDay": {
+            "type": "boolean"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "recurrenceRule": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CrearEventoCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EventoDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       },
       "PeriodoAcademicoDTO": {
         "type": "object",

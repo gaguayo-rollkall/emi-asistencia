@@ -11,9 +11,9 @@ public interface IApplicationDbContext
     DbSet<CarreraPeriodo> CarreraPeriodos { get; }
     DbSet<Estudiante> Estudiantes { get; }
     DbSet<Asistencia> Asistencias { get; }
-    DbSet<Evento> Eventos { get; }
     DbSet<Curso> Cursos { get; }
     DbSet<CursoEstudiante> CursoEstudiantes { get; }
+    DbSet<EventoCalendario> EventosCalendario { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
