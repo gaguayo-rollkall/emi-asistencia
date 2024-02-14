@@ -1,23 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
-import { extend } from '@syncfusion/ej2-base';
+
+import apiService from '../../servicios/api-service';
 
 import './Calendario.css';
-
-// const fake = [{
-//   "Id": 1,
-//   "Subject": "Story Time for Kids",
-//   "StartTime": "2021-02-14T04:30:00.000Z",
-//   "EndTime": "2021-02-14T06:00:00.000Z",
-//   "CategoryColor": "#1aaa55"
-// }]
+import toast from 'react-hot-toast';
 
 export default function Calendario() {
   const scheduleObj = useRef(null);
-  const [data, setData] = useState([]);
+  const [eventos, setEventos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const actionComplete = (args) => {
-    console.log(args);
+  const actionComplete = async (args) => {
+    if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged') {
+      const [evento] = args.data;
+      await apiService.post('/eventos', evento);
+      return;
+    }
+
+    if (args.requestType === 'eventDeleted') {
+      const [evento] = args.data;
+      await apiService.delete(`/eventos/${evento.Id}`)
+    }
   }
 
   const onEventRendered = (args) => {
@@ -33,6 +37,39 @@ export default function Calendario() {
       }
   };
 
+  const cargarEventos = useCallback(async() => {
+    try {
+      const data = await apiService.get('/eventos').then(es => es.map(e => ({
+        Id: e.id,
+        Description: e.description,
+        StartTime: new Date(e.startTime),
+        EndTime: new Date(e.endTime),
+        IsAllDay: e.isAllDay,
+        Subject: e.subject,
+        Location: e.location,
+        RecurrenceRule: e.recurrenceRule,
+      })));
+
+      setEventos(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Eventos', error);
+      toast.error('Hubo un problema al cargar los eventos');
+    }
+  }, []);
+
+  useEffect(() => {
+    cargarEventos();
+  }, [cargarEventos]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <span className="loading loading-ball loading-lg"></span>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-full">
       <ScheduleComponent
@@ -40,7 +77,7 @@ export default function Calendario() {
         height='100%'
         selectedDate={new Date()}
         ref={scheduleObj}
-        eventSettings={{ dataSource: data }}
+        eventSettings={{ dataSource: eventos }}
         eventRendered={onEventRendered}
         actionComplete={actionComplete}>
         <Inject services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]} />

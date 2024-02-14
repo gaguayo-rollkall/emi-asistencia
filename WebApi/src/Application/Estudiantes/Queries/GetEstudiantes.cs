@@ -36,7 +36,6 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
         return await _context
             .Estudiantes
             .AsNoTracking()
-            // .Where(e => e.)
             .Select(e => new EstudianteDto
             {
                 Codigo = e.Codigo, Nombre = e.Nombre, Email = e.Email, RFID = e.RFID,
