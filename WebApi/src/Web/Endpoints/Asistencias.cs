@@ -26,6 +26,6 @@ public class Asistencias : EndpointGroupBase
             return Results.BadRequest();
         }
 
-        return Results.NoContent();
+        return Results.Ok(asistencia);
     }
 }

@@ -41,18 +41,18 @@ function App() {
         body: JSON.stringify(asistencia)
       };
 
-      await fetch(apiUrl, opciones)
+      const { codigo: codigoEstudiante, nombre = '' } = await fetch(apiUrl, opciones)
         .then(response => {
           if (!response.ok) {
             throw new Error('Hubo un problema registrando');
           }
 
-          return true;
+          return response.json();
         })
 
       setCodigo('');
       setEstado('go');
-      setMensaje(`Bienvenido ${codigo}`)
+      setMensaje(`Bienvenido ${codigoEstudiante} ${nombre}`)
     } catch (error) {
       console.error('Asistencia', error);
       setMensaje('Rechazado')

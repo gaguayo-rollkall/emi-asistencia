@@ -47,14 +47,14 @@ const sidebarStructure = [
     icon: 'estudiantes',
     link: "/estudiantes"
   },
-  {
-    id: 'configuracion',
-    title: 'Registro RFID',
-    name: 'rfid',
-    parent: true,
-    icon: 'configuracion',
-    link: "/rfid"
-  },
+  // {
+  //   id: 'configuracion',
+  //   title: 'Registro RFID',
+  //   name: 'rfid',
+  //   parent: true,
+  //   icon: 'configuracion',
+  //   link: "/rfid"
+  // },
 ]
 
 export { sidebarStructure };

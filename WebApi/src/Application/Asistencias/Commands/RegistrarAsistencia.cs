@@ -1,15 +1,16 @@
-﻿using WebApi.Application.Common.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection.Estudiantes.Queries;
+using WebApi.Application.Common.Interfaces;
 using WebApi.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Asistencias.Commands;
 
-public class RegistrarAsistenciaCommand : IRequest<Guid?>
+public class RegistrarAsistenciaCommand : IRequest<EstudianteDto?>
 {
     public string? RFID { get; set; }
     public string? CodigoEstudiante { get; set; }
 }
 
-public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsistenciaCommand, Guid?>
+public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsistenciaCommand, EstudianteDto?>
 {
     private readonly IApplicationDbContext _context;
 
@@ -18,10 +19,17 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
         _context = context;
     }
 
-    public async Task<Guid?> Handle(RegistrarAsistenciaCommand request, CancellationToken cancellationToken)
+    public async Task<EstudianteDto?> Handle(RegistrarAsistenciaCommand request, CancellationToken cancellationToken)
     {
         var estudiante = await _context.Estudiantes
             .AsNoTracking()
+            .Select(e => new EstudianteDto
+            {
+                Codigo = e.Codigo,
+                Nombre = e.Nombre,
+                RFID = e.RFID,
+                Email = e.Email,
+            })
             .FirstOrDefaultAsync(e => e.Codigo == request.CodigoEstudiante ||
                                       e.RFID == request.RFID);
 
@@ -40,6 +48,6 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
         _context.Asistencias.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return estudiante;
     }
 }

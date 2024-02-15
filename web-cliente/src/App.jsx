@@ -22,6 +22,7 @@ import PeriodosAcademicos from './paginas/periodos/PeriodosAcademicos';
 import Calendario from './paginas/calendario/Calendario';
 import Cursos from './paginas/cursos/Cursos';
 import Alumnos from './paginas/cursos/Alumnos';
+import Estudiantes from './paginas/estudiantes/Estudiantes';
 
 function App() {
   useEffect(() => {
@@ -55,7 +56,7 @@ function App() {
             <Route path="calendario" element={<Calendario />} />
             <Route path="cursos" element={<Cursos />} />
             <Route path="cursos/:id/alumnos" element={<Alumnos />} />
-            <Route path="estudiantes" element={<></>} />
+            <Route path="estudiantes" element={<Estudiantes />} />
             <Route path="rfid" element={<></>} />
           </Route>
         </Routes>

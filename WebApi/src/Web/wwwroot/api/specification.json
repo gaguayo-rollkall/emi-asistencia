@@ -364,6 +364,38 @@
         }
       }
     },
+    "/api/Estudiantes/registrar-estudiante": {
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "PostApiEstudiantesRegistrarEstudiante",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrarEstudianteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Eventos": {
       "get": {
         "tags": [
@@ -1420,6 +1452,17 @@
             }
           }
         }
+      },
+      "RegistrarEstudianteCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EstudianteDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
       },
       "EventoDto": {
         "type": "object",
