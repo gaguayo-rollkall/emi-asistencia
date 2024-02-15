@@ -19,7 +19,7 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
     {
         if (request.CursoId is not null)
         {
-            await _context
+            return await _context
                 .CursoEstudiantes
                 .AsNoTracking()
                 .Where(c => c.CursoId == request.CursoId)

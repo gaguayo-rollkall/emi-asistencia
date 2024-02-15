@@ -33,6 +33,7 @@ export default function Cursos() {
   ];
 
   const commandClick = (args) => {
+    console.log(args);
     const { id } = args.rowData;
     navigate(`/cursos/${id}/alumnos`) 
   }
