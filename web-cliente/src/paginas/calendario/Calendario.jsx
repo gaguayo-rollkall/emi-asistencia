@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
+import QRCode from "react-qr-code";
 
 import apiService from '../../servicios/api-service';
 
@@ -79,7 +80,13 @@ export default function Calendario() {
         ref={scheduleObj}
         eventSettings={{ dataSource: eventos }}
         eventRendered={onEventRendered}
-        actionComplete={actionComplete}>
+        actionComplete={actionComplete}
+        quickInfoTemplates={{
+          templateType: 'Event',
+          // eslint-disable-next-line react/prop-types
+          footer: (props) => props.Id && <QRCode value={props.Id} />
+        }}
+        >
         <Inject services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]} />
       </ScheduleComponent>
     </div>
