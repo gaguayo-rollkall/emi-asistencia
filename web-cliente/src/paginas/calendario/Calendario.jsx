@@ -1,11 +1,30 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
-import QRCode from "react-qr-code";
+import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
 
 import apiService from '../../servicios/api-service';
 
 import './Calendario.css';
 import toast from 'react-hot-toast';
+
+// eslint-disable-next-line react/prop-types
+const QR = ({ id }) => {
+  const [visible, setVisible] = useState(false);
+  
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setVisible(true);
+    }, 0);
+
+    () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <div style={{ width: 200, height: 150 }}>
+      {visible && <QRCodeGeneratorComponent width={"200px"} height={"150px"} value={`${id}`} />}
+    </div>
+  )
+}
 
 export default function Calendario() {
   const scheduleObj = useRef(null);
@@ -26,19 +45,19 @@ export default function Calendario() {
   }
 
   const onEventRendered = (args) => {
-      let categoryColor = args.data.CategoryColor;
-      if (!args.element || !categoryColor) {
-          return;
-      }
-      if (scheduleObj.current.currentView === 'Agenda') {
-          args.element.firstChild.style.borderLeftColor = categoryColor;
-      }
-      else {
-          args.element.style.backgroundColor = categoryColor;
-      }
+    let categoryColor = args.data.CategoryColor;
+    if (!args.element || !categoryColor) {
+      return;
+    }
+    if (scheduleObj.current.currentView === 'Agenda') {
+      args.element.firstChild.style.borderLeftColor = categoryColor;
+    }
+    else {
+      args.element.style.backgroundColor = categoryColor;
+    }
   };
 
-  const cargarEventos = useCallback(async() => {
+  const cargarEventos = useCallback(async () => {
     try {
       const data = await apiService.get('/eventos').then(es => es.map(e => ({
         Id: e.id,
@@ -84,9 +103,9 @@ export default function Calendario() {
         quickInfoTemplates={{
           templateType: 'Event',
           // eslint-disable-next-line react/prop-types
-          footer: (props) => props.Id && <QRCode value={props.Id} />
+          footer: (props) => props.Id && <QR id={props.Id} />
         }}
-        >
+      >
         <Inject services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]} />
       </ScheduleComponent>
     </div>

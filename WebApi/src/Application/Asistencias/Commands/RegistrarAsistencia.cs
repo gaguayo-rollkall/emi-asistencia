@@ -8,6 +8,7 @@ public class RegistrarAsistenciaCommand : IRequest<EstudianteDto?>
 {
     public string? RFID { get; set; }
     public string? CodigoEstudiante { get; set; }
+    public int? EventoId { get; set; }
 }
 
 public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsistenciaCommand, EstudianteDto?>
@@ -43,6 +44,7 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
             Fecha = DateTime.Now,
             RFID = !string.IsNullOrEmpty(request.RFID) ? request.RFID : string.Empty,
             CodigoEstudiante = request.CodigoEstudiante,
+            Evento = request.EventoId,
         };
 
         _context.Asistencias.Add(entity);

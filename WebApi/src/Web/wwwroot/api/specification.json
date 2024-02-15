@@ -1333,6 +1333,11 @@
           "codigoEstudiante": {
             "type": "string",
             "nullable": true
+          },
+          "eventoId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         }
       },

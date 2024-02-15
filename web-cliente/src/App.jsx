@@ -23,6 +23,7 @@ import Calendario from './paginas/calendario/Calendario';
 import Cursos from './paginas/cursos/Cursos';
 import Alumnos from './paginas/cursos/Alumnos';
 import Estudiantes from './paginas/estudiantes/Estudiantes';
+import Reportes from './paginas/reportes/Reportes';
 
 function App() {
   useEffect(() => {
@@ -50,7 +51,7 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="dashboard" element={<></>} />
+            <Route path="dashboard" element={<Reportes />} />
             <Route path="carreras" element={<Carreras />} />
             <Route path="periodos" element={<PeriodosAcademicos />} />
             <Route path="calendario" element={<Calendario />} />

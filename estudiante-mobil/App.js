@@ -4,6 +4,42 @@ import * as eva from '@eva-design/eva';
 import { Avatar, Button, ApplicationProvider, Layout, Text } from '@ui-kitten/components';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+import { URL_API } from './configuracion.json';
+const apiUrl = `${URL_API}/api/asistencias`;
+const CODIGO = 'T-79878';
+
+const registrarAsitencia = async(eventoId) => {
+  try {
+    const asistencia = {
+      codigoEstudiante: CODIGO,
+      eventoId,
+    };
+
+    const opciones = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(asistencia)
+    };
+
+    const { codigo: codigoEstudiante, nombre = '' } = await fetch(apiUrl, opciones)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Hubo un problema registrando');
+        }
+
+        return response.json();
+      })
+
+    alert(`Bienvenido ${codigoEstudiante} ${nombre}`)
+  } catch (error) {
+    console.error('Asistencia', error);
+    alert('Rechazado')
+  } finally {
+  }
+}
+
 const HomeScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(true);
@@ -19,7 +55,7 @@ const HomeScreen = () => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    registrarAsitencia(data);
   };
 
   if (hasPermission === null) {
@@ -30,10 +66,10 @@ const HomeScreen = () => {
   }
 
   return (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Avatar source={require('./assets/emi_logo.jpg')} size="large" />
-      <Text category='h5'>T-79878</Text>
-      <Button onPress={() => setScanned(false)}>
+    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#174287' }}>
+      <Avatar source={require('./assets/emi_logo.jpg')} size="giant" />
+      <Text category='h3' style={{ color: 'white' }}>{CODIGO}</Text>
+      <Button onPress={() => setScanned(false)} style={{ backgroundColor: '#fdd000', margin: 12 }}>
         Registrar Asistencia
       </Button>
 

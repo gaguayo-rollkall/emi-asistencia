@@ -77,7 +77,7 @@ function App() {
 
   return (
     <main>
-      {/* <img src={logo} alt='logo' width={400} /> */}
+      <img src={logo} alt='logo' width={320} />
       <div className="encuadro">
         <div className={`estado ${estado}`}></div>
       </div>
