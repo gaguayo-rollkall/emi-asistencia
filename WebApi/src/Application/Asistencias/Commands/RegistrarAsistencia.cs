@@ -3,14 +3,13 @@ using WebApi.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Asistencias.Commands;
 
-public class RegistrarAsistenciaCommand : IRequest<Guid>
+public class RegistrarAsistenciaCommand : IRequest<Guid?>
 {
-    public DateTime Fecha { get; set; }
     public string? RFID { get; set; }
     public string? CodigoEstudiante { get; set; }
 }
 
-public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsistenciaCommand, Guid>
+public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsistenciaCommand, Guid?>
 {
     private readonly IApplicationDbContext _context;
 
@@ -19,11 +18,21 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
         _context = context;
     }
 
-    public async Task<Guid> Handle(RegistrarAsistenciaCommand request, CancellationToken cancellationToken)
+    public async Task<Guid?> Handle(RegistrarAsistenciaCommand request, CancellationToken cancellationToken)
     {
+        var estudiante = await _context.Estudiantes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Codigo == request.CodigoEstudiante ||
+                                      e.RFID == request.RFID);
+
+        if (estudiante is null)
+        {
+            return null;
+        }
+        
         var entity = new Asistencia
         {
-            Fecha = request.Fecha,
+            Fecha = DateTime.Now,
             RFID = !string.IsNullOrEmpty(request.RFID) ? request.RFID : string.Empty,
             CodigoEstudiante = request.CodigoEstudiante,
         };

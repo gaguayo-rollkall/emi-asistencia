@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import logo from './assets/logo_emi.png';
 import './App.css'
+
+import { URL_API } from '../configuracion.json';
+
+const apiUrl = `${URL_API}/api/asistencias`;
 
 const ENTER_KEYS = ["13", "Enter"];
 
@@ -25,19 +27,49 @@ function App() {
   const [estado, setEstado] = useState('');
   const [mensaje, setMensaje] = useState('Esperando ...');
 
+  const registrarAsitencia = async(rfid) => {
+    try {
+      const asistencia = {
+        rfid,
+      };
+
+      const opciones = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(asistencia)
+      };
+
+      await fetch(apiUrl, opciones)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Hubo un problema registrando');
+          }
+
+          return true;
+        })
+
+      setCodigo('');
+      setEstado('go');
+      setMensaje(`Bienvenido ${codigo}`)
+    } catch (error) {
+      console.error('Asistencia', error);
+      setMensaje('Rechazado')
+    } finally {
+      setTimeout(() => {
+        setCodigo('');
+        setEstado('');
+        setMensaje('Esperando ...')
+      }, 1500);
+    }
+  }
+
   const handler = ({ key }) => {
     if (!ENTER_KEYS.includes(String(key))) {
       setCodigo(c => c + key);
     } else {
-      console.log(codigo);
-      setCodigo('');
-      setEstado('go');
-      setMensaje(`Bienvenido ${codigo}`)
-
-      setTimeout(() => {
-        setEstado('');
-        setMensaje('Esperando ...')
-      }, 2000);
+      registrarAsitencia(codigo);
     }
   };
 
@@ -45,7 +77,7 @@ function App() {
 
   return (
     <main>
-      <img src={logo} alt='logo' width={400} />
+      {/* <img src={logo} alt='logo' width={400} /> */}
       <div className="encuadro">
         <div className={`estado ${estado}`}></div>
       </div>

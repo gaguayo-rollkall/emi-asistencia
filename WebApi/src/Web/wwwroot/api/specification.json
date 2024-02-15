@@ -47,15 +47,7 @@
         },
         "responses": {
           "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "guid"
-                }
-              }
-            }
+            "description": ""
           }
         }
       }
@@ -1302,10 +1294,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "fecha": {
-            "type": "string",
-            "format": "date-time"
-          },
           "rfid": {
             "type": "string",
             "nullable": true

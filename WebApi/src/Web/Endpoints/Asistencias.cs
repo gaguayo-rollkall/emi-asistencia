@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Asistencias.Commands;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection.Asistencias.Commands;
 using Microsoft.Extensions.DependencyInjection.Asistencias.Queries;
 
 namespace WebApi.Web.Endpoints;
@@ -14,7 +15,17 @@ public class Asistencias : EndpointGroupBase
 
     public async Task<IList<AsistenciaDto>> GetAsistencias(ISender sender)
         => await sender.Send(new GetAsistenciasQuery());
-    
-    public async Task<Guid> RegistrarAsistencia(ISender sender, RegistrarAsistenciaCommand command) =>
-        await sender.Send(command);
+
+    [AllowAnonymous]
+    public async Task<IResult> RegistrarAsistencia(ISender sender, RegistrarAsistenciaCommand command)
+    {
+        var asistencia = await sender.Send(command);
+
+        if (asistencia is null)
+        {
+            return Results.BadRequest();
+        }
+
+        return Results.NoContent();
+    }
 }
