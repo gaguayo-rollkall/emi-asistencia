@@ -21,6 +21,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Curso> Cursos => Set<Curso>();
     public DbSet<CursoEstudiante> CursoEstudiantes => Set<CursoEstudiante>();
     public DbSet<EventoCalendario> EventosCalendario => Set<EventoCalendario>();
+    public DbSet<Ambiente> Ambientes => Set<Ambiente>();
+    public DbSet<Permiso> Permisos => Set<Permiso>();
+    public DbSet<Personal> Personales => Set<Personal>();
+    public DbSet<PersonalPermiso> PersonalPermisos => Set<PersonalPermiso>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -34,6 +38,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         Curso.Map(builder);
         CursoEstudiante.Map(builder);
         EventoCalendario.Map(builder);
+        Ambiente.Map(builder);
+        Permiso.Map(builder);
+        Personal.Map(builder);
+        PersonalPermiso.Map(builder);
 
         base.OnModelCreating(builder);
     }

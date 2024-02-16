@@ -9,7 +9,7 @@ public class Curso : BaseAuditableEntity
     public string Nombre { get; set; } = default!;
     public Carrera? Carrera { get; set; }
     public PeriodoAcademico? PeriodoAcademico { get; set; }
-    public ICollection<CursoEstudiante> Cursos { get; set; } = new List<CursoEstudiante>();
+    public ICollection<CursoEstudiante> CursoEstudiantes { get; set; } = new List<CursoEstudiante>();
     
     public static void Map(ModelBuilder modelBuilder)
     {

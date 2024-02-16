@@ -14,6 +14,10 @@ public interface IApplicationDbContext
     DbSet<Curso> Cursos { get; }
     DbSet<CursoEstudiante> CursoEstudiantes { get; }
     DbSet<EventoCalendario> EventosCalendario { get; }
-    
+    DbSet<Ambiente> Ambientes { get; }
+    DbSet<Permiso> Permisos { get; }
+    DbSet<Personal> Personales { get; }
+    DbSet<PersonalPermiso> PersonalPermisos { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

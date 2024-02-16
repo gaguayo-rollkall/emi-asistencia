@@ -22,7 +22,7 @@ public class CursoEstudiante : BaseAuditableEntity
         
         modelBuilder.Entity<CursoEstudiante>()
             .HasOne(sc => sc.Curso)
-            .WithMany(s => s.Cursos)
+            .WithMany(s => s.CursoEstudiantes)
             .HasForeignKey(sc => sc.CursoId);
     }
 }
