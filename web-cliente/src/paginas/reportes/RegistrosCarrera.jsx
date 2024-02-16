@@ -6,12 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
-import Errores from '../../components/Errores';
 
-export default function Cursos() {
-  const gridRef = useRef();
-  const toolbarOptions = ['Add', 'Edit', 'Delete']
-  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
+export default function RegistrosCarrera() {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
@@ -23,19 +19,6 @@ export default function Cursos() {
   const [carrera, setCarrera] = useState('')
   const [gestion, setGestion] = useState('')
   const [periodo, setPeriodo] = useState('')
-
-  const commands = [
-    {
-      buttonOption: {
-        content: 'Alumnos', cssClass: 'e-flat'
-      }
-    }
-  ];
-
-  const commandClick = (args) => {
-    const { id } = args.rowData;
-    navigate(`/cursos/${id}/alumnos`) 
-  }
 
   const cargarCarreras = useCallback(async () => {
     try {
@@ -64,44 +47,6 @@ export default function Cursos() {
     }
   }
 
-  const guardar = async (seleccionado) => {
-    try {
-      await apiService.post('/cursos', {
-        carreraId: carrera,
-        periodoId: periodo,
-        ...seleccionado
-      });
-    } catch (error) {
-      const { response: { data: { errors } } } = error;
-      gridRef.current.dataSource = cursos;
-
-      if (errors) {
-        setErrors(errors);
-      }
-
-      console.error('Guardar', error);
-    }
-  }
-
-  const borrar = async (seleccionado) => {
-    try {
-      await apiService.delete(`/cursos/${seleccionado.id}`);
-    } catch (error) {
-      console.error('Borrar', error);
-      gridRef.current.dataSource = cursos;
-      toast.error('No se pudo borrar el curso.');
-    }
-  }
-
-  const dataSourceChanged = async (state) => {
-    console.log(state);
-    if (state.action === 'add' || state.action === 'edit') {
-      await guardar(state.data);
-    } else if (state.requestType === 'delete') {
-      await borrar(state.data[0]);
-    }
-  }
-
   const cargarCursos = useCallback(async () => {
     try {
       const data = await apiService.get('/cursos', { params: { carreraId: carrera, periodoId: periodo } });
@@ -125,10 +70,10 @@ export default function Cursos() {
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
-      <Breadcrumbs items={['Inicio', 'Cursos']} />
+      <Breadcrumbs items={['Reportes', 'Registros']} />
 
-      <div className="w-full">
-        <div className="card w-full bg-base-100 shadow-xl my-5">
+      <div className="w-full flex flex-col justify-center">
+        <div className="card w-5/6 bg-base-100 shadow-xl my-5">
           <div className="card-body">
             <ComboBoxComponent
               dataSource={carreras}
@@ -156,27 +101,11 @@ export default function Cursos() {
           </div>
         </div>
 
-        <div className="card w-full bg-base-100 shadow-xl my-5">
+        <div className="card w-5/6 bg-base-100 shadow-xl my-5">
           <div className="card-body">
-            <GridComponent dataSource={cursos}
-              toolbar={toolbarOptions}
-              allowPaging={true}
-              editSettings={editSettings}
-              actionComplete={dataSourceChanged}
-              ref={gridRef}
-              commandClick={commandClick}>
-              <ColumnsDirective>
-                <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
-                <ColumnDirective field='nombre' headerText='Nombre' width='100' />
-                <ColumnDirective headerText='Estudiantes' width='120' commands={commands} />
-              </ColumnsDirective>
-              <Inject services={[Page, Toolbar, Edit, CommandColumn]} />
-            </GridComponent>
           </div>
         </div>
       </div>
-
-      <Errores errors={errors} cleanErrors={() => setErrors([])} />
     </main>
   )
 }

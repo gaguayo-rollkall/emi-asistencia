@@ -12,6 +12,9 @@ import CalendarioIcon from './icons/calendario.svg?react';
 import RegistroIcon from './icons/registro.svg?react';
 import ConfiguracionIcon from './icons/configuracion.svg?react';
 import CursosIcon from './icons/cursos.svg?react';
+import CarreraIcon from './icons/carrera.svg?react';
+import ChartIcon from './icons/chart.svg?react';
+import EventoIcon from './icons/evento.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
@@ -38,9 +41,9 @@ const Sidebar = ({ setExpand }) => {
     }
   };
 
-  const handleNavigate = (path) => {
-    setActiveName(path);
-    navigate(path);
+  const handleNavigate = ({ name, link }) => {
+    setActiveName(name);
+    navigate(link);
   };
 
   const handleToggle = (name) => {
@@ -87,6 +90,9 @@ const Sidebar = ({ setExpand }) => {
     icons_map["estudiantes"] = <RegistroIcon className="h-5 w-5 text-current"  />;
     icons_map["configuracion"] = <ConfiguracionIcon className="h-5 w-5 text-current"  />;
     icons_map["cursos"] = <CursosIcon className="h-5 w-5 text-current" />
+    icons_map["carrera"] = <CarreraIcon className="h-5 w-5 text-current" />
+    icons_map["chart"] = <ChartIcon className="h-5 w-5 text-current" />
+    icons_map["evento"] = <EventoIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 
@@ -106,7 +112,7 @@ const Sidebar = ({ setExpand }) => {
             if ("child" in item) {
               handleToggle(item.name);
             } else if ("link" in item) {
-              handleNavigate(item.name);
+              handleNavigate(item);
             }
           }}
           onKeyDown={(event) => {
@@ -115,7 +121,7 @@ const Sidebar = ({ setExpand }) => {
               if ("child" in item) {
                 handleToggle(item.name);
               } else if ("link" in item) {
-                handleNavigate(item.name);
+                handleNavigate(item);
               }
             }
           }}

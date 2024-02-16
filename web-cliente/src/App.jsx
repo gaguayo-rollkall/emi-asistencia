@@ -23,7 +23,9 @@ import Calendario from './paginas/calendario/Calendario';
 import Cursos from './paginas/cursos/Cursos';
 import Alumnos from './paginas/cursos/Alumnos';
 import Estudiantes from './paginas/estudiantes/Estudiantes';
-import Reportes from './paginas/reportes/Reportes';
+import Dashboard from './paginas/reportes/Dashboard';
+import RegistrosCarrera from './paginas/reportes/RegistrosCarrera';
+import RegistrosEvento from './paginas/reportes/RegistrosEvento';
 
 function App() {
   useEffect(() => {
@@ -51,7 +53,9 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="dashboard" element={<Reportes />} />
+            <Route path="reportes/dashboard" element={<Dashboard />} />
+            <Route path="reportes/registros-carrera" element={<RegistrosCarrera />} />
+            <Route path="reportes/registros-evento" element={<RegistrosEvento />} />
             <Route path="carreras" element={<Carreras />} />
             <Route path="periodos" element={<PeriodosAcademicos />} />
             <Route path="calendario" element={<Calendario />} />
