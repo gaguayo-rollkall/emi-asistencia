@@ -554,6 +554,49 @@
         }
       }
     },
+    "/api/Reportes/registros-carrera": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "operationId": "GetApiReportesRegistrosCarrera",
+        "parameters": [
+          {
+            "name": "fechaInicio",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "fechaFin",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegistroCarreraDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -1604,6 +1647,74 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "RegistroCarreraDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "idCarrera": {
+            "type": "string",
+            "format": "guid"
+          },
+          "carrera": {
+            "type": "string"
+          },
+          "cursos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistroCurso"
+            }
+          }
+        }
+      },
+      "RegistroCurso": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "estudiantes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistroEstudiante"
+            }
+          }
+        }
+      },
+      "RegistroEstudiante": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "codigo": {
+            "type": "string"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "asistencias": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegistroAsistencia"
+            }
+          }
+        }
+      },
+      "RegistroAsistencia": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dia": {
+            "type": "string"
+          },
+          "asistencia": {
+            "type": "boolean"
           }
         }
       },
