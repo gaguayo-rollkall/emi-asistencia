@@ -11,6 +11,6 @@ public class Reportes : EndpointGroupBase
             .MapMethods("/registros-carrera", new[] { "GET" }, GetRegistrosPorCarrera);
     }
 
-    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorCarrera(ISender sender, string fechaInicio, string fechaFin) =>
-        await sender.Send(new GetRegistrosPorCarreraQuery(DateTime.Parse(fechaInicio), DateTime.Parse(fechaFin)));
+    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorCarrera(ISender sender, Guid? carreraId, Guid periodoAcademicoId, string fechaInicio, string fechaFin) =>
+        await sender.Send(new GetRegistrosPorCarreraQuery(carreraId, periodoAcademicoId, DateTime.Parse(fechaInicio), DateTime.Parse(fechaFin)));
 }

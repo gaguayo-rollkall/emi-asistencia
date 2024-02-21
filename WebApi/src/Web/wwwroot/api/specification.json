@@ -562,13 +562,33 @@
         "operationId": "GetApiReportesRegistrosCarrera",
         "parameters": [
           {
+            "name": "carreraId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "guid",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "periodoAcademicoId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 2
+          },
+          {
             "name": "fechaInicio",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "x-position": 1
+            "x-position": 3
           },
           {
             "name": "fechaFin",
@@ -577,7 +597,7 @@
             "schema": {
               "type": "string"
             },
-            "x-position": 2
+            "x-position": 4
           }
         ],
         "responses": {

@@ -4,7 +4,11 @@ using WebApi.Application.Common.Security;
 namespace Microsoft.Extensions.DependencyInjection.Reportes.Queries;
 
 [Authorize]
-public record GetRegistrosPorCarreraQuery(DateTime fechaInicio, DateTime fechaFin) : IRequest<IList<RegistroCarreraDto>>;
+public record GetRegistrosPorCarreraQuery(
+    Guid? carreraId,
+    Guid periodoAcademicoId,
+    DateTime fechaInicio,
+    DateTime fechaFin) : IRequest<IList<RegistroCarreraDto>>;
 
 public class
     GetRegistrosPorCarreraQueryHandler : IRequestHandler<GetRegistrosPorCarreraQuery, IList<RegistroCarreraDto>>
@@ -22,13 +26,14 @@ public class
         
         var carreras = await _context.Carreras
             .AsNoTracking()
+            .Where(c => request.carreraId == null || c.Id == request.carreraId)
             .Select(c => new { c.Id, c.Nombre, })
             .OrderBy(c => c.Nombre)
             .ToListAsync(cancellationToken);
 
         var periodoAcademico = await _context.PeriodoAcademicos
             .AsNoTracking()
-            .Where(p => p.FechaInicio >= request.fechaInicio && request.fechaFin <= p.FechaFin)
+            .Where(p => p.Id == request.periodoAcademicoId)
             .Select(s => new
             {
                 s.Id,
@@ -47,7 +52,7 @@ public class
         while (fechaInicio <= fechaFin)
         {
             dias.Add(new DateOnly(fechaInicio.Year, fechaFin.Month, fechaInicio.Day));
-            fechaInicio = fechaFin.AddDays(1);
+            fechaInicio = fechaInicio.AddDays(1);
         }
 
         var cursos = await _context.Cursos
@@ -88,7 +93,7 @@ public class
                 {
                     var registroEstudiante = new RegistroEstudiante { Codigo = estudiante!.Codigo, Nombre = estudiante.Nombre };
                     var asistenciasPorEstudiante = asistencias
-                        .Where(a => a.CodigoEstudiante == estudiante.Codigo)
+                        .Where(a => a.CodigoEstudiante == estudiante.Codigo || a.RFID == estudiante.RFID)
                         .Select(a => new
                         {
                             Fecha = new DateOnly(a.Fecha.Year, a.Fecha.Month, a.Fecha.Day),

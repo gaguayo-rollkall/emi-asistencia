@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.1.1",
     "@syncfusion/ej2-react-barcode-generator": "^24.2.6",
     "@syncfusion/ej2-react-buttons": "^24.2.3",
+    "@syncfusion/ej2-react-calendars": "^24.2.5",
     "@syncfusion/ej2-react-charts": "^24.2.5",
     "@syncfusion/ej2-react-dropdowns": "^24.2.5",
     "@syncfusion/ej2-react-grids": "^24.2.4",
