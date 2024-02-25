@@ -364,6 +364,38 @@
         }
       }
     },
+    "/api/Estudiantes/enviar-invitacion": {
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "EnviarInvitacion",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnviarInvitacionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Estudiantes/registrar-estudiante": {
       "post": {
         "tags": [
@@ -526,13 +558,13 @@
         "tags": [
           "PeriodosAcademicos"
         ],
-        "operationId": "CrearPeriodoAcademico",
+        "operationId": "CrearActualizarPeriodoAcademico",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CrearPeriodoAcademicoCommand"
+                "$ref": "#/components/schemas/CrearActualizarPeriodoAcademicoCommand"
               }
             }
           },
@@ -550,6 +582,31 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/PeriodosAcademicos/{id}": {
+      "delete": {
+        "tags": [
+          "PeriodosAcademicos"
+        ],
+        "operationId": "BorrarPeriodoAcademico",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -1491,6 +1548,11 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
           "nombre": {
             "type": "string"
           },
@@ -1518,6 +1580,15 @@
             "items": {
               "$ref": "#/components/schemas/EstudianteDto"
             }
+          }
+        }
+      },
+      "EnviarInvitacionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "codigo": {
+            "type": "string"
           }
         }
       },
@@ -1647,10 +1718,15 @@
           }
         }
       },
-      "CrearPeriodoAcademicoCommand": {
+      "CrearActualizarPeriodoAcademicoCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
           "periodo": {
             "type": "string"
           },

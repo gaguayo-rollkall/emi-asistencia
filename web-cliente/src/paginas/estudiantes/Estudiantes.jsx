@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar } from '@syncfusion/ej2-react-grids';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn, Filter } from '@syncfusion/ej2-react-grids';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
@@ -13,7 +13,7 @@ export default function Estudiantes() {
   const [errors, setErrors] = useState({});
   const [estudiantes, setEstudiantes] = useState([]);
 
-  const guardar = async (seleccionado) => {
+  const guardar = async (seleccionado, previo) => {
     try {
       if (!seleccionado.nombre?.trim()) {
         return;
@@ -23,7 +23,14 @@ export default function Estudiantes() {
       await cargarEstudiantes();
     } catch (error) {
       const { response: { data: { errors } } } = error;
-      gridRef.current.dataSource = estudiantes;
+      const previosEstudiantes = [...estudiantes];
+      const estudianteIndex = previosEstudiantes.findIndex(e => e.codigo === previo.codigo);
+
+      if (estudianteIndex !== -1) {
+        previosEstudiantes[estudianteIndex] = { ...previo };
+
+        setEstudiantes([...previosEstudiantes]);
+      }
 
       if (errors) {
         setErrors(errors);
@@ -45,7 +52,32 @@ export default function Estudiantes() {
 
   const dataSourceChanged = async (state) => {
     if (state.action === 'add' || state.action === 'edit') {
-      await guardar(state.data);
+      await guardar(state.data, state.previousData);
+    }
+  }
+
+  const commands = [
+    {
+      buttonOption: {
+        content: 'Invitacion', cssClass: 'btn btn-active btn-link btn-xs'
+      }
+    }
+  ];
+
+  const commandClick = async (args) => {
+    const { codigo, email } = args.rowData;
+    
+    if (!email) {
+      toast.error('El estudiante no tiene un email.');
+      return;
+    }
+
+    try {
+      await apiService.post('/estudiantes/enviar-invitacion', { codigo });
+      toast.success('Se envio la invitacion al estudiante.');
+    } catch (error) {
+      console.error('Invitar', error);
+      toast.error('Hubo un problema al enviar la invitacion.')
     }
   }
 
@@ -55,6 +87,9 @@ export default function Estudiantes() {
 
   const toolbarOptions = ['Add', 'Edit']
   const editSettings = { allowEditing: true, allowAdding: true };
+  const FilterOptions = {
+    type: 'Menu'
+  };
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
@@ -69,14 +104,19 @@ export default function Estudiantes() {
               editSettings={editSettings}
               actionComplete={dataSourceChanged}
               ref={gridRef}
-              enableImmutableMode={true}>
+              enableImmutableMode={false}
+              allowFiltering={true}
+              filterSettings={FilterOptions}
+              commandClick={commandClick}>
               <ColumnsDirective>
-                <ColumnDirective field='codigo' isPrimaryKey={true} />
+              <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
+                <ColumnDirective field='codigo' />
                 <ColumnDirective field='nombre' headerText='Nombre' />
                 <ColumnDirective field='rfid' headerText='RFID' />
                 <ColumnDirective field='email' headerText='Email' />
+                <ColumnDirective headerText='Enviar invitacion' width='120' commands={commands} />
               </ColumnsDirective>
-              <Inject services={[Page, Toolbar, Edit]} />
+              <Inject services={[Page, Toolbar, Edit, CommandColumn, Filter]} />
             </GridComponent>
           </div>
         </div>

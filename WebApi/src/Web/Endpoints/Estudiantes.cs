@@ -10,6 +10,7 @@ public class Estudiantes : EndpointGroupBase
         app.MapGroup(this)
             .MapGet(GetEstudiantes)
             .MapPost(RegistrarEstudiantes)
+            .MapPost(EnviarInvitacion, "/enviar-invitacion")
             .MapMethods("/registrar-estudiante", new[] { "POST" }, RegistrarEstudiante);
     }
     
@@ -20,5 +21,8 @@ public class Estudiantes : EndpointGroupBase
         await sender.Send(command);
     
     public async Task<bool> RegistrarEstudiante(ISender sender, RegistrarEstudianteCommand command) =>
+        await sender.Send(command);
+
+    public async Task<bool> EnviarInvitacion(ISender sender, EnviarInvitacionCommand command) =>
         await sender.Send(command);
 }

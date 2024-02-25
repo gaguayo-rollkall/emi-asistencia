@@ -25,6 +25,7 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
                 .Where(c => c.CursoId == request.CursoId)
                 .Select(c => new EstudianteDto
                 {
+                    Id = c.Estudiante!.Id,
                     Codigo = c.Estudiante!.Codigo,
                     Nombre = c.Estudiante!.Nombre,
                     Email = c.Estudiante!.Email,
@@ -38,7 +39,7 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
             .AsNoTracking()
             .Select(e => new EstudianteDto
             {
-                Codigo = e.Codigo, Nombre = e.Nombre, Email = e.Email, RFID = e.RFID,
+                Id = e.Id, Codigo = e.Codigo, Nombre = e.Nombre, Email = e.Email, RFID = e.RFID,
             })
             .ToListAsync(cancellationToken);
     }

@@ -32,13 +32,14 @@ export default function Calendario() {
   const [isLoading, setIsLoading] = useState(true);
 
   const actionComplete = async (args) => {
+    console.log(args);
     if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged') {
       const [evento] = args.data;
       await apiService.post('/eventos', evento);
       return;
     }
 
-    if (args.requestType === 'eventDeleted') {
+    if (args.requestType === 'eventDeleted' || args.requestType === 'eventRemoved') {
       const [evento] = args.data;
       await apiService.delete(`/eventos/${evento.Id}`)
     }

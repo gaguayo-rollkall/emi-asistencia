@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection.TodoLists.Commands.CrearPeriodoAcademico;
 
-public class CrearPeriodoAcademicoValidador : AbstractValidator<CrearPeriodoAcademicoCommand>
+public class CrearPeriodoAcademicoValidador : AbstractValidator<CrearActualizarPeriodoAcademicoCommand>
 {
     private readonly IApplicationDbContext _context;
 

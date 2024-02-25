@@ -27,7 +27,7 @@ export default function Cursos() {
   const commands = [
     {
       buttonOption: {
-        content: 'Alumnos', cssClass: 'e-flat'
+        content: 'Alumnos', cssClass: 'btn btn-active btn-link btn-xs'
       }
     }
   ];
@@ -71,6 +71,8 @@ export default function Cursos() {
         periodoId: periodo,
         ...seleccionado
       });
+
+      await cargarCursos();
     } catch (error) {
       const { response: { data: { errors } } } = error;
       gridRef.current.dataSource = cursos;
@@ -168,7 +170,7 @@ export default function Cursos() {
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
                 <ColumnDirective field='nombre' headerText='Nombre' width='100' />
-                <ColumnDirective headerText='Estudiantes' width='120' commands={commands} />
+                <ColumnDirective headerText='' width='120' commands={commands} />
               </ColumnsDirective>
               <Inject services={[Page, Toolbar, Edit, CommandColumn]} />
             </GridComponent>
