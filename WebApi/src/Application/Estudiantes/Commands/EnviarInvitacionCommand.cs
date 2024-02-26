@@ -1,6 +1,7 @@
-﻿using System.Net.Mail;
-using Mandrill;
-using Mandrill.Model;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using System.Net.Mail;
+using QRCoder;
 using WebApi.Application.Common.Interfaces;
 
 namespace Microsoft.Extensions.DependencyInjection.Estudiantes.Commands;
@@ -58,8 +59,20 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
             myMail.Subject = "Test message";
             myMail.SubjectEncoding = System.Text.Encoding.UTF8;
 
+            var qrCodeImage = GenerateQRCode(estudiante.Codigo);
+            var base64Image = ConvertImageToBase64(qrCodeImage);
+
+            var bytes = Convert.FromBase64String(base64Image);
+            var ms = new MemoryStream(bytes);
+
+            var fileName = $"{estudiante.Codigo} {estudiante.Nombre}.png";
+            var data = new Attachment(ms, fileName);
+            data.ContentId = fileName;
+            data.ContentDisposition!.Inline = true;
+            myMail.Attachments.Add(data);
+            
             // set body-message and encoding
-            myMail.Body = @"
+            myMail.Body = $@"
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -91,7 +104,7 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
                                     <tbody style=""box-sizing: border-box;"">
                                       <tr style=""box-sizing: border-box;"">
                                         <td class=""card-cell"" style=""box-sizing: border-box; background-color: rgb(255, 255, 255); overflow-x: hidden; overflow-y: hidden; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; text-align: center;"" bgcolor=""rgb(255, 255, 255)"" align=""center"">
-                                          <img src=""https://tropico.emi.edu.bo/images/2022/08/25/portada-1.png"" alt=""Big image here"" id=""i6fby"" class=""c1271"" style=""box-sizing: border-box; width: 100%; margin-top: 0px; margin-right: 0px; margin-bottom: 15px; margin-left: 0px; font-size: 50px; color: rgb(120, 197, 214); line-height: 250px; text-align: center;"">
+                                          <img src=""https://tropico.emi.edu.bo/images/2022/08/25/portada-1.png"" alt=""EMI"" id=""i6fby"" class=""c1271"" style=""box-sizing: border-box; width: 100%; margin-top: 0px; margin-right: 0px; margin-bottom: 15px; margin-left: 0px; font-size: 50px; color: rgb(120, 197, 214); line-height: 250px; text-align: center;"">
                                           <table class=""table100 c1357"" style=""box-sizing: border-box; width: 100%; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; height: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-collapse: collapse;"" width=""100%"" height=""0"">
                                             <tbody style=""box-sizing: border-box;"">
                                               <tr style=""box-sizing: border-box;"">
@@ -102,11 +115,7 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
                                                   </p>
                                                   <table class=""c1542"" style=""box-sizing: border-box; margin-top: 0px; margin-right: auto; margin-bottom: 10px; margin-left: auto; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%;"" width=""100%"">
                                                     <tbody style=""box-sizing: border-box;"">
-                                                      <tr style=""box-sizing: border-box;"">
-                                                        <td id=""c1545"" class=""card-footer"" style=""box-sizing: border-box; padding-top: 20px; padding-right: 0px; padding-bottom: 20px; padding-left: 0px; text-align: center;"" align=""center"">
-                                                          <a href=""https://github.com/grapesjs/grapesjs"" class=""button"" id=""i14ta"" style=""box-sizing: border-box; font-size: 12px; padding-top: 10px; padding-right: 20px; padding-bottom: 10px; padding-left: 20px; color: rgb(255, 255, 255); text-align: center; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; font-weight: 300; background-color: #061b5f;"">Acceder App Movil</a>
-                                                        </td>
-                                                      </tr>
+                                                        <img id=""qrImage"" src=""cid:{fileName}"" alt=""QR"">
                                                     </tbody>
                                                   </table>
                                                 </td>
@@ -142,5 +151,26 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
         }
 
         return true;
+    }
+    
+    static Bitmap GenerateQRCode(string data)
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+        var qrCode = new QRCode(qrCodeData);
+        Bitmap qrCodeImage = qrCode.GetGraphic(20); // Adjust the size as needed
+
+        return qrCodeImage;
+    }
+
+    static string ConvertImageToBase64(Bitmap image)
+    {
+        using MemoryStream ms = new MemoryStream();
+#pragma warning disable CA1416
+        image.Save(ms, ImageFormat.Png);
+#pragma warning restore CA1416
+        byte[] imageBytes = ms.ToArray();
+        string base64String = Convert.ToBase64String(imageBytes);
+        return base64String;
     }
 }
