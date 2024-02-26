@@ -66,6 +66,11 @@ const HomeScreen = () => {
     }
   };
 
+  const salir = () => {
+    setCodigo('')
+    AsyncStorage.removeItem('codigo');
+  }
+
   if (hasPermission === null) {
     return <Text>Solicitando Permiso de Camara.</Text>;
   }
@@ -90,7 +95,7 @@ const HomeScreen = () => {
         </Button>
       )}
 
-      {codigo && <Button onPress={() => setCodigo('')} style={{ backgroundColor: '#4a00ff', margin: 24, position: 'absolute', bottom: 12 }}>Salir</Button>}
+      {codigo && <Button onPress={() => salir()} style={{ backgroundColor: '#4a00ff', margin: 24, position: 'absolute', bottom: 12 }}>Salir</Button>}
 
       {!scanned && <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}

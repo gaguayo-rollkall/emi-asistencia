@@ -616,7 +616,7 @@
         "tags": [
           "Reportes"
         ],
-        "operationId": "GetApiReportesRegistrosCarrera",
+        "operationId": "GetRegistrosPorCarrera",
         "parameters": [
           {
             "name": "carreraId",
@@ -655,6 +655,61 @@
               "type": "string"
             },
             "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegistroCarreraDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reportes/registros-evento": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "operationId": "GetRegistrosPorEvento",
+        "parameters": [
+          {
+            "name": "carreraId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "guid",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "periodoAcademicoId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "evento",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
           }
         ],
         "responses": {
