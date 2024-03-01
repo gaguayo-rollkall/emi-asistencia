@@ -19,7 +19,6 @@ public class RegistrarAsistenciaValidator : AbstractValidator<RegistrarAsistenci
 
                 if (evento is null)
                 {
-                    validationContext.AddFailure("Evento no encontrado.");
                     return;
                 }
                 
