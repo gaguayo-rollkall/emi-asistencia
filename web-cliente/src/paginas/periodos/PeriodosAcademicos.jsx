@@ -48,6 +48,8 @@ export default function PeriodosAcademicos() {
       }
 
       console.error('Guardar', error);
+    } finally {
+      modalRef.current?.close();
     }
   }
 
