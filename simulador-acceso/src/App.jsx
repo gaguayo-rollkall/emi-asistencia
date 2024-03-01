@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import logo from './assets/logo_emi.png';
+import ibnorca from './assets/ibnorca.png';
 import './App.css'
 
 import { URL_API } from '../configuracion.json';
@@ -22,12 +23,43 @@ const useEventListener = (eventName, handler, element = window) => {
   }, [eventName, element]);
 };
 
+function NOW() {
+
+  var date = new Date();
+  var aaaa = date.getUTCFullYear();
+  var gg = date.getUTCDate();
+  var mm = (date.getUTCMonth() + 1);
+
+  if (gg < 10)
+    gg = "0" + gg;
+
+  if (mm < 10)
+    mm = "0" + mm;
+
+  var cur_day = aaaa + "-" + mm + "-" + gg;
+
+  var hours = date.getUTCHours()
+  var minutes = date.getUTCMinutes()
+  var seconds = date.getUTCSeconds();
+
+  if (hours < 10)
+    hours = "0" + hours;
+
+  if (minutes < 10)
+    minutes = "0" + minutes;
+
+  if (seconds < 10)
+    seconds = "0" + seconds;
+
+  return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+}
+
 function App() {
   const [codigo, setCodigo] = useState('');
   const [estado, setEstado] = useState('');
-  const [mensaje, setMensaje] = useState('Esperando ...');
+  const [estudiante, setEstudiante] = useState({});
 
-  const registrarAsitencia = async(rfid) => {
+  const registrarAsitencia = async (rfid) => {
     try {
       const asistencia = {
         rfid,
@@ -41,7 +73,7 @@ function App() {
         body: JSON.stringify(asistencia)
       };
 
-      const { codigo: codigoEstudiante, nombre = '' } = await fetch(apiUrl, opciones)
+      const estudianteRegistrado = await fetch(apiUrl, opciones)
         .then(response => {
           if (!response.ok) {
             throw new Error('Hubo un problema registrando');
@@ -52,16 +84,17 @@ function App() {
 
       setCodigo('');
       setEstado('go');
-      setMensaje(`Bienvenido ${codigoEstudiante} ${nombre}`)
+      setEstudiante(estudianteRegistrado);
     } catch (error) {
       console.error('Asistencia', error);
-      setMensaje('Rechazado')
+      setEstado('rejected');
+      setEstudiante({});
     } finally {
       setTimeout(() => {
         setCodigo('');
         setEstado('');
-        setMensaje('Esperando ...')
-      }, 1500);
+        setEstudiante({});
+      }, 2500);
     }
   }
 
@@ -77,13 +110,50 @@ function App() {
 
   return (
     <main>
-      <img src={logo} alt='logo' width={320} />
-      <div className="encuadro">
-        <div className={`estado ${estado}`}></div>
+      <div className="header">
+        <div className="atrevete">
+          <span>ATREVETE A SER</span>
+          <span className="inge">INGENIER@</span>
+        </div>
+        <div className="sello">
+          SELLO
+        </div>
+        <div className="logo">
+          <img src={logo} alt='logo' width={320} />
+        </div>
+        <div className="ibnorca">
+          <img src={ibnorca} alt='ibnorca' width={320} />
+        </div>
       </div>
 
-      <div className="welcome">
-        {mensaje}
+      <div className="estudiante">
+        <div className={`photo ${estado === 'go' ? 'go' : ''}`}>
+          {estado === 'go' ? (
+            <div className="granted">
+              SE HABILITO EL ACCESO
+            </div>
+          ) : estado === 'rejected' ? (
+            <div className="rejected">
+              ACCESO DENEGADO
+            </div>
+          ) : <></>}
+        </div>
+        <div className="details">
+          {estado === 'go' ? (
+            <>
+              <div className="detalles">EST. {estudiante.nombre}</div>
+              <div className="detalles">Codigo: {estudiante.codigo}</div>
+              <div className="detalles">RFID: {estudiante.rfid}</div>
+            </>
+          ) : estado === 'rejected' ? (
+            <>
+              <div className="detalles bad">NO SE ENCONTRO EL REGISTRO</div>
+              <div className="detalles bad">DE LA TARJETA EN EL SISTEMA</div>
+              <div className="detalles bad">RFID: {codigo}</div>
+              <div className="detalles bad">{NOW()}</div>
+            </>
+          ) : <></>}
+        </div>
       </div>
     </main>
   )

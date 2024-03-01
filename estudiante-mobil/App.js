@@ -28,8 +28,12 @@ const HomeScreen = () => {
         body: JSON.stringify(asistencia)
       };
 
-      const { codigo: codigoEstudiante, nombre = '' } = await fetch(apiUrl, opciones)
-        .then(response => {
+      const { id, subject } = await fetch(apiUrl, opciones)
+        .then(async response => {
+          if (response.status === 400) {
+            throw new Error('No se puede registrar asistencia a un evento que no está en curso.');
+          }
+
           if (!response.ok) {
             throw new Error('Hubo un problema registrando');
           }
@@ -37,10 +41,9 @@ const HomeScreen = () => {
           return response.json();
         })
 
-      alert(`Bienvenido ${codigoEstudiante} ${nombre}`)
+      alert(`Asistencia registrada para ${subject}, Codigo: ${id}`)
     } catch (error) {
-      console.error('Asistencia', error);
-      alert('Rechazado')
+      alert(`Asistencia Rechazada: ${error}`);
     }
   }
 

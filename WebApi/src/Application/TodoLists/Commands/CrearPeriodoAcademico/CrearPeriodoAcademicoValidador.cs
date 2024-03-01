@@ -25,6 +25,11 @@ public class CrearPeriodoAcademicoValidador : AbstractValidator<CrearActualizarP
                     failures.Add("Gestion debe ser mayor a 1990");
                 }
 
+                if (model.Gestion < DateTime.Now.Year)
+                {
+                    failures.Add("Gestion no debe ser menor al año actual.");
+                }
+
                 if (model.FechaInicio is null)
                 {
                     failures.Add("Fecha de Inicio es obligatoria.");
