@@ -26,6 +26,7 @@ import Estudiantes from './paginas/estudiantes/Estudiantes';
 import Dashboard from './paginas/reportes/Dashboard';
 import RegistrosCarrera from './paginas/reportes/RegistrosCarrera';
 import RegistrosEvento from './paginas/reportes/RegistrosEvento';
+import Usuarios from './paginas/usuarios/Usuarios';
 
 function App() {
   useEffect(() => {
@@ -63,6 +64,7 @@ function App() {
             <Route path="cursos/:id/alumnos" element={<Alumnos />} />
             <Route path="estudiantes" element={<Estudiantes />} />
             <Route path="rfid" element={<></>} />
+            <Route path="usuarios" element={<Usuarios />} />
           </Route>
         </Routes>
       </AuthProvider>

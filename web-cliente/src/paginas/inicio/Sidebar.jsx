@@ -15,6 +15,7 @@ import CursosIcon from './icons/cursos.svg?react';
 import CarreraIcon from './icons/carrera.svg?react';
 import ChartIcon from './icons/chart.svg?react';
 import EventoIcon from './icons/evento.svg?react';
+import UsuariosIcon from './icons/usuarios.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
@@ -93,6 +94,7 @@ const Sidebar = ({ setExpand }) => {
     icons_map["carrera"] = <CarreraIcon className="h-5 w-5 text-current" />
     icons_map["chart"] = <ChartIcon className="h-5 w-5 text-current" />
     icons_map["evento"] = <EventoIcon className="h-5 w-5 text-current" />
+    icons_map["usuarios"] = <UsuariosIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 
@@ -155,6 +157,7 @@ const Sidebar = ({ setExpand }) => {
             <div
               className={`truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
                 }`}
+                style={{ color: 'white' }}
             >
               {item.title}
             </div>
@@ -217,7 +220,7 @@ const Sidebar = ({ setExpand }) => {
       ].join(" ")}
     >
       <button
-        className="absolute z-50 top-16 -right-3 bg-white hover:bg-slate-100 text-slate-500 p-0.5 rounded-full border border-slate-200"
+        className="absolute z-50 top-16 -right-3 bg-white hover:bg-slate-100 text-slate-500 p-0.5 rounded-full border border-black"
         onClick={() => {
           setIsExpand(!isExpand);
           setExpand(!isExpand);
@@ -242,7 +245,7 @@ const Sidebar = ({ setExpand }) => {
         onMouseLeave={() => handleHoverExpand(false)}
         className={`relative h-screen overflow-hidden`}
       >
-        <SimpleBar style={{ height: "100%" }} autoHide timeout={100}>
+        <SimpleBar style={{ height: "100%", backgroundColor: '#003f8a', color: 'white' }} autoHide timeout={100}>
           <div className="text-slate-500">
             <div className="my-8 flex flex-col items-center h-44 overflow-x-hidden">
               <a
@@ -260,13 +263,13 @@ const Sidebar = ({ setExpand }) => {
                   <img src={profilePic} className="block" alt="" />
                 </div>
                 <div
-                  className={`text-base font-semibold text-slate-700 mt-3 truncate duration-300 ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
+                  className={`text-base font-semibold mt-3 truncate duration-300 text-white ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
                     }`}
                 >
                   {username}
                 </div>
                 <div
-                  className={`duration-300 text-sm text-slate-500 truncate ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
+                  className={`duration-300 text-sm truncate text-white ${isExpand ? "" : isExpandOnHover ? "" : "w-0 h-0 opacity-0"
                     }`}
                 >
                   {company}

@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar } from '@syncfusion/ej2-react-grids';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, PdfExport } from '@syncfusion/ej2-react-grids';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
+import { upperCase } from '../../utiles';
 
 const URL = '/carreras';
 
@@ -70,7 +71,7 @@ export default function Carreras() {
     cargarCarreras();
   }, [cargarCarreras]);
 
-  const toolbarOptions = ['Add', 'Edit', 'Delete']
+  const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
   const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
 
   return (
@@ -86,12 +87,13 @@ export default function Carreras() {
                            editSettings={editSettings}
                            actionComplete={dataSourceChanged}
                            ref={gridRef}
-                           enableImmutableMode={true}>
+                           enableImmutableMode={true}
+                           allowPdfExport={true}>
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
-                <ColumnDirective field='nombre' headerText='Nombre' width='100' />
+                <ColumnDirective field='nombre' headerText='Nombre' width='100' valueAccessor={upperCase} />
               </ColumnsDirective>
-              <Inject services={[Page, Toolbar, Edit]}/>
+              <Inject services={[Page, Toolbar, Edit, PdfExport]}/>
             </GridComponent>
           </div>
         </div>

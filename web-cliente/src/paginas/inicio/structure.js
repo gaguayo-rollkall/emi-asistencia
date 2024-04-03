@@ -1,5 +1,13 @@
 const sidebarStructure = [
   {
+    id: 'usuarios',
+    title: 'Usuarios',
+    name: 'usuarios',
+    parent: true,
+    icon: 'usuarios',
+    link: "/usuarios"
+  },
+  {
     id: "reportes",
     title: "Reportes",
     name: "dashboard",

@@ -10,7 +10,7 @@ namespace WebApi.Infrastructure.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
+    public DbSet<ApplicationUser> AppUsers => Set<ApplicationUser>();
     public DbSet<TodoList> TodoLists => Set<TodoList>();
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
     public DbSet<Carrera> Carreras => Set<Carrera>();
@@ -45,4 +45,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         base.OnModelCreating(builder);
     }
+
+    public IEnumerable<User> GetUsers() => Users.FromSql($"SELECT * FROM AspNetUsers")
+        .Select(u => new User
+        {
+            Id = u.Id,
+            Nombre = u.NormalizedUserName,
+            UserName = u.UserName,
+            Email = u.Email,
+        })
+        .ToList();
 }

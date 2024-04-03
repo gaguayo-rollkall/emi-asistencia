@@ -20,4 +20,5 @@ public interface IApplicationDbContext
     DbSet<PersonalPermiso> PersonalPermisos { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    public IEnumerable<User> GetUsers();
 }
