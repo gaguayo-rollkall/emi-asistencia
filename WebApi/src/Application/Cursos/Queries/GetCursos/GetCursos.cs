@@ -22,7 +22,7 @@ public class GetCursosQueryHandler : IRequestHandler<GetCursosQuery, IList<Curso
             .AsNoTracking()
             .Where(c => c.CarreraId == request.CarreraId &&
                         c.PeriodoAcademicoId == request.PeriodoId)
-            .Select(c => new CursoDto { Id = c.Id, Nombre = c.Nombre, })
+            .Select(c => new CursoDto { Id = c.Id, Nombre = c.Nombre.ToUpper(), })
             .ToListAsync(cancellationToken);
     }
 }

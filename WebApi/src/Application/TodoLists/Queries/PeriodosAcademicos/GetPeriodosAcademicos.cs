@@ -27,7 +27,7 @@ public class GetPeriodosAcademicosQueryHandler : IRequestHandler<GetPeriodosAcad
                 {
                     Id = s.Id,
                     Gestion = s.Gestion,
-                    Periodo = s.Periodo,
+                    Periodo = s.Periodo.ToUpper(),
                     FechaInicio = s.FechaInicio,
                     FechaFin = s.FechaFin,
                 })

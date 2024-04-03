@@ -27,7 +27,7 @@ public class
         var carreras = await _context.Carreras
             .AsNoTracking()
             .Where(c => request.carreraId == null || c.Id == request.carreraId)
-            .Select(c => new { c.Id, c.Nombre, })
+            .Select(c => new { c.Id, Nombre = c.Nombre.ToUpper(), })
             .OrderBy(c => c.Nombre)
             .ToListAsync(cancellationToken);
 
@@ -62,7 +62,7 @@ public class
             {
                 c.CarreraId,
                 c.Id,
-                c.Nombre,
+                Nombre = c.Nombre.ToUpper(),
                 Estudiantes = c.CursoEstudiantes
                     .Select(ce => ce.Estudiante)
                     .ToList(),

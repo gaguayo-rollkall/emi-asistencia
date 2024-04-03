@@ -22,7 +22,7 @@ public class GetCarrerasQueryHandler : IRequestHandler<GetCarrerasQuery, IList<C
             .Select(c => new CarreraDto
             {
                 Id = c.Id,
-                Nombre = c.Nombre,
+                Nombre = c.Nombre.ToUpper(),
             })
             .OrderBy(c => c.Nombre)
             .ToListAsync(cancellationToken);
