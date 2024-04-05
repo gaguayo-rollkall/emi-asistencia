@@ -77,6 +77,14 @@ const sidebarStructure = [
     icon: 'estudiantes',
     link: "/estudiantes"
   },
+  {
+    id: 'control',
+    title: 'Control',
+    name: 'control',
+    parent: true,
+    icon: 'control',
+    link: "/control"
+  },
   // {
   //   id: 'configuracion',
   //   title: 'Registro RFID',

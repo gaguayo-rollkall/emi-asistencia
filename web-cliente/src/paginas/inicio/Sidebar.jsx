@@ -16,6 +16,7 @@ import CarreraIcon from './icons/carrera.svg?react';
 import ChartIcon from './icons/chart.svg?react';
 import EventoIcon from './icons/evento.svg?react';
 import UsuariosIcon from './icons/usuarios.svg?react';
+import ScreenIcon from './icons/screen.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
@@ -95,6 +96,7 @@ const Sidebar = ({ setExpand }) => {
     icons_map["chart"] = <ChartIcon className="h-5 w-5 text-current" />
     icons_map["evento"] = <EventoIcon className="h-5 w-5 text-current" />
     icons_map["usuarios"] = <UsuariosIcon className="h-5 w-5 text-current" />
+    icons_map["control"] = <ScreenIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 

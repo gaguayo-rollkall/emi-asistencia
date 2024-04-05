@@ -27,6 +27,7 @@ import Dashboard from './paginas/reportes/Dashboard';
 import RegistrosCarrera from './paginas/reportes/RegistrosCarrera';
 import RegistrosEvento from './paginas/reportes/RegistrosEvento';
 import Usuarios from './paginas/usuarios/Usuarios';
+import Control from './paginas/control/Control';
 
 function App() {
   useEffect(() => {
@@ -65,6 +66,7 @@ function App() {
             <Route path="estudiantes" element={<Estudiantes />} />
             <Route path="rfid" element={<></>} />
             <Route path="usuarios" element={<Usuarios />} />
+            <Route path="control" element={<Control />} />
           </Route>
         </Routes>
       </AuthProvider>
