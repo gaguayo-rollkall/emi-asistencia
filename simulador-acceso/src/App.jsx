@@ -111,22 +111,9 @@ function App() {
   return (
     <main>
       <div className="header">
-        <div className="atrevete">
-          <span>ATREVETE A SER</span>
-          <span className="inge">INGENIER@</span>
-        </div>
-        <div className="sello">
-          SELLO
-        </div>
-        <div className="logo">
-          <img src={logo} alt='logo' width={320} />
-        </div>
-        <div className="ibnorca">
-          <img src={ibnorca} alt='ibnorca' width={320} />
-        </div>
       </div>
 
-      <div className="estudiante">
+      {/* <div className="estudiante">
         <div className={`photo ${estado === 'go' ? 'go' : ''}`}>
           {estado === 'go' ? (
             <div className="granted">
@@ -154,7 +141,7 @@ function App() {
             </>
           ) : <></>}
         </div>
-      </div>
+      </div> */}
     </main>
   )
 }

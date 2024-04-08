@@ -18,6 +18,8 @@ public interface IApplicationDbContext
     DbSet<Permiso> Permisos { get; }
     DbSet<Personal> Personales { get; }
     DbSet<PersonalPermiso> PersonalPermisos { get; }
+    public DbSet<Control> Controles { get; }
+    DbSet<UsuarioInformacion> UsuarioInformaciones { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     public IEnumerable<User> GetUsers();

@@ -1,3 +1,3 @@
 export const upperCase = (field, data) => {
-  return data[field].toUpperCase();
+  return data[field]?.toUpperCase();
 }

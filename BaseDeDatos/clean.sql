@@ -1,0 +1,3 @@
+DELETE FROM CursoEstudiantes  WHERE 0;
+DELETE FROM Cursos WHERE 0;
+DELETE FROM Estudiantes WHERE 0;

@@ -90,7 +90,7 @@ export default function Carreras() {
                            enableImmutableMode={true}
                            allowPdfExport={true}>
               <ColumnsDirective>
-                <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
+                <ColumnDirective field='id' visible={true} isPrimaryKey={true} width={100} />
                 <ColumnDirective field='nombre' headerText='Nombre' width='100' valueAccessor={upperCase} />
               </ColumnsDirective>
               <Inject services={[Page, Toolbar, Edit, PdfExport]}/>

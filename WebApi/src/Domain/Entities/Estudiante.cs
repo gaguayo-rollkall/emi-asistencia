@@ -9,6 +9,8 @@ public class Estudiante : BaseAuditableEntity
     public string Codigo { get; set; } = string.Empty;
     public string RFID { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string Grado { get; set; } = "EST";
+    public string? Foto { get; set; }
     public ICollection<CursoEstudiante> Cursos { get; set; } = new List<CursoEstudiante>();
     
     public static void Map(ModelBuilder modelBuilder)
