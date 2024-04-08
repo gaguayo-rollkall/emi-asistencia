@@ -1065,6 +1065,43 @@
         ]
       }
     },
+    "/api/UploadBox": {
+      "post": {
+        "tags": [
+          "UploadBox"
+        ],
+        "operationId": "UploadFileAsync",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/UploadBox/{id}": {
+      "delete": {
+        "tags": [
+          "UploadBox"
+        ],
+        "operationId": "DeleteFileAsync",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Users": {
       "get": {
         "tags": [

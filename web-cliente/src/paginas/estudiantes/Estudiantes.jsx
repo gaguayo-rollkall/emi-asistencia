@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn, Filter } from '@syncfusion/ej2-react-grids';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
+import ImageUploader from '../../components/ImageUploader';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
 
@@ -94,6 +95,8 @@ export default function Estudiantes() {
   return (
     <main className="w-full h-full flex-grow p-6 relative">
       <Breadcrumbs items={['Inicio', 'Estudiantes']} />
+
+      <ImageUploader />
 
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">
