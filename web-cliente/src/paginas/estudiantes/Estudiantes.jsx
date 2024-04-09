@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn, Filter } from '@syncfusion/ej2-react-grids';
+import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Toolbar, CommandColumn, Filter } from '@syncfusion/ej2-react-grids';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
-import ImageUploader from '../../components/ImageUploader';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
+import ModalEstudiante from './ModalEstudiante';
 
 const URL = '/estudiantes';
 
@@ -13,49 +14,21 @@ export default function Estudiantes() {
   const gridRef = useRef();
   const [errors, setErrors] = useState({});
   const [estudiantes, setEstudiantes] = useState([]);
-
-  const guardar = async (seleccionado, previo) => {
-    try {
-      if (!seleccionado.nombre?.trim()) {
-        return;
-      }
-
-      await apiService.post(`${URL}/registrar-estudiante`, seleccionado);
-      await cargarEstudiantes();
-    } catch (error) {
-      const { response: { data: { errors } } } = error;
-      const previosEstudiantes = [...estudiantes];
-      const estudianteIndex = previosEstudiantes.findIndex(e => e.codigo === previo.codigo);
-
-      if (estudianteIndex !== -1) {
-        previosEstudiantes[estudianteIndex] = { ...previo };
-
-        setEstudiantes([...previosEstudiantes]);
-      }
-
-      if (errors) {
-        setErrors(errors);
-      }
-
-      console.error('Guardar', error);
-    }
-  }
+  const [modalEstudiante, setModalEstudiante] = useState(false);
+  const [estudiante, setEstudiante] = useState({ nombre: ''});
 
   const cargarEstudiantes = useCallback(async () => {
     try {
+      showSpinner(document.getElementById('estudiantes-main'));
       const data = await apiService.get(URL);
       setEstudiantes(data);
     } catch (error) {
       console.error('Cargar Carreras', error);
       toast.error('Hubo un problema al cargar los estudiantes.')
+    } finally {
+      hideSpinner(document.getElementById('estudiantes-main'));
     }
   }, []);
-
-  const dataSourceChanged = async (state) => {
-    if (state.action === 'add' || state.action === 'edit') {
-      await guardar(state.data, state.previousData);
-    }
-  }
 
   const commands = [
     {
@@ -67,7 +40,7 @@ export default function Estudiantes() {
 
   const commandClick = async (args) => {
     const { codigo, email } = args.rowData;
-    
+
     if (!email) {
       toast.error('El estudiante no tiene un email.');
       return;
@@ -82,48 +55,92 @@ export default function Estudiantes() {
     }
   }
 
+  const clickHandler = (args) => {
+    if (args.item.id === 'AgregarEstudiante') {
+      setEstudiante({
+        grado: 'EST',
+        nombre: '',
+        codigo: '',
+        rfid: '',
+        email: '',
+      });
+      setModalEstudiante(true);
+    }
+
+    if (args.item.id === 'EditarEstudiante') {
+      setModalEstudiante(true);
+    }
+  }
+
+  useEffect(() => {
+    createSpinner({
+      target: document.getElementById('estudiantes-main'),
+    });
+  }, []);
+
   useEffect(() => {
     cargarEstudiantes();
   }, [cargarEstudiantes]);
 
-  const toolbarOptions = ['Add', 'Edit']
-  const editSettings = { allowEditing: true, allowAdding: true };
+  const toolbarOptions = [
+    {
+      text: 'Agregar Estudiante',
+      tooltipText: 'Agregar',
+      prefixIcon: 'e-add',
+      id: 'AgregarEstudiante'
+    },
+    {
+      text: 'Editar Estudiante',
+      tooltipText: 'Editar',
+      prefixIcon: 'e-edit',
+      id: 'EditarEstudiante'
+    }]
   const FilterOptions = {
     type: 'Menu'
   };
+  const selectionSettings = { mode: 'Row', type: 'Single' };
 
   return (
-    <main className="w-full h-full flex-grow p-6 relative">
+    <main className="w-full h-full flex-grow p-6 relative" id="estudiantes-main">
       <Breadcrumbs items={['Inicio', 'Estudiantes']} />
-
-      <ImageUploader />
 
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">
           <div className="card-body">
-            <GridComponent dataSource={estudiantes}
+            <GridComponent
+              dataSource={estudiantes}
               toolbar={toolbarOptions}
+              toolbarClick={clickHandler}
               allowPaging={true}
-              editSettings={editSettings}
-              actionComplete={dataSourceChanged}
               ref={gridRef}
               enableImmutableMode={false}
               allowFiltering={true}
               filterSettings={FilterOptions}
-              commandClick={commandClick}>
+              commandClick={commandClick}
+              selectionSettings={selectionSettings}
+              rowSelected={({ data }) => setEstudiante({ ...data })}
+            >
               <ColumnsDirective>
-              <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
+                <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
                 <ColumnDirective field='codigo' />
+                <ColumnDirective field='grado' headerText='Grado' />
                 <ColumnDirective field='nombre' headerText='Nombre' />
                 <ColumnDirective field='rfid' headerText='RFID' />
                 <ColumnDirective field='email' headerText='Email' />
                 <ColumnDirective headerText='Enviar invitacion' width='120' commands={commands} />
               </ColumnsDirective>
-              <Inject services={[Page, Toolbar, Edit, CommandColumn, Filter]} />
+              <Inject services={[Page, Toolbar, CommandColumn, Filter]} />
             </GridComponent>
           </div>
         </div>
       </div>
+
+      <ModalEstudiante
+        status={modalEstudiante}
+        setStatus={setModalEstudiante}
+        estudiante={estudiante}
+        onClose={cargarEstudiantes}
+      />
 
       <Errores errors={errors} cleanErrors={() => setErrors([])} />
     </main>

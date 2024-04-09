@@ -34,6 +34,7 @@ public class RegistrarEstudianteCommandHandler : IRequestHandler<RegistrarEstudi
         estudianteDb.Nombre = request.Nombre;
         estudianteDb.Email = request.Email;
         estudianteDb.RFID = request.RFID;
+        estudianteDb.Foto = request.Foto;
         
         await _context.SaveChangesAsync(cancellationToken);
         

@@ -26,10 +26,12 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
                 .Select(c => new EstudianteDto
                 {
                     Id = c.Estudiante!.Id,
+                    Grado = c.Estudiante.Grado,
                     Codigo = c.Estudiante!.Codigo.ToUpper(),
                     Nombre = c.Estudiante!.Nombre.ToUpper(),
                     Email = c.Estudiante!.Email,
                     RFID = c.Estudiante!.RFID,
+                    Foto = c.Estudiante!.Foto,
                 })
                 .ToListAsync(cancellationToken);
         }
@@ -39,7 +41,8 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
             .AsNoTracking()
             .Select(e => new EstudianteDto
             {
-                Id = e.Id, Codigo = e.Codigo.ToUpper(), Nombre = e.Nombre.ToUpper(), Email = e.Email, RFID = e.RFID,
+                Id = e.Id, Codigo = e.Codigo.ToUpper(), Grado = e.Grado, Nombre = e.Nombre.ToUpper(), Email = e.Email, RFID = e.RFID,
+                Foto = e.Foto,
             })
             .ToListAsync(cancellationToken);
     }

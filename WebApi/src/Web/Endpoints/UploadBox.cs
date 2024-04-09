@@ -20,8 +20,8 @@ public class UploadBox : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(UploadFileAsync)
-            .MapDelete(DeleteFileAsync, "{id}");
+            .MapPost(UploadFileAsync, "/upload")
+            .MapPost(DeleteFileAsync, "/remove");
     }
 
     [AllowAnonymous]
@@ -57,32 +57,9 @@ public class UploadBox : EndpointGroupBase
     }
 
     [AllowAnonymous]
-    public async Task DeleteFileAsync(HttpContext context, string id)
+    public Task DeleteFileAsync(HttpContext context)
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsync("Invalid request. ID is required.");
-            return;
-        }
-
-        try
-        {
-            // Perform removal operation based on the provided ID
-            // For example, remove a file from the file system or database
-            // Example:
-            // RemoveFileById(id);
-
-            // Return a success response
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            await context.Response.WriteAsync($"Resource with ID {id} removed successfully.");
-        }
-        catch (Exception ex)
-        {
-            // Handle any exceptions
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsync($"An error occurred: {ex.Message}");
-        }
+        return Task.CompletedTask;
     }
 
     public async Task<string> UploadImageAsync(IFormFile file)
@@ -102,9 +79,9 @@ public class UploadBox : EndpointGroupBase
 
         var responseStream = await response.Content.ReadAsStringAsync();
         var imgurResponse = JsonSerializer.Deserialize<ImgurUploadResponse>(responseStream, new JsonSerializerOptions
-{
-    PropertyNameCaseInsensitive = true
-});
+        {
+            PropertyNameCaseInsensitive = true
+        });
 
         return imgurResponse?.Data?.Link ?? string.Empty;
     }

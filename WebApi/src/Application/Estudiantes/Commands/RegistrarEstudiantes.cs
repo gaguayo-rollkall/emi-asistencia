@@ -37,10 +37,12 @@ public class RegistrarEstudiantesCommandHandler : IRequestHandler<RegistrarEstud
                 estudianteDb = new Estudiante
                 {
                     Id = Guid.NewGuid(),
+                    Grado = estudiante.Grado,
                     Codigo = estudiante.Codigo,
                     Nombre = estudiante.Nombre,
                     Email = estudiante.Email,
                     RFID = estudiante.RFID,
+                    Foto = estudiante.Foto,
                 };
 
                 _context.Estudiantes.Add(estudianteDb);

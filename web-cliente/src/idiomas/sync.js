@@ -1297,8 +1297,8 @@ export default {
       "ModeSwitcher": "Modo interruptor"
     },
     "uploader": {
-      "Browse": "Vistazo...",
-      "Clear": "Claro",
+      "Browse": "Buscar archivo...",
+      "Clear": "Limpiar",
       "Upload": "Subir",
       "dropFilesHint": "O suelta archivos aquí",
       "invalidMaxFileSize": "El tamaño del archivo es demasiado grande.",

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@syncfusion/ej2-popups": "^25.1.38",
     "@syncfusion/ej2-react-barcode-generator": "^24.2.6",
     "@syncfusion/ej2-react-buttons": "^24.2.3",
     "@syncfusion/ej2-react-calendars": "^24.2.5",
@@ -26,6 +27,7 @@
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.2",
     "react-router-dom": "^6.22.0",
     "sort-by": "^1.2.0",
     "vite-plugin-svgr": "^4.2.0"

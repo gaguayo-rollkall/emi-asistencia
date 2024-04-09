@@ -34,7 +34,7 @@ const carreras = [
   '08dc2c00-5a4b-4cd4-8a46-d0dc6c80e698', // Petrolera
 ];
 
-var semestres = [
+var cursos = [
   'PRIMER SEMESTRE',
   'SEGUNDO SEMESTRE',
   'TERCER SEMESTRE',
@@ -50,7 +50,7 @@ var semestres = [
 let index = 0;
 
 carreras.forEach(carreraId => {
-  semestres.forEach(semestre => {
+  cursos.forEach(semestre => {
     const idSemestre = uuidv4();
     console.log(`INSERT INTO Cursos(Id, CarreraId, PeriodoAcademicoId, Nombre, Created, LastModified) VALUES ('${idSemestre}', '${carreraId}', '${periodoAcademico}', '${semestre}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);`);
 

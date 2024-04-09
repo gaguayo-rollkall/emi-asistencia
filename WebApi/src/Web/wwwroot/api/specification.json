@@ -1065,7 +1065,7 @@
         ]
       }
     },
-    "/api/UploadBox": {
+    "/api/UploadBox/upload": {
       "post": {
         "tags": [
           "UploadBox"
@@ -1078,23 +1078,12 @@
         }
       }
     },
-    "/api/UploadBox/{id}": {
-      "delete": {
+    "/api/UploadBox/remove": {
+      "post": {
         "tags": [
           "UploadBox"
         ],
         "operationId": "DeleteFileAsync",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
         "responses": {
           "200": {
             "description": ""
@@ -1668,6 +1657,9 @@
             "format": "guid",
             "nullable": true
           },
+          "grado": {
+            "type": "string"
+          },
           "nombre": {
             "type": "string"
           },
@@ -1679,6 +1671,10 @@
           },
           "email": {
             "type": "string"
+          },
+          "foto": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
