@@ -3,13 +3,10 @@ version: '3.7'
 services:
   web-cliente:
     container_name: 'emi-web-client'
+    build: ./web-cliente
     restart: always
-    image: nginx:alpine
     ports:
       - "5173:80"
-    volumes:
-      - ./nginx.web.conf:/etc/nginx/conf.d/default.conf
-      - ./web-cliente/dist:/usr/share/nginx/html
     networks:
       - default
     depends_on:
@@ -18,12 +15,9 @@ services:
   simulador-accesso:
     container_name: 'emi-simulador-accesso'
     restart: always
-    image: nginx:alpine
+    build: './simulador-acceso'
     ports:
       - "5174:80"
-    volumes:
-      - ./nginx.simulador.conf:/etc/nginx/conf.d/default.conf
-      - ./simulador-acceso/dist:/usr/share/nginx/html
     networks:
       - default
     depends_on:
@@ -33,6 +27,8 @@ services:
     container_name: 'emi-core'
     restart: always
     build: ./WebApi
+    ports:
+      - "8080:8080"
     volumes:
       - ./assets:/app/assets
     networks:
