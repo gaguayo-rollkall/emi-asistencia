@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
-import logo from './assets/logo_emi.png';
-import ibnorca from './assets/ibnorca.png';
+import { Carousel } from 'react-responsive-carousel';
+
 import './App.css'
 
 import { URL_API } from '../configuracion.json';
+import { useCallback } from 'react';
 
 const apiUrl = `${URL_API}/api/asistencias`;
 
@@ -58,6 +59,7 @@ function App() {
   const [codigo, setCodigo] = useState('');
   const [estado, setEstado] = useState('');
   const [estudiante, setEstudiante] = useState({});
+  const [controles, setControles] = useState([]);
 
   const registrarAsitencia = async (rfid) => {
     try {
@@ -108,9 +110,40 @@ function App() {
 
   useEventListener("keydown", handler);
 
+  const loadControles = useCallback(async () => {
+    const data = await fetch(`${URL_API}/api/control`).then(response => response.json());
+    setControles(data)
+  }, []);
+
+  useEffect(() => {
+    loadControles();
+  }, [loadControles]);
+
   return (
-    <main>
-      <div className="header">
+    <main style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 20
+    }}>
+      <div className="header" />
+
+      <div style={{
+        width: '80%',
+        maxHeight: 'calc(100vh - 100px)'
+      }}>
+        <Carousel showArrows={true} showThumbs={false} autoPlay={true} transitionTime={60000}>
+          {controles.map(({ id, tipo, url }) => (
+            <div key={id}>
+              {tipo === 0 && (
+                <img src={url} height={700} />
+              )}
+              {tipo === 1 && (
+                <iframe width="100%" height="700" src={`${url}&autoplay=1&mute=1&autoplay=1&loop=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen ></iframe>
+              )}
+            </div>
+          ))}
+        </Carousel>
       </div>
 
       {/* <div className="estudiante">

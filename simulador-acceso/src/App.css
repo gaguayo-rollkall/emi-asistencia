@@ -1,4 +1,11 @@
+@import "../node_modules/react-responsive-carousel/lib/styles/carousel.min.css";
+
+main {
+  height: 100%;
+}
+
 .header {
+  width: 100%;
   height: 100px;
   background: url('./assets/emi.png') 100% 100% no-repeat;
   background-size: contain;
