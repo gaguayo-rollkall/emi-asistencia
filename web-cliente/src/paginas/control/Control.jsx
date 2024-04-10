@@ -11,6 +11,16 @@ const URL = '/control';
 export default function Control() {
   const [controles, setControles] = useState([]);
 
+  const subirControl = async ({ value }) => {
+    try {
+      await apiService.post(URL, { url: value, tipo: 0 });
+    } catch (error) {
+      console.error('Subir Control', error);
+    } finally {
+      cargarControles();
+    }
+  }
+
   const cargarControles = useCallback(async () => {
     try {
       showSpinner(document.getElementById('controles-main'));
@@ -44,11 +54,11 @@ export default function Control() {
 
             <div className="grid grid-cols-3 gap-4">
               {controles.map((control) => (
-                <Resource key={control.id} {...control} />
+                <Resource key={control.id} {...control} onRemove={cargarControles} />
               ))}
 
               {controles.length < 6 && (
-                <ImageUploader hidePreview />
+                <ImageUploader hidePreview change={subirControl} />
               )}
             </div>
           </div>
