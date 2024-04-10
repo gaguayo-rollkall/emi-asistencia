@@ -5,7 +5,8 @@ import { URL_API } from '../../configuracion.json';
 
 export default function ImageUploader({
   value,
-  change
+  change,
+  hidePreview,
 }) {
   const asyncSettings = {
     saveUrl: `${URL_API}/api/UploadBox/upload`,
@@ -27,11 +28,12 @@ export default function ImageUploader({
   return (
     <div className='upload_wrapper'>
       {/* Render Uploader */}
-      <div className="avatar">
-        <div className="w-24 rounded">
-          <img src={value || "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg"} />
-        </div>
-      </div>
+      {!hidePreview &&
+        <div className="avatar">
+          <div className="w-24 rounded">
+            <img src={value || "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg"} />
+          </div>
+        </div>}
 
       <UploaderComponent id='fileUpload' type='file'
         asyncSettings={asyncSettings} uploading={onUploadFile} removing={onRemoveFile} success={onUploadSuccess}
