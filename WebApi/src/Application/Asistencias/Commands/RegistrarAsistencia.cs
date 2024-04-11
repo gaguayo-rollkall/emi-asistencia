@@ -32,6 +32,8 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
                 Nombre = e.Nombre,
                 RFID = e.RFID,
                 Email = e.Email,
+                Foto = e.Foto,
+                Grado = e.Grado,
             })
             .FirstOrDefaultAsync(e => e.Codigo == request.CodigoEstudiante ||
                                       e.RFID == request.RFID);
@@ -41,9 +43,15 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
             return null;
         }
         
+        var asistenciasDeHoy = await _context.Asistencias
+            .AsNoTracking()
+            .Where(a => a.CodigoEstudiante == request.CodigoEstudiante &&
+                        a.Fecha.Date == DateTime.Now.Date)
+            .CountAsync(cancellationToken);
+        
         var entity = new Asistencia
         {
-            Fecha = DateTime.Now,
+            Fecha = DateTime.UtcNow,
             RFID = !string.IsNullOrEmpty(request.RFID) ? request.RFID : string.Empty,
             CodigoEstudiante = request.CodigoEstudiante,
             Evento = request.EventoId,
@@ -70,7 +78,10 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
         {
             Codigo = estudiante.Codigo,
             RFID = estudiante.RFID,
+            Grado = estudiante.Grado,
             Nombre = estudiante.Nombre,
+            Foto = estudiante.Foto,
+            Warning = asistenciasDeHoy > 2,
         };
     }
 }

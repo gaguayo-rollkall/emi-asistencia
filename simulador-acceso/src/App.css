@@ -13,3 +13,12 @@ main {
   border-radius: 20px;
   background-color: #002F8F;
 }
+
+.no-autorizado {
+  background: url('./assets/personal-autorizado.jpg') no-repeat;
+  background-size: contain;
+}
+
+.estudiante-foto {
+  background-size: 100% 100% !important;
+}
