@@ -78,4 +78,11 @@ public class IdentityService : IIdentityService
 
         return result.ToApplicationResult();
     }
+
+    public async Task UpdateUserPasswordAsync(string userName, string password)
+    {
+        var user = await _userManager.FindByEmailAsync(userName);
+        await _userManager.RemovePasswordAsync(user!);
+        await _userManager.AddPasswordAsync(user!, password);
+    }
 }

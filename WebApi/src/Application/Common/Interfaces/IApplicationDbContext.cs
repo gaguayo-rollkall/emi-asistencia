@@ -22,5 +22,4 @@ public interface IApplicationDbContext
     DbSet<UsuarioInformacion> UsuarioInformaciones { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-    public IEnumerable<User> GetUsers();
 }

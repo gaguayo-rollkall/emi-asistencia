@@ -8,4 +8,5 @@ public class UsuarioInformacionDto : IEntity
     public string? Nombre { get; set; }
     public string? Detalles { get; set; }
     public Guid Id { get; set; }
+    public string? Password { get; set; }
 }

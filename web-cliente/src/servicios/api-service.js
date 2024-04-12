@@ -12,7 +12,7 @@ const apiService = axios.create({
 apiService.interceptors.request.use(
   (config) => {
     // Here you can set headers, tokens, or perform any other request modification
-    const user = JSON.parse(localStorage.getItem('user') || '');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     if (user?.token?.accessToken) {
       config.headers['Authorization'] = `Bearer ${user.token.accessToken}`;

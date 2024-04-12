@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import "simplebar-react/dist/simplebar.min.css";
 import { sidebarStructure } from "./structure";
+import { useAuth } from "../../hooks/useAuth";
 
 import DashboardIcon  from './icons/dashboard.svg?react';
 import CarrerasIcon  from './icons/carreras.svg?react';
@@ -17,10 +18,13 @@ import ChartIcon from './icons/chart.svg?react';
 import EventoIcon from './icons/evento.svg?react';
 import UsuariosIcon from './icons/usuarios.svg?react';
 import ScreenIcon from './icons/screen.svg?react';
+import LogoutIcon from './icons/logout.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const isAdmin = user?.username === 'administrator@emi.com';
 
   const username = "Escuela Militar de Ingenieria";
   const company = "Sistema de Asistencia";
@@ -97,6 +101,7 @@ const Sidebar = ({ setExpand }) => {
     icons_map["evento"] = <EventoIcon className="h-5 w-5 text-current" />
     icons_map["usuarios"] = <UsuariosIcon className="h-5 w-5 text-current" />
     icons_map["control"] = <ScreenIcon className="h-5 w-5 text-current" />
+    icons_map["logout"] = <LogoutIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 
@@ -106,6 +111,10 @@ const Sidebar = ({ setExpand }) => {
     }
     const classesActive = activeName === item.name ? "active" : "";
 
+    if (item.isAdmin && !isAdmin) {
+      return null;
+    }
+
     return (
       <li key={index}>
         <a
@@ -113,6 +122,11 @@ const Sidebar = ({ setExpand }) => {
           tabIndex={0}
           id={item.id}
           onClick={() => {
+            if (item.logout) {
+              logout();
+              return;
+            }
+
             if ("child" in item) {
               handleToggle(item.name);
             } else if ("link" in item) {

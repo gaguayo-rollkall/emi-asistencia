@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using WebApi.Application.Common.Interfaces;
 using WebApi.Domain.Entities;
 using WebApi.Infrastructure.Identity;
@@ -9,7 +10,11 @@ namespace WebApi.Infrastructure.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    // private readonly UserManager<ApplicationUser> _userManager;
+    
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
     public DbSet<ApplicationUser> AppUsers => Set<ApplicationUser>();
     public DbSet<TodoList> TodoLists => Set<TodoList>();
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
@@ -49,14 +54,4 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         base.OnModelCreating(builder);
     }
-
-    public IEnumerable<User> GetUsers() => Users.FromSql($"SELECT * FROM AspNetUsers")
-        .Select(u => new User
-        {
-            Id = u.Id,
-            Nombre = u.NormalizedUserName,
-            UserName = u.UserName,
-            Email = u.Email,
-        })
-        .ToList();
 }

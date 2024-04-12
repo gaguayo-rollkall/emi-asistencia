@@ -2392,6 +2392,10 @@
           "id": {
             "type": "string",
             "format": "guid"
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

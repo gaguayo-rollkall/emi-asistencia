@@ -2,17 +2,32 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn, Filter } from '@syncfusion/ej2-react-grids';
 
+import UsuariosForm from './UsuariosForm';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
-import Errores from '../../components/Errores';
-import { upperCase } from '../../utiles';
 
-const URL = '/users';
+const URL = '/users/informacion-usuarios';
 
 export default function Usuarios() {
   const gridRef = useRef();
-  const [errors, setErrors] = useState({});
   const [usuarios, setUsuarios] = useState([]);
+
+  const toolbarOptions = ['Add', 'Edit']
+  const template = (props) => <UsuariosForm {...props} onEditComplete={() => {
+    gridRef.current.endEdit();
+    cargarUsuarios();
+  }} />
+  const editSettings = {
+    allowEditing: true,
+    allowAdding: true,
+    mode: 'Dialog',
+    footerTemplate: () => <></>,
+    template,
+  };
+
+  const FilterOptions = {
+    type: 'Menu'
+  };
 
   const cargarUsuarios = useCallback(async () => {
     try {
@@ -23,18 +38,6 @@ export default function Usuarios() {
       toast.error('Hubo un problema al cargar los usuarios.')
     }
   }, []);
-
-  const toolbarOptions = ['Add', 'Edit']
-  const editSettings = { allowEditing: true, allowAdding: true };
-  const FilterOptions = {
-    type: 'Menu'
-  };
-
-  const dataSourceChanged = async (state) => {
-    if (state.action === 'add' || state.action === 'edit') {
-      // 
-    }
-  }
 
   useEffect(() => {
     cargarUsuarios();
@@ -51,15 +54,14 @@ export default function Usuarios() {
                 toolbar={toolbarOptions}
                 allowPaging={true}
                 editSettings={editSettings}
-                actionComplete={dataSourceChanged}
                 ref={gridRef}
-                enableImmutableMode={false}
                 allowFiltering={true}
                 filterSettings={FilterOptions}>
                 <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
-                  <ColumnDirective field='nombre' headerText='Nombre'  alueAccessor={upperCase} />
-                  <ColumnDirective field='email' headerText='Email' />
+                  <ColumnDirective field='userId' headerText='Email' />
+                  <ColumnDirective field='nombre' headerText='Nombre' />
+                  <ColumnDirective field='detalles' headerText='Detalles' />
                 </ColumnsDirective>
                 <Inject services={[Page, Toolbar, Edit, CommandColumn, Filter]} />
               </GridComponent>

@@ -15,11 +15,6 @@ public class GetUsuariosQueryHandler : IRequestHandler<GetUsuariosQuery, List<Us
 
     public Task<List<UsuarioDto>> Handle(GetUsuariosQuery request, CancellationToken cancellationToken)
     {
-        var users = _context.GetUsers().Select(u => new UsuarioDto
-        {
-            Id = u.Id, UserName = u.UserName, Email = u.Email, Nombre = u.Nombre,
-        }).ToList();
-
-        return Task.FromResult(users);
+        return Task.FromResult(Array.Empty<UsuarioDto>().ToList());
     }
 }

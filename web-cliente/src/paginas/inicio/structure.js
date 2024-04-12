@@ -5,7 +5,8 @@ const sidebarStructure = [
     name: 'usuarios',
     parent: true,
     icon: 'usuarios',
-    link: "/usuarios"
+    link: "/usuarios",
+    isAdmin: true,
   },
   {
     id: "reportes",
@@ -43,7 +44,8 @@ const sidebarStructure = [
     name: 'carreras',
     parent: true,
     icon: 'carreras',
-    link: "/carreras"
+    link: "/carreras",
+    isAdmin: true,
   },
   {
     id: 'periodo',
@@ -51,7 +53,8 @@ const sidebarStructure = [
     name: 'periodos',
     parent: true,
     icon: 'periodo',
-    link: "/periodos"
+    link: "/periodos",
+    isAdmin: true,
   },
   {
     id: 'cursos',
@@ -59,7 +62,8 @@ const sidebarStructure = [
     name: 'cursos',
     parent: true,
     icon: 'cursos',
-    link: "/cursos"
+    link: "/cursos",
+    isAdmin: false,
   },
   {
     id: 'calendario',
@@ -83,16 +87,17 @@ const sidebarStructure = [
     name: 'control',
     parent: true,
     icon: 'control',
-    link: "/control"
+    link: "/control",
+    isAdmin: true,
   },
-  // {
-  //   id: 'configuracion',
-  //   title: 'Registro RFID',
-  //   name: 'rfid',
-  //   parent: true,
-  //   icon: 'configuracion',
-  //   link: "/rfid"
-  // },
+  {
+    id: 'logout',
+    title: 'Salir',
+    name: 'logout',
+    logout: true,
+    parent: true,
+    icon: 'logout',
+  },
 ]
 
 export { sidebarStructure };
