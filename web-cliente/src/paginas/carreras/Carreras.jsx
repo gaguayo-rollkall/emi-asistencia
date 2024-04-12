@@ -73,6 +73,11 @@ export default function Carreras() {
 
   const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
   const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
+  const toolbarClick = (args) => {
+    if (gridRef.current && args.item.id === 'GridCarreras_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
+      gridRef.current.pdfExport();
+    }
+  }
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
@@ -81,17 +86,19 @@ export default function Carreras() {
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">
           <div className="card-body">
-            <GridComponent dataSource={carreras}
+            <GridComponent id="GridCarreras"
+                           dataSource={carreras}
                            toolbar={toolbarOptions}
                            allowPaging={true}
                            editSettings={editSettings}
                            actionComplete={dataSourceChanged}
                            ref={gridRef}
                            enableImmutableMode={true}
-                           allowPdfExport={true}>
+                           allowPdfExport={true}
+                           toolbarClick={toolbarClick}>
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} width={100} />
-                <ColumnDirective field='nombre' headerText='Nombre' width='100' valueAccessor={upperCase} />
+                <ColumnDirective field='nombre' headerText='Nombre' width='100' />
               </ColumnsDirective>
               <Inject services={[Page, Toolbar, Edit, PdfExport]}/>
             </GridComponent>
