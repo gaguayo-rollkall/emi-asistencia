@@ -104,7 +104,7 @@ export default function PeriodosAcademicos() {
             <figure className="px-10 pt-10">
               <h1 className="text-4xl">{p.gestion}</h1>
             </figure>
-            <div className="card-body  items-center overflow-x-auto">
+            <div className="card-body  items-center overflow-x-hidden">
               <table className="table">
                 <tbody>
                   {p.periodos.map(({ id, periodo, fechaInicio, fechaFin }, j) => (

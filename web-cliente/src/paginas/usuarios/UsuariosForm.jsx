@@ -46,20 +46,6 @@ export default function UsuariosForm(props) {
   
         await apiService.put(`/users/informacion-usuarios/${form.id}`, form);
 
-        // if (props.isAdd) {
-        //   await apiService.post('/users/register', {
-        //     email: form.userId,
-        //     password: form.password,
-        //   });
-        // }
-
-        // if (!props.isAdd && form.password) {
-        //   await apiService.post('/users/resetpassword', {
-        //     email: form.userId,
-        //     newPassword: form.password,
-        //   });
-        // }
-
         onEditComplete();
       }
     } catch (apiError) {

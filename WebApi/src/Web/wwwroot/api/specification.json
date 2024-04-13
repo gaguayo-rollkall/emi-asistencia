@@ -443,6 +443,38 @@
         }
       }
     },
+    "/api/Estudiantes/{codigo}": {
+      "get": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "GetEstudiante",
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EstudianteDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Estudiantes/enviar-invitacion": {
       "post": {
         "tags": [
