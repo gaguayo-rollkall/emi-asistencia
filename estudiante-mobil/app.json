@@ -15,13 +15,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Permitir $(PRODUCT_NAME) acceder a la camara.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.gaguayo.estudiantemobil"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +48,11 @@
           "cameraPermission": "Permitir $(PRODUCT_NAME) acceder a la camara."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3e2771c2-37cb-428b-a588-5629db9e010a"
+      }
+    }
   }
 }
