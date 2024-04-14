@@ -34,7 +34,7 @@ export default function Cursos() {
 
   const commandClick = (args) => {
     const { id } = args.rowData;
-    navigate(`/cursos/${id}/alumnos`) 
+    navigate(`/cursos-alumnos?cursoId=${id}`) 
   }
 
   const cargarCarreras = useCallback(async () => {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar } from '@syncfusion/ej2-react-grids';
 import { UploaderComponent } from '@syncfusion/ej2-react-inputs';
 
@@ -8,7 +8,8 @@ import apiService from '../../servicios/api-service';
 import toast from 'react-hot-toast';
 
 export default function Alumnos() {
-  const params = useParams();
+  const [searchParams] = useSearchParams();
+  console.log(searchParams);
   const uploadObj = useRef(null);
 
   const [curso, setCurso] = useState({});
@@ -27,7 +28,7 @@ export default function Alumnos() {
       estudiantes.push({ codigo, nombre, email, rfid });
     });
 
-    await apiService.post('/estudiantes', { cursoId: params.id, estudiantes })
+    await apiService.post('/estudiantes', { cursoId: searchParams.id, estudiantes })
     await cargarEstudiante();
   }
 
@@ -53,10 +54,11 @@ export default function Alumnos() {
 
   const cargarEstudiante = useCallback(async () => {
     try {
-      if (!params.id) return;
+      const id = searchParams.get('cursoId');
+      if (!id) return;
 
-      const info = await apiService.get(`/cursos/${params.id}`)
-      const data = await apiService.get('/estudiantes', { params: { cursoId: params.id } });
+      const info = await apiService.get(`/cursos/${id}`)
+      const data = await apiService.get('/estudiantes', { params: { cursoId: id } });
 
       setCurso(info);
       setEstudiantes(data);
@@ -64,7 +66,7 @@ export default function Alumnos() {
       console.error('Estudiantes', error);
       toast.error('Hubo un problema al cargar los estudiantes');
     }
-  }, [params.id]);
+  }, [searchParams]);
 
   useEffect(() => {
     cargarEstudiante();

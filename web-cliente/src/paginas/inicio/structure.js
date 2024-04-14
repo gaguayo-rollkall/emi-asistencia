@@ -19,21 +19,21 @@ const sidebarStructure = [
         id: "dashboard",
         title: "Dashboard",
         name: "reportes.dashboard",
-        link: "/reportes/dashboard",
+        link: "/reportes-dashboard",
         icon: "chart"
       },
       {
         id: "ingresos-carrera",
         title: "Registros por Carrera",
         name: "reportes.ingresos-carrera",
-        link: "/reportes/registros-carrera",
+        link: "/reportes-registros-carrera",
         icon: "carrera"
       },
       {
         id: "ingresos-eventos",
         title: "Registros por Eventos",
         name: "reportes.ingresos-eventos",
-        link: "/reportes/registros-evento",
+        link: "/reportes-registros-evento",
         icon: "evento"
       }
     ]

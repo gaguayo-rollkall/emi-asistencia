@@ -55,14 +55,14 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route path="reportes/dashboard" element={<Dashboard />} />
-            <Route path="reportes/registros-carrera" element={<RegistrosCarrera />} />
-            <Route path="reportes/registros-evento" element={<RegistrosEvento />} />
+            <Route path="reportes-dashboard" element={<Dashboard />} />
+            <Route path="reportes-registros-carrera" element={<RegistrosCarrera />} />
+            <Route path="reportes-registros-evento" element={<RegistrosEvento />} />
             <Route path="carreras" element={<Carreras />} />
             <Route path="periodos" element={<PeriodosAcademicos />} />
             <Route path="calendario" element={<Calendario />} />
             <Route path="cursos" element={<Cursos />} />
-            <Route path="cursos/:id/alumnos" element={<Alumnos />} />
+            <Route path="cursos-alumnos" element={<Alumnos />} />
             <Route path="estudiantes" element={<Estudiantes />} />
             <Route path="rfid" element={<></>} />
             <Route path="usuarios" element={<Usuarios />} />
