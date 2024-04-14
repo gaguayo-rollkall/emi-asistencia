@@ -11,9 +11,9 @@ const URL = '/control';
 export default function Control() {
   const [controles, setControles] = useState([]);
 
-  const subirControl = async ({ value }) => {
+  const subirControl = async ({ value, tipo = 0 }) => {
     try {
-      await apiService.post(URL, { url: value, tipo: 0 });
+      await apiService.post(URL, { url: value, tipo });
     } catch (error) {
       console.error('Subir Control', error);
     } finally {
@@ -58,7 +58,7 @@ export default function Control() {
               ))}
 
               {controles.length < 6 && (
-                <ImageUploader hidePreview change={subirControl} />
+                <ImageUploader hidePreview change={subirControl} video={true} />
               )}
             </div>
           </div>

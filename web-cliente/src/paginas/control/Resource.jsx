@@ -46,7 +46,8 @@ export default function Resource({
     }}>
       <CloseButton onClick={removeControl} />
       {tipo === 1 && (
-        <iframe width="100%" height="300" src={url} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe width="100%" height="300" src={url} title="YouTube video player" frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
       )}
     </div>
   )
