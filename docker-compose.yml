@@ -33,6 +33,8 @@ services:
       - ./assets:/app/assets
     networks:
       - default
+    environment:
+      - TZ=America/La_Paz
 
   servidor-mysql:
     image: mysql:latest
