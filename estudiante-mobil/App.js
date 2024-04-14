@@ -2,18 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import * as eva from '@eva-design/eva';
 import { Avatar, Button, ApplicationProvider, Layout, Text } from '@ui-kitten/components';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera, CameraType } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
-import { URL_API } from './configuracion.json';
+import { URL_API } from './configuracion';
 const apiUrl = `${URL_API}/api/asistencias`;
-
-const apiService = axios.create({
-  URL_API,
-  timeout: 10000, // Adjust the timeout as needed
-});
 
 const formatDate = (date) => {
   const hour = date.getHours();
@@ -31,7 +25,7 @@ const formatDate = (date) => {
 
 const HomeScreen = () => {
   const [type, setType] = useState(CameraType.back);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
   const [scanned, setScanned] = useState(true);
   const [codigo, setCodigo] = useState('');
   const [estudiante, setEstudiante] = useState(null);
@@ -83,23 +77,35 @@ const HomeScreen = () => {
     }
   }
 
+  const escanear = async () => {
+    if (!permission.granted) {
+      await requestPermission();
+    }
+
+    setScanned(false);
+  }
+
   useEffect(() => {
     AsyncStorage.getItem('codigo').then((value) => setCodigo(value));
     AsyncStorage.getItem('estudiante').then((value) => setEstudiante(JSON.parse(value)));
   }, []);
 
   const handleBarCodeScanned = async ({ type, data }) => {
-    setScanned(true);
+    try {
+      setScanned(true);
 
-    if (codigo === '' || codigo === null || codigo === undefined) {
-      setCodigo(data);
-      AsyncStorage.setItem('codigo', data);
+      if (codigo === '' || codigo === null || codigo === undefined) {
+        const estudianteData = await fetch(`${URL_API}/api/estudiantes/${data}`).then(response => response.json());
+        AsyncStorage.setItem('estudiante', JSON.stringify(estudianteData));
+        setEstudiante(estudianteData);
 
-      const estudianteData = await fetch(`${URL_API}/api/estudiantes/${data}`).then(response => response.json());
-      AsyncStorage.setItem('estudiante', JSON.stringify(estudianteData));
-      setEstudiante(estudianteData);
-    } else {
-      registrarAsitencia(data);
+        setCodigo(data);
+        AsyncStorage.setItem('codigo', data);
+      } else {
+        registrarAsitencia(data);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -157,7 +163,7 @@ const HomeScreen = () => {
         <>
           <Image source={require('./assets/emilogo.png')} style={{ width: 300, height: 100, resizeMode: 'stretch', }} />
           <Image source={require('./assets/qrcodebro.png')} style={{ width: '100%', height: 500 }} />
-          <Button onPress={() => setScanned(false)} style={{ backgroundColor: '#fdd000', margin: 12 }}>
+          <Button onPress={escanear} style={{ backgroundColor: '#fdd000', margin: 12 }}>
             Escanear QR
           </Button>
         </>
@@ -165,11 +171,11 @@ const HomeScreen = () => {
 
       {codigo && <Button onPress={() => salir()} style={{ backgroundColor: '#fdd000', margin: 24, position: 'absolute', bottom: 12 }}>Salir</Button>}
 
-      {!scanned && <Camera
+      {!scanned && <BarCodeScanner
         barCodeScannerSettings={{
-          barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+          barCodeTypes: [256],
         }}
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={handleBarCodeScanned}
         style={{
           flex: 1,
         }} type={type}>
@@ -192,7 +198,7 @@ const HomeScreen = () => {
             }}>Salir</Text>
           </TouchableOpacity>
         </View>
-      </Camera>}
+      </BarCodeScanner>}
     </Layout >
   )
 };
