@@ -18,11 +18,7 @@ public class RegistroEstudiante
 {
     public string Codigo { get; set; } = string.Empty;
     public string Nombre { get; set; } = string.Empty;
-    public List<RegistroAsistencia> Asistencias { get; set; } = new();
-}
-
-public class RegistroAsistencia
-{
-    public string Dia { get; set; } = string.Empty;
-    public bool Asistencia { get; set; }
+    public string? Ingreso { get; set; }
+    public string? Salida { get; set; }
+    public int? Registros { get; set; }
 }

@@ -2136,23 +2136,18 @@
           "nombre": {
             "type": "string"
           },
-          "asistencias": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RegistroAsistencia"
-            }
-          }
-        }
-      },
-      "RegistroAsistencia": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "dia": {
-            "type": "string"
+          "ingreso": {
+            "type": "string",
+            "nullable": true
           },
-          "asistencia": {
-            "type": "boolean"
+          "salida": {
+            "type": "string",
+            "nullable": true
+          },
+          "registros": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         }
       },

@@ -1,19 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn } from '@syncfusion/ej2-react-grids';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Group, Toolbar, PdfExport } from '@syncfusion/ej2-react-grids';
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
-import { useNavigate } from "react-router-dom";
 
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import { reportFake } from './fake/alumnos';
 
 export default function RegistrosCarrera() {
-  const navigate = useNavigate();
-
-  const [errors, setErrors] = useState({});
-  const [reporte, setReporte] = useState(reportFake);
+  const gridRef = useRef();
+  const [reporte, setReporte] = useState([]);
   const [carreras, setCarreras] = useState([])
   const [gestiones, setGestiones] = useState([])
   const [periodos, setPeriodos] = useState({})
@@ -31,7 +28,7 @@ export default function RegistrosCarrera() {
   const [fechaInicio, setFechaInicio] = useState(startValue);
   const [fechaFin, setFechaFin] = useState(endValue);
 
-  const format = 'dd/MMM/yy hh:mm a';
+  const format = 'dd/MMM/yyyy';
   const separator = '-';
 
   const cargarCarreras = useCallback(async () => {
@@ -49,12 +46,21 @@ export default function RegistrosCarrera() {
   const cargarPeriodosAcademicos = async () => {
     try {
       const data = await apiService.get('/periodosacademicos');
+      const gestiones = data.map(({ gestion }) => ({ gestion }));
+      const periodosData = {};
 
-      data.forEach(p => {
-        setGestiones(g => [...g, { gestion: p.gestion }]);
-        setPeriodos(x => ({ ...x, [p.gestion]: p.periodos.map(({ id, periodo }) => ({ id, periodo })) }));
+      data.forEach(({ gestion, periodos: p }) => {
+        console.log(gestion, periodos);
+        periodosData[gestion] = p.map(({ id, periodo }) => ({ id, periodo }));
       });
 
+      setGestiones(gestiones);
+      setPeriodos(periodosData);
+
+      const [{ gestion: primeraGestion }] = gestiones;
+      const ultimoPeriodo = periodosData[primeraGestion].slice(-1)[0].id;
+      setGestion(primeraGestion);
+      setPeriodo(ultimoPeriodo);
     } catch (error) {
       console.error('Periodos', error);
       toast.error('Hubo un problema al cargar los periodos academicos.')
@@ -74,8 +80,17 @@ export default function RegistrosCarrera() {
   const cargarReporte = async () => {
     try {
       const data = await apiService.get('/reportes/registros-carrera', { params: { fechaInicio, fechaFin, carreraId: carrera, periodoAcademicoId: periodo } })
-      setReporte(data);
-      console.log(data);
+      const reporteData = [];
+
+      data.forEach(({ carrera, cursos, idCarrera }) => {
+        cursos.forEach(({ id, nombre, estudiantes }) => {
+          estudiantes.forEach(estudiante => {
+            reporteData.push({ carrera, curso: nombre, ...estudiante, })
+          });
+        });
+      });
+
+      setReporte(reporteData);
     } catch (error) {
       console.error('Reporte', error);
       toast.error('Hubo un problema al cargar el reporte.')
@@ -86,6 +101,17 @@ export default function RegistrosCarrera() {
     cargarCarreras();
     cargarPeriodosAcademicos();
   }, [cargarCarreras]);
+
+  const toolbarOptions = ['PdfExport']
+  const toolbarClick = (args) => {
+    if (gridRef.current && args.item.id === 'GridReporteCarrera_pdfexport') {
+      const pdfExportProperties = {
+        pageOrientation: 'Landscape',
+        fileName: 'Reporte de Registros por Carrera.pdf',
+      };
+      gridRef.current.pdfExport(pdfExportProperties);
+    }
+  }
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
@@ -132,34 +158,30 @@ export default function RegistrosCarrera() {
           </div>
         </div>
 
-        {reporte.length > 0 && (
-          <div className="card w-full bg-base-100 shadow-xl my-5">
-            <div className="card-body">
-              {reporte.map(({ carrera, cursos, idCarrera }) => (
-                <div className="carrera" key={idCarrera}>
-                  <p className="text-lg">{carrera}</p>
-
-                  {cursos.map(({ id, nombre, estudiantes }) => (
-                    <div className="cursos" key={id}>
-                      <p className="text-base mt-4">{nombre}</p>
-
-                      <GridComponent dataSource={estudiantes}
-                        allowPaging={false}>
-                        <ColumnsDirective>
-                          <ColumnDirective field='codigo' headerText='Codigo' isPrimaryKey={true} />
-                          <ColumnDirective field='nombre' headerText='Nombre' />
-                          <ColumnDirective field='ingreso' headerText='Ingreso' />
-                          <ColumnDirective field='salida' headerText='Salida' />
-                          <ColumnDirective field='registros' headerText='Registros' />
-                        </ColumnsDirective>
-                        <Inject services={[Page, Toolbar, Edit]} />
-                      </GridComponent>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>)}
+        <GridComponent
+          id="GridReporteCarrera"
+          dataSource={reporte}
+          allowPaging={false}
+          toolbar={toolbarOptions}
+          ref={gridRef}
+          allowPdfExport={true}
+          toolbarClick={toolbarClick}
+          allowGrouping={true}
+          groupSettings={{
+            columns: ['carrera', 'curso']
+          }}
+        >
+          <ColumnsDirective>
+            <ColumnDirective field='carrera' headerText='Carrera' />
+            <ColumnDirective field='curso' headerText='Curso' />
+            <ColumnDirective field='codigo' headerText='Codigo' isPrimaryKey={true} />
+            <ColumnDirective field='nombre' headerText='Nombre' />
+            <ColumnDirective field='ingreso' headerText='Ingreso' />
+            <ColumnDirective field='salida' headerText='Salida' />
+            <ColumnDirective field='registros' headerText='Registros' />
+          </ColumnsDirective>
+          <Inject services={[Page, Toolbar, Group, PdfExport]} />
+        </GridComponent>
       </div>
     </main>
   )

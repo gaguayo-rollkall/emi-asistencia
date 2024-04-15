@@ -49,9 +49,11 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
             return registros;
         }
 
-        var dias = new List<DateOnly>();
-        var fechaInicio = DateOnly.FromDateTime(evento.StartTime!.Value);
-        var fechaFin = DateOnly.FromDateTime(evento.EndTime!.Value);
+        // var dias = new List<DateOnly>();
+        // var fechaInicio = DateOnly.FromDateTime(evento.StartTime!.Value);
+        // var fechaFin = DateOnly.FromDateTime(evento.EndTime!.Value);
+        var fechaInicio = new DateTime(evento.StartTime!.Year, request.fechaInicio.Month, request.fechaInicio.Day, 0, 0, 0).ToUniversalTime();
+        var fechaFin = new DateTime(request.fechaFin.Year, request.fechaFin.Month, request.fechaFin.Day, 23, 59, 59).ToUniversalTime();
 
         while (fechaInicio <= fechaFin)
         {
@@ -98,18 +100,14 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
                     var registroEstudiante = new RegistroEstudiante { Codigo = estudiante!.Codigo, Nombre = estudiante.Nombre };
                     var asistenciasPorEstudiante = asistencias
                         .Where(a => a.CodigoEstudiante == estudiante.Codigo)
-                        .Select(a => new
-                        {
-                            Fecha = new DateOnly(a.Fecha.Year, a.Fecha.Month, a.Fecha.Day),
-                        });
+                        .OrderBy(a => a.Fecha)
+                        .ToList();
 
-                    foreach (var dia in dias)
+                    if (asistenciasPorEstudiante.Any())
                     {
-                        registroEstudiante.Asistencias.Add(new RegistroAsistencia
-                        {
-                            Dia = dia.ToString("d"),
-                            Asistencia = asistenciasPorEstudiante.Any(a => a.Fecha == dia),
-                        }); 
+                        registroEstudiante.Ingreso = asistenciasPorEstudiante.First().Fecha.ToString("HH:mm:ss");
+                        registroEstudiante.Salida = asistenciasPorEstudiante.Count >= 2 ? asistenciasPorEstudiante.Last().Fecha.ToString("HH:mm:ss") : string.Empty;
+                        registroEstudiante.Registros = asistenciasPorEstudiante.Count;
                     }
 
                     registroCurso.Estudiantes.Add(registroEstudiante);
