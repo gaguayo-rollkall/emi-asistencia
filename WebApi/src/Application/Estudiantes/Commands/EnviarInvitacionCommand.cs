@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.Net;
 using System.Net.Mail;
-using QRCoder;
 using WebApi.Application.Common.Interfaces;
 
 namespace Microsoft.Extensions.DependencyInjection.Estudiantes.Commands;
@@ -59,7 +59,7 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
             myMail.Subject = "Test message";
             myMail.SubjectEncoding = System.Text.Encoding.UTF8;
 
-            var qrCodeImage = GenerateQRCode(estudiante.Codigo);
+            var qrCodeImage = await GenerateQRCode(estudiante.Codigo);
             var base64Image = ConvertImageToBase64(qrCodeImage);
 
             var bytes = Convert.FromBase64String(base64Image);
@@ -152,24 +152,18 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
         return true;
     }
     
-    static Bitmap GenerateQRCode(string data)
+    static async Task<byte[]> GenerateQRCode(string data)
     {
-        QRCodeGenerator qrGenerator = new QRCodeGenerator();
-        QRCodeData qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-        var qrCode = new QRCode(qrCodeData);
-        Bitmap qrCodeImage = qrCode.GetGraphic(20); // Adjust the size as needed
+        var qrURl = $"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={data}";
+        using var httpClient = new HttpClient();
+        var imageData = await httpClient.GetByteArrayAsync(qrURl);
 
-        return qrCodeImage;
+        return imageData;
     }
 
-    static string ConvertImageToBase64(Bitmap image)
+    static string ConvertImageToBase64(byte[] image)
     {
-        using MemoryStream ms = new MemoryStream();
-#pragma warning disable CA1416
-        image.Save(ms, ImageFormat.Png);
-#pragma warning restore CA1416
-        byte[] imageBytes = ms.ToArray();
-        string base64String = Convert.ToBase64String(imageBytes);
+        string base64String = Convert.ToBase64String(image);
         return base64String;
     }
 }
