@@ -49,18 +49,6 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
             return registros;
         }
 
-        // var dias = new List<DateOnly>();
-        // var fechaInicio = DateOnly.FromDateTime(evento.StartTime!.Value);
-        // var fechaFin = DateOnly.FromDateTime(evento.EndTime!.Value);
-        var fechaInicio = new DateTime(evento.StartTime!.Year, request.fechaInicio.Month, request.fechaInicio.Day, 0, 0, 0).ToUniversalTime();
-        var fechaFin = new DateTime(request.fechaFin.Year, request.fechaFin.Month, request.fechaFin.Day, 23, 59, 59).ToUniversalTime();
-
-        while (fechaInicio <= fechaFin)
-        {
-            dias.Add(new DateOnly(fechaInicio.Year, fechaFin.Month, fechaInicio.Day));
-            fechaInicio = fechaInicio.AddDays(1);
-        }
-
         var cursos = await _context.Cursos
             .AsNoTracking()
             .Where(c => c.PeriodoAcademicoId == periodoAcademico.Id)
@@ -78,7 +66,6 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
 
         var asistencias = await _context.Asistencias
             .AsNoTracking()
-            // .Where(a => a.Fecha >= evento.StartTime!.Value && a.Fecha <= evento.StartTime!.Value)
             .Where(a => a.Evento == request.evento)
             .ToListAsync(cancellationToken);
             
