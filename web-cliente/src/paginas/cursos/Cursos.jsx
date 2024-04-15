@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
+import CursosForm from './CursosForm';
 
 export default function Cursos() {
   const gridRef = useRef();
-  const toolbarOptions = ['Add', 'Edit', 'Delete']
-  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
@@ -24,6 +23,20 @@ export default function Cursos() {
   const [gestion, setGestion] = useState('')
   const [periodo, setPeriodo] = useState('')
 
+  const toolbarOptions = ['Add', 'Edit', 'Delete']
+  const template = (props) => <CursosForm {...props}
+    onEditComplete={() => {
+      gridRef.current.endEdit();
+      cargarCursos();
+    }} />
+  const editSettings = {
+    allowEditing: true,
+    allowAdding: true,
+    mode: 'Dialog',
+    footerTemplate: () => <></>,
+    template,
+  };
+
   const commands = [
     {
       buttonOption: {
@@ -34,7 +47,7 @@ export default function Cursos() {
 
   const commandClick = (args) => {
     const { id } = args.rowData;
-    navigate(`/cursos-alumnos?cursoId=${id}`) 
+    navigate(`/cursos-alumnos?cursoId=${id}`)
   }
 
   const cargarCarreras = useCallback(async () => {
@@ -73,27 +86,6 @@ export default function Cursos() {
     }
   }
 
-  const guardar = async (seleccionado) => {
-    try {
-      await apiService.post('/cursos', {
-        carreraId: carrera,
-        periodoId: periodo,
-        ...seleccionado
-      });
-
-      await cargarCursos();
-    } catch (error) {
-      const { response: { data: { errors } } } = error;
-      gridRef.current.dataSource = cursos;
-
-      if (errors) {
-        setErrors(errors);
-      }
-
-      console.error('Guardar', error);
-    }
-  }
-
   const borrar = async (seleccionado) => {
     try {
       await apiService.delete(`/cursos/${seleccionado.id}`);
@@ -105,16 +97,16 @@ export default function Cursos() {
   }
 
   const dataSourceChanged = async (state) => {
-    console.log(state);
-    if (state.action === 'add' || state.action === 'edit') {
-      await guardar(state.data);
-    } else if (state.requestType === 'delete') {
+    if (state.requestType === 'delete') {
       await borrar(state.data[0]);
     }
   }
 
   const cargarCursos = useCallback(async () => {
     try {
+      sessionStorage.setItem('carrera', carrera);
+      sessionStorage.setItem('periodo', periodo);
+
       const data = await apiService.get('/cursos', { params: { carreraId: carrera, periodoId: periodo } });
       setCursos(data);
     } catch (error) {
@@ -138,6 +130,7 @@ export default function Cursos() {
     <main className="w-full h-full flex-grow p-6 relative">
       <Breadcrumbs items={['Inicio', 'Cursos']} />
 
+      {carrera} <br /> {periodo}
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">
           <div className="card-body">
