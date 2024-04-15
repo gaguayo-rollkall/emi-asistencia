@@ -143,7 +143,6 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
 
             mySmtpClient.Send(myMail);
         }
-
         catch (SmtpException ex)
         {
             throw new ApplicationException

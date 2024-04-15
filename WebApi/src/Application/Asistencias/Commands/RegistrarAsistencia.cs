@@ -46,7 +46,7 @@ public class RegistrarAsistenciaCommandHandler : IRequestHandler<RegistrarAsiste
         var asistenciasDeHoy = await _context.Asistencias
             .AsNoTracking()
             .Where(a => a.CodigoEstudiante == request.CodigoEstudiante &&
-                        a.Fecha.Date == DateTime.Now.Date)
+                        a.Fecha.Date == DateTime.UtcNow.Date)
             .CountAsync(cancellationToken);
         
         var entity = new Asistencia

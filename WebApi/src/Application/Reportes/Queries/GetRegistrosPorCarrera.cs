@@ -92,8 +92,8 @@ public class
 
                     if (asistenciasPorEstudiante.Any())
                     {
-                        registroEstudiante.Ingreso = asistenciasPorEstudiante.First().Fecha.ToString("HH:mm:ss");
-                        registroEstudiante.Salida = asistenciasPorEstudiante.Count >= 2 ? asistenciasPorEstudiante.Last().Fecha.ToString("HH:mm:ss") : string.Empty;
+                        registroEstudiante.Ingreso = asistenciasPorEstudiante.First().Fecha.ToLocalTime().ToString("HH:mm:ss");
+                        registroEstudiante.Salida = asistenciasPorEstudiante.Count >= 2 ? asistenciasPorEstudiante.Last().Fecha.ToLocalTime().ToString("HH:mm:ss") : string.Empty;
                         registroEstudiante.Registros = asistenciasPorEstudiante.Count;
                     }
 
