@@ -52,14 +52,23 @@ export default function Cursos() {
   const cargarPeriodosAcademicos = async () => {
     try {
       const data = await apiService.get('/periodosacademicos');
+      const gestiones = data.map(({ gestion }) => ({ gestion }));
+      const periodosData = {};
 
-      data.forEach(p => {
-        setGestiones(g => [...g, { gestion: p.gestion }]);
-        setPeriodos(x => ({ ...x, [p.gestion]: p.periodos.map(({ id, periodo }) => ({ id, periodo })) }));
+      data.forEach(({ gestion, periodos: p }) => {
+        console.log(gestion, periodos);
+        periodosData[gestion] = p.map(({ id, periodo }) => ({ id, periodo }));
       });
 
+      setGestiones(gestiones);
+      setPeriodos(periodosData);
+
+      const [{ gestion: primeraGestion }] = gestiones;
+      const ultimoPeriodo = periodosData[primeraGestion].slice(-1)[0].id;
+      setGestion(primeraGestion);
+      setPeriodo(ultimoPeriodo);
     } catch (error) {
-      console.log('Periodos', error);
+      console.error('Periodos', error);
       toast.error('Hubo un problema al cargar los periodos academicos.')
     }
   }
