@@ -98,7 +98,6 @@ const HomeScreen = () => {
         const estudianteData = await fetch(`${URL_API}/api/estudiantes/${data}`).then(response => response.json());
         AsyncStorage.setItem('estudiante', JSON.stringify(estudianteData));
         setEstudiante(estudianteData);
-
         setCodigo(data);
         AsyncStorage.setItem('codigo', data);
       } else {

@@ -6,6 +6,7 @@ services:
     build: ./web-cliente
     restart: always
     ports:
+      - "80:80"
       - "5173:80"
     networks:
       - default
