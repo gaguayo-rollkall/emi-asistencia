@@ -30,17 +30,19 @@ const options = {
 
 const URL = '/estudiantes';
 
-export default function ModalEstudiante({
-  estudiante,
+export default function RegistrarEstudianteModal({
   status,
+  cursoId,
   setStatus,
   onClose
 }) {
+  console.info(cursoId)
   const [form, setForm] = useState({});
 
   const submit = async () => {
     if (formObject.validate()) {
-      await apiService.post(`${URL}/registrar-estudiante`, form);
+      const estudiante = { ...form, cursoId };
+      await apiService.post(`${URL}/registrar-estudiante`, estudiante);
       onClose();
       setStatus(false);
     }
@@ -50,7 +52,7 @@ export default function ModalEstudiante({
     {
       click: submit,
       buttonModel: {
-        content: !estudiante?.Id ? 'Agregar' : 'Actualizar',
+        content: 'Agregar',
         isPrimary: true,
       }
     }
@@ -64,47 +66,64 @@ export default function ModalEstudiante({
     setForm({ ...form, [field]: upperCase ? value.toUpperCase().trim() : value });
   }
 
+  const codigoSeleccionado = async ({value}) => {
+    setForm({ ...form, codigo: value });
+
+    if (!value) return;
+
+    const data = await apiService.get(`${URL}/${value}`);
+    if (data) {
+      setForm({ ...form, ...data });
+    }
+  }
+
   useEffect(() => {
     if (status) {
-      formObject = new FormValidator('#form1', options);
-      setForm(estudiante)
+      formObject = new FormValidator('#form45', options);
+      setForm({
+        grado: 'EST',
+        nombre: '',
+        codigo: '',
+        rfid: '',
+        email: '',
+      })
     }
-  }, [estudiante, status]);
+  }, [status]);
 
   return (
     <DialogComponent
-      id="estudiantesDialog"
+      id="estudiantes2Dialog"
       showCloseIcon={true}
       animationSettings={animationSettings}
       width="500px"
       target="#estudiantes-main"
-      header={!estudiante?.id ? 'Agregar Estudiante' : 'Actualizar Estudiante'}
+      header={'Agregar Estudiante'}
       visible={status}
       buttons={buttons}
       open={() => dialogOpen()}
       close={() => dialogClose()}
       isModal={true}
     >
-      <form id="form1" method="post" onSubmit={(e) => e.preventDefault()}>
+      <form id="form45" method="post" onSubmit={(e) => e.preventDefault()}>
         {status && <ImageUploader value={form.foto} change={update('foto')} />}
         <div className="form-group">
-          <TextBoxComponent type="text" name="grado" value={form.grado} change={update('grado', true)} placeholder="Grado" floatLabelType="Auto" data-msg-containerid="errroForGrado" />
+          <TextBoxComponent type="text" name="grado" value={form.grado} change={update('grado', true)} placeholder="Grado" floatLabelType="Auto" data-msg-containerid="errroForGrado" enabled={form.codigo} />
           <div id="errroForGrado" />
         </div>
         <div className="form-group">
-          <TextBoxComponent type="text" name="nombre" value={form.nombre} change={update('nombre', true)} placeholder="Nombre" floatLabelType="Auto" data-msg-containerid="errroForNombre" />
+          <TextBoxComponent type="text" name="nombre" value={form.nombre} change={update('nombre', true)} placeholder="Nombre" floatLabelType="Auto" data-msg-containerid="errroForNombre" enabled={form.codigo}/>
           <div id="errroForNombre" />
         </div>
         <div className="form-group">
-          <TextBoxComponent type="text" name="codigo" value={form.codigo} change={update('codigo', true)} placeholder="Codigo" floatLabelType="Auto" data-msg-containerid="errroForCodigo" />
+          <TextBoxComponent type="text" name="codigo" value={form.codigo} change={codigoSeleccionado} placeholder="Codigo" floatLabelType="Auto" data-msg-containerid="errroForCodigo" focus={true} />
           <div id="errroForCodigo" />
         </div>
         <div className="form-group">
-          <TextBoxComponent type="text" name="rfid" value={form.rfid} change={update('rfid')} placeholder="RFID" floatLabelType="Auto" data-msg-containerid="errroForRFID" />
+          <TextBoxComponent type="text" name="rfid" value={form.rfid} change={update('rfid')} placeholder="RFID" floatLabelType="Auto" data-msg-containerid="errroForRFID" enabled={form.codigo}/>
           <div id="errroForRFID" />
         </div>
         <div className="form-group">
-          <TextBoxComponent type="text" name="email" value={form.email} change={update('email')} placeholder="Email" floatLabelType="Auto" data-msg-containerid="errroForEmail" />
+          <TextBoxComponent type="text" name="email" value={form.email} change={update('email')} placeholder="Email" floatLabelType="Auto" data-msg-containerid="errroForEmail" enabled={form.codigo}/>
           <div id="errroForEmail" />
         </div>
       </form>

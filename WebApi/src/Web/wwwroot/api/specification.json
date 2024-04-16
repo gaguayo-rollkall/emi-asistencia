@@ -1888,6 +1888,11 @@
             "format": "guid",
             "nullable": true
           },
+          "cursoId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
           "grado": {
             "type": "string"
           },

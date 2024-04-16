@@ -6,30 +6,36 @@ import { UploaderComponent } from '@syncfusion/ej2-react-inputs';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import toast from 'react-hot-toast';
+import RegistrarEstudianteModal from './RegistrarAlumnoModal';
 
 export default function Alumnos() {
   const [searchParams] = useSearchParams();
-  console.log(searchParams);
   const uploadObj = useRef(null);
 
   const [curso, setCurso] = useState({});
   const [estudiantes, setEstudiantes] = useState([]);
+  const [tempEstudiantes, setTempEstudiantes] = useState([]);
+  const [modalEstudiante, setModalEstudiante] = useState(false);
 
   const toolbarOptions = []
   const editSettings = {};
 
   const processCSV = async (text) => {
-    const estudiantes = [];
+    const estudiantesRaw = [];
 
     const lines = text.split('\r\n');
-    lines.forEach(line => {
+    lines.filter(l => l !== '').forEach(line => {
       const columns = line.split(',');
-      const [codigo, nombre = '', email = '', rfid = ''] = columns;
-      estudiantes.push({ codigo, nombre, email, rfid });
+      const [grado = 'EST', codigo, nombre = '', email = '', rfid = ''] = columns;
+      estudiantesRaw.push({ grado, codigo, nombre, email, rfid });
     });
 
-    await apiService.post('/estudiantes', { cursoId: searchParams.id, estudiantes })
-    await cargarEstudiante();
+    setTempEstudiantes(estudiantesRaw);
+  }
+
+  const registrarEstudiantes = async () => {
+    await apiService.post('/estudiantes', { cursoId: searchParams.id, estudiantes });
+    await cargarEstudiantes();
   }
 
   const subirEstudiantes = async () => {
@@ -52,7 +58,7 @@ export default function Alumnos() {
     }
   }
 
-  const cargarEstudiante = useCallback(async () => {
+  const cargarEstudiantes = useCallback(async () => {
     try {
       const id = searchParams.get('cursoId');
       if (!id) return;
@@ -69,11 +75,11 @@ export default function Alumnos() {
   }, [searchParams]);
 
   useEffect(() => {
-    cargarEstudiante();
-  }, [cargarEstudiante]);
+    cargarEstudiantes();
+  }, [cargarEstudiantes]);
 
   return (
-    <main className="w-full h-full flex-grow p-6 relative">
+    <main className="w-full h-full flex-grow p-6 relative" id="estudiantes-main">
       <Breadcrumbs items={['Inicio', 'Cursos', 'Estudiantes']} />
 
       <div className="text-xl font-bold tracking-tight text-gray-900 sm:text-xl breadcrumbs">
@@ -90,13 +96,14 @@ export default function Alumnos() {
           <div className="card-body">
             {estudiantes.length === 0 &&
               <div className="text-center">
+                <p className="text-sm">El formato del excel (CSV) debe ser: Grado, Codigo, Nombre, Email, RFID </p>
                 <UploaderComponent
                   type='file'
                   ref={uploadObj}
                   autoUpload={true}
-                  sequentialUpload={false}></UploaderComponent>
-
-                <button className="btn btn-outline btn-primary mt-4" onClick={subirEstudiantes}>Subir</button>
+                  sequentialUpload={false}
+                  beforeUpload={subirEstudiantes}
+                  beforeRemove={() => setTempEstudiantes([])} />
               </div>
             }
 
@@ -109,16 +116,48 @@ export default function Alumnos() {
                 enableImmutableMode={false}>
                 <ColumnsDirective>
                   <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
+                  <ColumnDirective field='grado' headerText='Grado' width='100' />
                   <ColumnDirective field='codigo' headerText='Codigo' width='100' />
                   <ColumnDirective field='nombre' headerText='Nombre' width='100' />
                   <ColumnDirective field='rfid' headerText='RFID' width='100' />
+                  <ColumnDirective field='email' headerText='Email' width='100' />
                 </ColumnsDirective>
                 <Inject services={[Page, Toolbar, Edit]} />
               </GridComponent>
             }
+
+            {tempEstudiantes.length > 0 &&
+              <div>
+                <GridComponent
+                  dataSource={tempEstudiantes}
+                  allowPaging={true} >
+                  <ColumnsDirective>
+                    <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
+                    <ColumnDirective field='grado' headerText='Grado' width='100' />
+                    <ColumnDirective field='codigo' headerText='Codigo' width='100' />
+                    <ColumnDirective field='nombre' headerText='Nombre' width='100' />
+                    <ColumnDirective field='rfid' headerText='RFID' width='100' />
+                    <ColumnDirective field='email' headerText='Email' width='100' />
+                  </ColumnsDirective>
+                  <Inject services={[Page]} />
+                </GridComponent>
+                <button className="btn btn-outline btn-success mt-4" onClick={registrarEstudiantes}>Registrar Estudiantes</button>
+              </div>
+            }
+
+            <button className="btn btn-primary btn-primary mt-4" onClick={() => setModalEstudiante(true)}>
+              Registrar Estudiante
+            </button>
           </div>
         </div>
       </div>
+
+      <RegistrarEstudianteModal
+        status={modalEstudiante}
+        cursoId={curso?.id}
+        setStatus={setModalEstudiante}
+        onClose={cargarEstudiantes}
+      />
     </main>
   )
 }

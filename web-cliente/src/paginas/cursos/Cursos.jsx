@@ -130,7 +130,6 @@ export default function Cursos() {
     <main className="w-full h-full flex-grow p-6 relative">
       <Breadcrumbs items={['Inicio', 'Cursos']} />
 
-      {carrera} <br /> {periodo}
       <div className="w-full">
         <div className="card w-full bg-base-100 shadow-xl my-5">
           <div className="card-body">
