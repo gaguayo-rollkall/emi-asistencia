@@ -1,22 +1,9 @@
-﻿
-using System.Net.Http.Headers;
-using System.Net.Http;
-using Microsoft.AspNetCore.Authorization;
-using System.Text.Json;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Web.Endpoints;
 
 public class UploadBox : EndpointGroupBase
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _clientId;
-
-    public UploadBox()
-    {
-        _httpClient = new HttpClient();
-        _clientId = "19921781ce7d932";
-    }
-
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
@@ -25,7 +12,7 @@ public class UploadBox : EndpointGroupBase
     }
 
     [AllowAnonymous]
-    public async Task UploadFileAsync(HttpContext context)
+    public async Task UploadFileAsync(HttpContext context, IWebHostEnvironment hostingEnvironment)
     {
         var form = await context.Request.ReadFormAsync();
         var file = form.Files["fileUpload"];
@@ -33,15 +20,7 @@ public class UploadBox : EndpointGroupBase
         // Check if a file was uploaded
         if (file != null && file.Length > 0)
         {
-            // You can handle the uploaded file here
-            // For example, save it to the file system or database
-            // Example:
-            // using (var stream = file.OpenReadStream())
-            // {
-            //     // Save the file
-            // }
-
-            var url = await UploadImageAsync(file);
+            var url = await UploadImageAsync(file, hostingEnvironment);
 
             // Return a success response
             context.Response.StatusCode = StatusCodes.Status200OK;
@@ -62,27 +41,35 @@ public class UploadBox : EndpointGroupBase
         return Task.CompletedTask;
     }
 
-    public async Task<string> UploadImageAsync(IFormFile file)
+    public async Task<string> UploadImageAsync(IFormFile file, IWebHostEnvironment hostingEnvironment)
     {
-        using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream);
-        var byteContent = new ByteArrayContent(memoryStream.ToArray());
-        byteContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+        // Generate a random file name
+        string uniqueFileName = Guid.NewGuid().ToString();
 
-        using var formData = new MultipartFormDataContent();
-        formData.Add(byteContent, "image", file.FileName);
+        // Get the file extension
+        string fileExtension = Path.GetExtension(file.FileName);
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", _clientId);
-        var response = await _httpClient.PostAsync("https://api.imgur.com/3/image", formData);
+        // Combine the random file name and the file extension
+        string newFileName = uniqueFileName + fileExtension;
 
-        response.EnsureSuccessStatusCode();
+        // Get the folder path where you want to save the file
+        string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
 
-        var responseStream = await response.Content.ReadAsStringAsync();
-        var imgurResponse = JsonSerializer.Deserialize<ImgurUploadResponse>(responseStream, new JsonSerializerOptions
+        // Ensure the directory exists, if not, create it
+        if (!Directory.Exists(uploadsFolder))
         {
-            PropertyNameCaseInsensitive = true
-        });
+            Directory.CreateDirectory(uploadsFolder);
+        }
 
-        return imgurResponse?.Data?.Link ?? string.Empty;
+        // Combine the folder path and the file name
+        string filePath = Path.Combine(uploadsFolder, newFileName);
+
+        // Save the file
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        return $"images/{newFileName}";
     }
 }
