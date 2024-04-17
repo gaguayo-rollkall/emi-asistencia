@@ -36,7 +36,7 @@ services:
       - "8080:8080"
     volumes:
       - ./assets:/app/assets
-      - /images:/wwwroot/images
+      - /images:/App/wwwroot/images
     networks:
       - default
     environment:
