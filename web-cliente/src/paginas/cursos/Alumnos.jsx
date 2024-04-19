@@ -34,8 +34,10 @@ export default function Alumnos() {
   }
 
   const registrarEstudiantes = async () => {
-    await apiService.post('/estudiantes', { cursoId: searchParams.id, estudiantes });
+    const cursoId = searchParams.get('cursoId');
+    await apiService.post('/estudiantes', { cursoId, estudiantes: tempEstudiantes });
     await cargarEstudiantes();
+    setTempEstudiantes([]);
   }
 
   const subirEstudiantes = async () => {

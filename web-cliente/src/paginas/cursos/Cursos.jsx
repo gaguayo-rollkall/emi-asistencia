@@ -27,11 +27,11 @@ export default function Cursos() {
   const template = (props) => <CursosForm {...props}
     onEditComplete={() => {
       gridRef.current.endEdit();
-      cargarCursos();
     }} />
   const editSettings = {
     allowEditing: true,
     allowAdding: true,
+    allowDeleting: true,
     mode: 'Dialog',
     footerTemplate: () => <></>,
     template,
@@ -69,7 +69,6 @@ export default function Cursos() {
       const periodosData = {};
 
       data.forEach(({ gestion, periodos: p }) => {
-        console.log(gestion, periodos);
         periodosData[gestion] = p.map(({ id, periodo }) => ({ id, periodo }));
       });
 
@@ -100,6 +99,8 @@ export default function Cursos() {
     if (state.requestType === 'delete') {
       await borrar(state.data[0]);
     }
+
+    await cargarCursos();
   }
 
   const cargarCursos = useCallback(async () => {
