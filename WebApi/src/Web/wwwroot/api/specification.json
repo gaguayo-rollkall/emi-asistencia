@@ -512,13 +512,45 @@
         "tags": [
           "Estudiantes"
         ],
-        "operationId": "PostApiEstudiantesRegistrarEstudiante",
+        "operationId": "RegistrarEstudiante",
         "requestBody": {
           "x-name": "command",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/RegistrarEstudianteCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Estudiantes/remover-estudiante": {
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "RemoverEstudiante",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoverEstudianteCommand"
               }
             }
           },
@@ -1940,6 +1972,17 @@
         }
       },
       "RegistrarEstudianteCommand": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EstudianteDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "RemoverEstudianteCommand": {
         "allOf": [
           {
             "$ref": "#/components/schemas/EstudianteDto"

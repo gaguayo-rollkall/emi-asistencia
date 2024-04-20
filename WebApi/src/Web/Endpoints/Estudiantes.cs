@@ -13,7 +13,8 @@ public class Estudiantes : EndpointGroupBase
             .MapGet(GetEstudiante, "/{codigo}")
             .MapPost(RegistrarEstudiantes)
             .MapPost(EnviarInvitacion, "/enviar-invitacion")
-            .MapMethods("/registrar-estudiante", new[] { "POST" }, RegistrarEstudiante);
+            .MapPost(RegistrarEstudiante, "/registrar-estudiante")
+            .MapPost(RemoverEstudiante, "/remover-estudiante");
     }
     
     public async Task<IList<EstudianteDto>> GetEstudiantes(ISender sender, Guid? cursoId) =>
@@ -27,6 +28,9 @@ public class Estudiantes : EndpointGroupBase
         await sender.Send(command);
     
     public async Task<bool> RegistrarEstudiante(ISender sender, RegistrarEstudianteCommand command) =>
+        await sender.Send(command);
+    
+    public async Task<bool> RemoverEstudiante(ISender sender, RemoverEstudianteCommand command) =>
         await sender.Send(command);
 
     public async Task<bool> EnviarInvitacion(ISender sender, EnviarInvitacionCommand command) =>

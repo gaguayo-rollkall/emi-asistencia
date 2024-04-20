@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar } from '@syncfusion/ej2-react-grids';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, CommandColumn } from '@syncfusion/ej2-react-grids';
 import { UploaderComponent } from '@syncfusion/ej2-react-inputs';
 
 import Breadcrumbs from '../../components/Breadcrumbs';
@@ -60,6 +60,26 @@ export default function Alumnos() {
     }
   }
 
+  const commands = [
+    {
+      buttonOption: {
+        content: 'Quitar', cssClass: 'btn btn-warning btn-xs'
+      }
+    }
+  ];
+
+  const commandClick = async (args) => {
+    try {
+      await apiService.post('/estudiantes/remover-estudiante', args.rowData);
+      await cargarEstudiantes();
+
+      toast.success('Se removio al estudiante del curso.');
+    } catch (error) {
+      console.error('Invitar', error);
+      toast.error('Hubo un problema al remover al estudiante.')
+    }
+  }
+
   const cargarEstudiantes = useCallback(async () => {
     try {
       const id = searchParams.get('cursoId');
@@ -115,7 +135,10 @@ export default function Alumnos() {
                 toolbar={toolbarOptions}
                 allowPaging={true}
                 editSettings={editSettings}
-                enableImmutableMode={false}>
+                enableImmutableMode={false}
+                commandClick={commandClick}
+                selectionSettings={{ mode: 'Row', type: 'Single' }}
+              >
                 <ColumnsDirective>
                   <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
                   <ColumnDirective field='grado' headerText='Grado' width='100' />
@@ -123,8 +146,9 @@ export default function Alumnos() {
                   <ColumnDirective field='nombre' headerText='Nombre' width='100' />
                   <ColumnDirective field='rfid' headerText='RFID' width='100' />
                   <ColumnDirective field='email' headerText='Email' width='100' />
+                  <ColumnDirective headerText='Remover Estudiante' width={120} commands={commands} />
                 </ColumnsDirective>
-                <Inject services={[Page, Toolbar, Edit]} />
+                <Inject services={[Page, CommandColumn, Toolbar, Edit]} />
               </GridComponent>
             }
 
@@ -132,7 +156,8 @@ export default function Alumnos() {
               <div>
                 <GridComponent
                   dataSource={tempEstudiantes}
-                  allowPaging={true} >
+                  allowPaging={true}
+                >
                   <ColumnsDirective>
                     <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
                     <ColumnDirective field='grado' headerText='Grado' width='100' />

@@ -9,7 +9,7 @@ import APIErrors from '../../components/APIErrors';
 
 let formObject;
 
-export default function CursosForm(props) {
+export default function CarreaForm(props) {
   const { onEditComplete } = props;
   const [form, setForm] = useState(props);
   const [error, setError] = useState(null);
@@ -49,11 +49,11 @@ export default function CursosForm(props) {
   }
 
   useEffect(() => {
-    formObject = new FormValidator(`#cursosForm1`, options);
+    formObject = new FormValidator(`#carreraForm1`, options);
   }, []);
 
   return (
-    <form id="cursosForm1" method="post" onSubmit={(e) => e.preventDefault()}>
+    <form id="carreraForm1" method="post" onSubmit={(e) => e.preventDefault()}>
       <APIErrors error={error} />
 
       <div className="form-group">

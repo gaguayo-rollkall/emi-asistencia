@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, Toolbar, PdfExport } from '@syncfusion/ej2-react-grids';
@@ -6,6 +7,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
 import { upperCase } from '../../utiles';
+import CarreaForm from './CarreraForm';
 
 const URL = '/carreras';
 
@@ -13,6 +15,25 @@ export default function Carreras() {
   const gridRef = useRef();
   const [errors, setErrors] = useState({});
   const [carreras, setCarreras] = useState([]);
+
+  const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
+  const template = (props) => <CarreaForm {...props} />
+  const editSettings = {
+    allowEditing: true,
+    allowAdding: true,
+    allowDeleting: true,
+    mode: 'Dialog',
+    headerTemplate: 'Registro de Carrera',
+    footerTemplate: () => <></>,
+    // template,
+  };
+
+  const toolbarClick = (args) => {
+    if (gridRef.current && args.item.id === 'GridCarreras_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
+      gridRef.current.pdfExport();
+    }
+  }
+
 
   const guardar = async (seleccionado) => {
     try {
@@ -59,7 +80,6 @@ export default function Carreras() {
   }, []);
 
   const dataSourceChanged = async (state) => {
-    console.log(state);
     if (state.action === 'add' || state.action === 'edit') {
       await guardar(state.data);
     } else if (state.requestType === 'delete') {
@@ -70,14 +90,6 @@ export default function Carreras() {
   useEffect(() => {
     cargarCarreras();
   }, [cargarCarreras]);
-
-  const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
-  const editSettings = { allowEditing: true, allowAdding: true, allowDeleting: true, mode: 'Dialog' };
-  const toolbarClick = (args) => {
-    if (gridRef.current && args.item.id === 'GridCarreras_pdfexport') { // 'Grid_pdfexport' -> Grid component id + _ + toolbar item name
-      gridRef.current.pdfExport();
-    }
-  }
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">

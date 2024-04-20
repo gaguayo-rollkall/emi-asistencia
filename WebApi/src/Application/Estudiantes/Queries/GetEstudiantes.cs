@@ -32,6 +32,7 @@ public class GetEstudiantesQueryHandler : IRequestHandler<GetEstudiantesQuery, I
                     Email = c.Estudiante!.Email,
                     RFID = c.Estudiante!.RFID,
                     Foto = c.Estudiante!.Foto,
+                    CursoId = c.CursoId,
                 })
                 .ToListAsync(cancellationToken);
         }
