@@ -892,6 +892,52 @@
         }
       }
     },
+    "/api/Reportes/selector-fechas": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "operationId": "GetSelectorFechas",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectorFechaDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Reportes/registros-mes": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "operationId": "GetRegistrosMes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegistroMesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -2219,6 +2265,33 @@
           },
           "fecha": {
             "type": "string"
+          }
+        }
+      },
+      "SelectorFechaDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fecha": {
+            "type": "string",
+            "nullable": true
+          },
+          "asistencias": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RegistroMesDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mes": {
+            "type": "string"
+          },
+          "cantidad": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
