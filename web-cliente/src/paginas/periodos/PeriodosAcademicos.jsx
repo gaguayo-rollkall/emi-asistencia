@@ -11,19 +11,20 @@ const URL = '/periodosacademicos';
 export default function PeriodosAcademicos() {
   const modalRef = useRef();
   const [errors, setErrors] = useState({});
+  const periodosAcademicos = ['I', 'II'];
 
   const [periodos, setPeriodos] = useState([]);
   const [periodo, setPeriodo] = useState({
-    gestion: 0,
-    periodo: '',
+    gestion: new Date().getFullYear(),
+    periodo: 'I',
     fechaInicio: null,
     fechaFin: null,
   });
 
   const agregarNuevo = () => {
     setPeriodo({
-      gestion: 0,
-      periodo: '',
+      gestion: new Date().getFullYear(),
+      periodo: 'I',
       fechaInicio: null,
       fechaFin: null,
     })
@@ -64,7 +65,12 @@ export default function PeriodosAcademicos() {
   }
 
   const editar = async (periodoSeleccionado) => {
-    setPeriodo(periodoSeleccionado);
+    const { fechaInicio, fechaFin } = periodoSeleccionado;
+    setPeriodo({
+      ...periodoSeleccionado,
+      fechaInicio: new Date(fechaInicio).toISOString().substr(0, 10),
+      fechaFin: new Date(fechaFin).toISOString().substr(0, 10),
+    });
     modalRef.current?.showModal();
   }
 
@@ -148,9 +154,16 @@ export default function PeriodosAcademicos() {
             <div className="col-span-full mt-4">
               <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">Periodo</label>
               <div className="mt-2">
-                <input type="text" placeholder="Periodo" className="input input-bordered w-full"
-                  value={periodo.periodo}
-                  onChange={({ target: { value: periodo } }) => setPeriodo((p) => ({ ...p, periodo }))} />
+                <select
+                  className="input input-bordered w-full"
+                  onChange={({ target: { value: periodo } }) => setPeriodo((p) => ({ ...p, periodo }))}
+                >
+                  {periodosAcademicos.map((periodoValue, i) => (
+                    <option key={i} selected={periodoValue === periodo.periodo} value={periodo.periodo}>
+                      {periodoValue}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -159,6 +172,7 @@ export default function PeriodosAcademicos() {
                 <label className="block text-sm font-medium leading-6 text-gray-900">Fecha de Inicio</label>
                 <div className="mt-2">
                   <input type="date" className="input input-bordered w-full"
+                    value={periodo.fechaInicio}
                     onChange={({ target: { value: fechaInicio } }) => setPeriodo((p) => ({ ...p, fechaInicio }))} />
                 </div>
               </div>
@@ -167,6 +181,7 @@ export default function PeriodosAcademicos() {
                 <label className="block text-sm font-medium leading-6 text-gray-900">Fecha de Fin</label>
                 <div className="mt-2">
                   <input type="date" className="input input-bordered w-full"
+                    value={periodo.fechaFin}
                     onChange={({ target: { value: fechaFin } }) => setPeriodo((p) => ({ ...p, fechaFin }))} />
                 </div>
               </div>
