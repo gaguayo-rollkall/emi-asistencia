@@ -24,7 +24,7 @@ export default {
       "Columnchooser": "Columnas",
       "Save": "Guardar",
       "Item": "articulo",
-      "Items": "artículos",
+      "Items": "estudiantes",
       "EditOperationAlert": "No hay registros seleccionados para la operación de edición",
       "DeleteOperationAlert": "No hay registros seleccionados para la operación de eliminación",
       "SaveButton": "Guardar",
@@ -134,7 +134,7 @@ export default {
     },
     "pager": {
       "currentPageInfo": "{0} de {1} páginas",
-      "totalItemsInfo": "({0} artículos)",
+      "totalItemsInfo": "({0} registros)",
       "firstPageTooltip": "Ir a la primera página",
       "lastPageTooltip": "Ir a la última página",
       "nextPageTooltip": "Ir a la página siguiente",
