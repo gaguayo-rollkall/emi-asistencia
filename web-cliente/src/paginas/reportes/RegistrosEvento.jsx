@@ -13,11 +13,16 @@ export default function RegistrosEvento() {
   const [gestiones, setGestiones] = useState([])
   const [periodos, setPeriodos] = useState({})
   const [eventos, setEventos] = useState([])
+  const [cursos, setCursos] = useState([{
+    id: '00000000-0000-0000-0000-000000000000',
+    Nombre: 'TODOS',
+  }])
 
   const [carrera, setCarrera] = useState('')
   const [gestion, setGestion] = useState('')
   const [periodo, setPeriodo] = useState('')
   const [evento, setEvento] = useState(0)
+  const [curso, setCurso] = useState('00000000-0000-0000-0000-000000000000');
 
   const startValue = new Date()
   const endValue = new Date();
@@ -71,9 +76,14 @@ export default function RegistrosEvento() {
     }
   }
 
+  const cargarCursos = async () => {
+    const cursos = await apiService.get('/cursos', { params: { carreraId: carrera, periodoId: periodo } });
+    setCursos([{ id: '00000000-0000-0000-0000-000000000000', nombre: 'TODOS LOS SEMESTRES' }, ...cursos.map(({ id, nombre }) => ({ id, nombre }))]);
+  }
+
   const cargarReporte = async () => {
     try {
-      const data = await apiService.get('/reportes/registros-evento', { params: { evento, carreraId: carrera, periodoAcademicoId: periodo } })
+      const data = await apiService.get('/reportes/registros-evento', { params: { evento, carreraId: carrera, periodoAcademicoId: periodo, cursoId: curso } })
       const reporteData = [];
 
       data.forEach(({ carrera, cursos, idCarrera }) => {
@@ -90,6 +100,12 @@ export default function RegistrosEvento() {
       toast.error('Hubo un problema al cargar el reporte.')
     }
   }
+
+  useEffect(() => {
+    if (carrera && periodo) {
+      cargarCursos();
+    }
+  }, [carrera, periodo])
 
   useEffect(() => {
     cargarCarreras();
@@ -140,6 +156,14 @@ export default function RegistrosEvento() {
               popupHeight="220px" />
 
             <ComboBoxComponent
+              dataSource={cursos}
+              fields={{ text: 'nombre', value: 'id' }}
+              change={(args) => setCurso(args.itemData === 'null' ? '' : args.itemData['id'])}
+              placeholder="Seleccione un Curso"
+              value={curso}
+              popupHeight="220px" />
+
+            <ComboBoxComponent
               dataSource={eventos || []}
               fields={{ text: 'subject', value: 'id' }}
               change={(args) => setEvento(args.itemData === 'null' ? '' : args.itemData['id'])}
@@ -171,6 +195,7 @@ export default function RegistrosEvento() {
             <ColumnDirective field='curso' headerText='Curso' />
             <ColumnDirective field='codigo' headerText='Codigo' isPrimaryKey={true} />
             <ColumnDirective field='nombre' headerText='Nombre' />
+            <ColumnDirective field='fecha' headerText='Fecha' />
             <ColumnDirective field='ingreso' headerText='Ingreso' />
           </ColumnsDirective>
           <Inject services={[Page, Toolbar, Group, PdfExport]} />

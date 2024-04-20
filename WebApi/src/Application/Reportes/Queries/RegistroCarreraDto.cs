@@ -21,4 +21,5 @@ public class RegistroEstudiante
     public string? Ingreso { get; set; }
     public string? Salida { get; set; }
     public int? Registros { get; set; }
+    public string Fecha { get; internal set; } = string.Empty;
 }

@@ -782,13 +782,23 @@
             "x-position": 2
           },
           {
+            "name": "cursoId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 3
+          },
+          {
             "name": "fechaInicio",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string"
             },
-            "x-position": 3
+            "x-position": 4
           },
           {
             "name": "fechaFin",
@@ -797,7 +807,7 @@
             "schema": {
               "type": "string"
             },
-            "x-position": 4
+            "x-position": 5
           }
         ],
         "responses": {
@@ -835,7 +845,7 @@
             "x-position": 1
           },
           {
-            "name": "periodoAcademicoId",
+            "name": "cursoId",
             "in": "query",
             "required": true,
             "schema": {
@@ -845,6 +855,16 @@
             "x-position": 2
           },
           {
+            "name": "periodoAcademicoId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 3
+          },
+          {
             "name": "evento",
             "in": "query",
             "required": true,
@@ -852,7 +872,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 3
+            "x-position": 4
           }
         ],
         "responses": {
@@ -2196,6 +2216,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "fecha": {
+            "type": "string"
           }
         }
       },

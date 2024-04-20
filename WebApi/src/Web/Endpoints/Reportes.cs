@@ -12,10 +12,12 @@ public class Reportes : EndpointGroupBase
             .MapGet(GetRegistrosPorEvento, "/registros-evento");
     }
 
-    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorCarrera(ISender sender, Guid? carreraId, Guid periodoAcademicoId, string fechaInicio, string fechaFin) =>
-        await sender.Send(new GetRegistrosPorCarreraQuery(carreraId, periodoAcademicoId, DateTime.Parse(fechaInicio), DateTime.Parse(fechaFin)));
+    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorCarrera(ISender sender, Guid? carreraId, Guid periodoAcademicoId, Guid cursoId, string fechaInicio, string fechaFin) =>
+        await sender.Send(new GetRegistrosPorCarreraQuery(carreraId, periodoAcademicoId, cursoId, DateTime.Parse(fechaInicio), DateTime.Parse(fechaFin)));
 
-    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorEvento(ISender sender, Guid? carreraId,
+    public async Task<IList<RegistroCarreraDto>> GetRegistrosPorEvento(ISender sender,
+        Guid? carreraId,
+        Guid cursoId,
         Guid periodoAcademicoId, int evento) =>
-        await sender.Send(new GetRegistrosPorEventoQuery(carreraId, periodoAcademicoId, evento));
+        await sender.Send(new GetRegistrosPorEventoQuery(carreraId, periodoAcademicoId, cursoId, evento));
 }

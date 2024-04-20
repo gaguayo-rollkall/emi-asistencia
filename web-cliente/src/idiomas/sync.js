@@ -23,7 +23,7 @@ export default {
       "Search": "Buscar",
       "Columnchooser": "Columnas",
       "Save": "Guardar",
-      "Item": "articulo",
+      "Item": "registro",
       "Items": "estudiantes",
       "EditOperationAlert": "No hay registros seleccionados para la operación de edición",
       "DeleteOperationAlert": "No hay registros seleccionados para la operación de eliminación",

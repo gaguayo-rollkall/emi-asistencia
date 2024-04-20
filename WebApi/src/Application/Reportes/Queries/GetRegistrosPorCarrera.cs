@@ -7,6 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection.Reportes.Queries;
 public record GetRegistrosPorCarreraQuery(
     Guid? carreraId,
     Guid periodoAcademicoId,
+    Guid cursoId,
     DateTime fechaInicio,
     DateTime fechaFin) : IRequest<IList<RegistroCarreraDto>>;
 
@@ -51,6 +52,7 @@ public class
         var cursos = await _context.Cursos
             .AsNoTracking()
             .Where(c => c.PeriodoAcademicoId == periodoAcademico.Id)
+            .Where(c => request.cursoId == Guid.Empty || request.cursoId == c.Id)
             .Select(c => new
             {
                 c.CarreraId,
@@ -89,6 +91,8 @@ public class
                         .Where(a => a.CodigoEstudiante == estudiante.Codigo || a.RFID == estudiante.RFID)
                         .OrderBy(a => a.Fecha)
                         .ToList();
+
+                    registroEstudiante.Fecha = request.fechaInicio.ToString("dd/MM/yyyy");
 
                     if (asistenciasPorEstudiante.Any())
                     {

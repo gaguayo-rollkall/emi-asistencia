@@ -4,7 +4,7 @@ using WebApi.Application.Common.Security;
 namespace Microsoft.Extensions.DependencyInjection.Reportes.Queries;
 
 [Authorize]
-public record GetRegistrosPorEventoQuery(Guid? carreraId, Guid periodoAcademicoId, int evento) : IRequest<IList<RegistroCarreraDto>>;
+public record GetRegistrosPorEventoQuery(Guid? carreraId, Guid periodoAcademicoId, Guid cursoId, int evento) : IRequest<IList<RegistroCarreraDto>>;
 
 public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPorEventoQuery, IList<RegistroCarreraDto>>
 {
@@ -52,6 +52,7 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
         var cursos = await _context.Cursos
             .AsNoTracking()
             .Where(c => c.PeriodoAcademicoId == periodoAcademico.Id)
+            .Where(c => request.cursoId == Guid.Empty || request.cursoId == c.Id)
             .Select(c => new
             {
                 c.CarreraId,
@@ -92,7 +93,10 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
 
                     if (asistenciasPorEstudiante.Any())
                     {
-                        registroEstudiante.Ingreso = asistenciasPorEstudiante.First().Fecha.ToLocalTime().ToString("HH:mm:ss");
+                        var fecha = asistenciasPorEstudiante.First().Fecha.ToLocalTime();
+
+                        registroEstudiante.Fecha = fecha.ToString("dd/MM/yyyy");
+                        registroEstudiante.Ingreso = fecha.ToString("HH:mm:ss");
                         registroEstudiante.Salida = asistenciasPorEstudiante.Count >= 2 ? asistenciasPorEstudiante.Last().Fecha.ToLocalTime().ToString("HH:mm:ss") : string.Empty;
                         registroEstudiante.Registros = asistenciasPorEstudiante.Count;
                     }
