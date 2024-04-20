@@ -20,6 +20,7 @@ import Login from './paginas/login/Login';
 import Carreras from './paginas/carreras/Carreras'
 import PeriodosAcademicos from './paginas/periodos/PeriodosAcademicos';
 import Calendario from './paginas/calendario/Calendario';
+import DetallesEvento from './paginas/calendario/DetallesEvento';
 import Cursos from './paginas/cursos/Cursos';
 import Alumnos from './paginas/cursos/Alumnos';
 import Estudiantes from './paginas/estudiantes/Estudiantes';
@@ -67,6 +68,7 @@ function App() {
             <Route path="rfid" element={<></>} />
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="control" element={<Control />} />
+            <Route path="detalles-evento" element={<DetallesEvento />} />
           </Route>
         </Routes>
       </AuthProvider>

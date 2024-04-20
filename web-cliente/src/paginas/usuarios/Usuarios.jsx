@@ -39,6 +39,10 @@ export default function Usuarios() {
     }
   }, []);
 
+  const dataSourceChanged = async (state) => {
+    await cargarUsuarios();
+  }
+
   useEffect(() => {
     cargarUsuarios();
   }, [cargarUsuarios]);
@@ -56,7 +60,8 @@ export default function Usuarios() {
                 editSettings={editSettings}
                 ref={gridRef}
                 allowFiltering={true}
-                filterSettings={FilterOptions}>
+                filterSettings={FilterOptions}
+                actionComplete={dataSourceChanged}>
                 <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} />
                   <ColumnDirective field='userId' headerText='Email' />

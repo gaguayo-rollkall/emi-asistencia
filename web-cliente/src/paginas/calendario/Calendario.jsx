@@ -20,8 +20,9 @@ const QR = ({ id }) => {
   }, []);
 
   return (
-    <div style={{ width: 200, height: 150 }}>
-      {visible && <QRCodeGeneratorComponent width={"200px"} height={"150px"} value={`${id}`} />}
+    <div style={{ height: 300, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <a className="btn btn-active btn-neutral btn-sm w-full" href={`/detalles-evento?evento=${id}`} target='_blank' rel="nonrefer">Mostrar Evento</a>
+      {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${id}`} />}
     </div>
   )
 }

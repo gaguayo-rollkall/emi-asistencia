@@ -626,6 +626,36 @@
       }
     },
     "/api/Eventos/{id}": {
+      "get": {
+        "tags": [
+          "Eventos"
+        ],
+        "operationId": "GetEventoById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventoDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Eventos"
@@ -646,6 +676,38 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Eventos/enviar-invitacion-evento": {
+      "post": {
+        "tags": [
+          "Eventos"
+        ],
+        "operationId": "EnviarInvitacionEvento",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnviarInvitacionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
           }
         }
       }
@@ -2033,7 +2095,20 @@
         "additionalProperties": false,
         "properties": {
           "codigo": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
+          },
+          "eventoId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "emails": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
