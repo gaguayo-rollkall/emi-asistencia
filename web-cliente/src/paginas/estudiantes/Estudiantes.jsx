@@ -70,6 +70,18 @@ export default function Estudiantes() {
     if (args.item.id === 'EditarEstudiante') {
       setModalEstudiante(true);
     }
+
+    if (args.item.id === 'EliminarEstudiante') {
+      const { id } = estudiante;
+
+      if (id) {
+        apiService.post(`${URL}/borrar-estudiante/${id}`, {})
+          .then(() => {
+            cargarEstudiantes();
+            toast.success('Estudiante eliminado correctamente.');
+          });
+      }
+    }
   }
 
   useEffect(() => {
@@ -94,6 +106,11 @@ export default function Estudiantes() {
       tooltipText: 'Editar',
       prefixIcon: 'e-edit',
       id: 'EditarEstudiante'
+    }, {
+      text: 'Eliminar',
+      tooltipText: 'Eliminar',
+      prefixIcon: 'e-delete',
+      id: 'EliminarEstudiante',
     }]
   const FilterOptions = {
     type: 'Menu'

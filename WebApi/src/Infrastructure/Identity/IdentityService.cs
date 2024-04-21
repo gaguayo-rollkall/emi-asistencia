@@ -79,6 +79,14 @@ public class IdentityService : IIdentityService
         return result.ToApplicationResult();
     }
 
+    public async Task<Result> DeleteUserByEmailAsync(string userName)
+    {
+        var user = await _userManager.FindByEmailAsync(userName);
+        var result = await _userManager.DeleteAsync(user!);
+
+        return result.ToApplicationResult();
+    }
+
     public async Task UpdateUserPasswordAsync(string userName, string password)
     {
         var user = await _userManager.FindByEmailAsync(userName);

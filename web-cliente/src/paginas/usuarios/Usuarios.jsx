@@ -12,7 +12,7 @@ export default function Usuarios() {
   const gridRef = useRef();
   const [usuarios, setUsuarios] = useState([]);
 
-  const toolbarOptions = ['Add', 'Edit']
+  const toolbarOptions = ['Add', 'Edit', 'Delete']
   const template = (props) => <UsuariosForm {...props} onEditComplete={() => {
     gridRef.current.endEdit();
     cargarUsuarios();
@@ -20,7 +20,9 @@ export default function Usuarios() {
   const editSettings = {
     allowEditing: true,
     allowAdding: true,
+    allowDeleting: true,
     mode: 'Dialog',
+    headerTemplate: 'Registro de Usuarios',
     footerTemplate: () => <></>,
     template,
   };
@@ -28,6 +30,15 @@ export default function Usuarios() {
   const FilterOptions = {
     type: 'Menu'
   };
+
+  const borrar = async (seleccionado) => {
+    try {
+      await apiService.delete(`/users/informacion-usuarios/${seleccionado.id}`);
+    } catch (error) {
+      console.error('Borrar', error);
+      toast.error('No se pudo borrar el usuario.');
+    }
+  }
 
   const cargarUsuarios = useCallback(async () => {
     try {
@@ -40,6 +51,10 @@ export default function Usuarios() {
   }, []);
 
   const dataSourceChanged = async (state) => {
+    if (state.requestType === 'delete') {
+      await borrar(state.data[0]);
+    }
+    
     await cargarUsuarios();
   }
 

@@ -571,6 +571,31 @@
         }
       }
     },
+    "/api/Estudiantes/borrar-estudiante/{id}": {
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "BorrarEstudiante",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Eventos": {
       "get": {
         "tags": [
@@ -2339,6 +2364,12 @@
             "nullable": true
           },
           "fecha": {
+            "type": "string"
+          },
+          "atraso": {
+            "type": "boolean"
+          },
+          "observacion": {
             "type": "string"
           }
         }

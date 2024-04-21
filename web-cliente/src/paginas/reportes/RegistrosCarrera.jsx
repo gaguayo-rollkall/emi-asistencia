@@ -115,7 +115,7 @@ export default function RegistrosCarrera() {
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
-      <Breadcrumbs items={['Reportes', 'Registros']} />
+      <Breadcrumbs items={['Reportes', 'Detalle']} />
 
       <div className="w-full flex flex-col justify-center items-center">
         <div className="card w-3/5 bg-base-100 shadow-xl my-5">

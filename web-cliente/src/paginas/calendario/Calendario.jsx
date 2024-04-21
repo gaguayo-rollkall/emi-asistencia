@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
 import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
+import { ListBoxComponent, Inject as InjectDropDown, CheckBoxSelection } from '@syncfusion/ej2-react-dropdowns';
 
 import apiService from '../../servicios/api-service';
 
@@ -10,7 +11,37 @@ import toast from 'react-hot-toast';
 // eslint-disable-next-line react/prop-types
 const QR = ({ id }) => {
   const [visible, setVisible] = useState(false);
-  
+  const [usuarios, setUsuarios] = useState([]);
+  const [emails, setEmails] = useState([]);
+  const [sendingEmail, setSendingEmail] = useState(false);
+
+  const sendEmail = async () => {
+    try {
+      setSendingEmail(true);
+
+      await apiService.post('/eventos/enviar-invitacion-evento', {
+        eventoId: id,
+        emails,
+      });
+
+      toast.success('Correo enviado correctamente');
+    } catch (error) {
+      console.error('Enviar Correo', error);
+      toast.error('No se pudo enviar el correo');
+    } finally {
+      setSendingEmail(false);
+    }
+  }
+
+  const loadUsers = useCallback(async () => {
+    const allUsers = await apiService.get('/users/informacion-usuarios');
+    setUsuarios(allUsers.map(u => ({ text: u.userId, id: u.userId })));
+  }, []);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setVisible(true);
@@ -20,9 +51,23 @@ const QR = ({ id }) => {
   }, []);
 
   return (
-    <div style={{ height: 300, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <a className="btn btn-active btn-neutral btn-sm w-full" href={`/detalles-evento?evento=${id}`} target='_blank' rel="nonrefer">Mostrar Evento</a>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${id}`} />}
+      <div style={{
+        marginTop: '1rem',
+        textAlign: 'left',
+      }}>
+        <p className="text-sm">Seleccione los usuarios para mandar la informacion del evento.</p>
+
+        <ListBoxComponent dataSource={usuarios} selectionSettings={{ showSelectAll: true, showCheckbox: true }} onChange={({ value }) => setEmails(value)}>
+          <InjectDropDown services={[CheckBoxSelection]} />
+        </ListBoxComponent>
+
+        <button className="btn btn-primary" disabled={emails.length === 0} onClick={sendEmail}>
+          {sendingEmail && <span className="loading loading-spinner"></span>}
+          Enviar Correo
+        </button>
+      </div>
     </div>
   )
 }

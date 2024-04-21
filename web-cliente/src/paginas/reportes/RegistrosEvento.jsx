@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import toast from 'react-hot-toast';
+import { getValue } from '@syncfusion/ej2-base';
 import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Group, Toolbar, PdfExport } from '@syncfusion/ej2-react-grids';
 import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
 
@@ -101,6 +102,14 @@ export default function RegistrosEvento() {
     }
   }
 
+  const rowDataBound = (args) => {
+    if (args.row) {
+      if (getValue('observacion', args.data) === 'Registro muy tarde') {
+        args.row.classList.add('bg-red-200')
+      }
+    }
+  }
+
   useEffect(() => {
     if (carrera && periodo) {
       cargarCursos();
@@ -126,7 +135,7 @@ export default function RegistrosEvento() {
 
   return (
     <main className="w-full h-full flex-grow p-6 relative">
-      <Breadcrumbs items={['Reportes', 'Registros']} />
+      <Breadcrumbs items={['Reportes', 'Detalle']} />
 
       <div className="w-full flex flex-col justify-center items-center">
         <div className="card w-3/5 bg-base-100 shadow-xl my-5">
@@ -189,6 +198,7 @@ export default function RegistrosEvento() {
           groupSettings={{
             columns: ['carrera', 'curso']
           }}
+          rowDataBound={rowDataBound}
         >
           <ColumnsDirective>
             <ColumnDirective field='carrera' headerText='Carrera' />
@@ -196,7 +206,8 @@ export default function RegistrosEvento() {
             <ColumnDirective field='codigo' headerText='Codigo' isPrimaryKey={true} />
             <ColumnDirective field='nombre' headerText='Nombre' />
             <ColumnDirective field='fecha' headerText='Fecha' />
-            <ColumnDirective field='ingreso' headerText='Ingreso' />
+            <ColumnDirective field='ingreso' headerText='Hora' />
+            <ColumnDirective field='observacion' headerText='Observacion' />
           </ColumnsDirective>
           <Inject services={[Page, Toolbar, Group, PdfExport]} />
         </GridComponent>

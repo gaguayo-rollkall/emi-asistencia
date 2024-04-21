@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { useAuth } from "../../hooks/useAuth";
 import apiService from '../../servicios/api-service';
 
+import './Login.css';
+
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -41,10 +43,10 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 login-screen">
+      <div className="max-w-xl w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Iniciar sesión</h2>
+          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Sistema de Control de Asistencia</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
@@ -91,6 +93,19 @@ export default function Login() {
             </button>
           </div>
         </form>
+      </div>
+
+      <div style={{
+        color: '#174287',
+        position: 'fixed',
+        left: 'calc(50% - 150px)',
+        bottom: 18,
+        textAlign: 'center',
+        fontWeight: 'bold'
+      }}>
+        ESCUELA MILITAR DE INGENIERIA
+        <br/>
+        © 2024
       </div>
     </div>
   );

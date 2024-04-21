@@ -94,11 +94,13 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
                     if (asistenciasPorEstudiante.Any())
                     {
                         var fecha = asistenciasPorEstudiante.First().Fecha.ToLocalTime();
+                        var minutos = evento.EndTime!.Value.Subtract(asistenciasPorEstudiante.First().Fecha).TotalMinutes;
 
                         registroEstudiante.Fecha = fecha.ToString("dd/MM/yyyy");
                         registroEstudiante.Ingreso = fecha.ToString("HH:mm:ss");
                         registroEstudiante.Salida = asistenciasPorEstudiante.Count >= 2 ? asistenciasPorEstudiante.Last().Fecha.ToLocalTime().ToString("HH:mm:ss") : string.Empty;
                         registroEstudiante.Registros = asistenciasPorEstudiante.Count;
+                        registroEstudiante.Observacion = minutos < 10 ? "Registro muy tarde" : string.Empty;
                     }
 
                     registroCurso.Estudiantes.Add(registroEstudiante);

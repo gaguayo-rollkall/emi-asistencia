@@ -57,9 +57,7 @@ export default function Control() {
                 <Resource key={control.id} {...control} onRemove={cargarControles} />
               ))}
 
-              {controles.length < 6 && (
-                <ImageUploader hidePreview change={subirControl} video={true} />
-              )}
+              <ImageUploader hidePreview change={subirControl} video={true} />
             </div>
           </div>
         </div>

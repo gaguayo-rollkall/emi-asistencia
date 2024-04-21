@@ -1,0 +1,4 @@
+.login-screen {
+  background: linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)), url('./emi.jpg') no-repeat center center fixed;
+  background-size: 60%;
+}

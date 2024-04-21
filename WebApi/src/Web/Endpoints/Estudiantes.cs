@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection.Estudiantes.Commands;
 using Microsoft.Extensions.DependencyInjection.Estudiantes.Queries;
+using WebApi.Application.Estudiantes.Commands;
 
 namespace WebApi.Web.Endpoints;
 
@@ -14,7 +15,8 @@ public class Estudiantes : EndpointGroupBase
             .MapPost(RegistrarEstudiantes)
             .MapPost(EnviarInvitacion, "/enviar-invitacion")
             .MapPost(RegistrarEstudiante, "/registrar-estudiante")
-            .MapPost(RemoverEstudiante, "/remover-estudiante");
+            .MapPost(RemoverEstudiante, "/remover-estudiante")
+            .MapPost(BorrarEstudiante, "/borrar-estudiante/{id}");
     }
     
     public async Task<IList<EstudianteDto>> GetEstudiantes(ISender sender, Guid? cursoId) =>
@@ -35,4 +37,7 @@ public class Estudiantes : EndpointGroupBase
 
     public async Task<bool> EnviarInvitacion(ISender sender, EnviarInvitacionCommand command) =>
         await sender.Send(command);
+
+    public async Task BorrarEstudiante(ISender sender, Guid id) =>
+        await sender.Send(new BorrarEstudianteCommand(id));
 }
