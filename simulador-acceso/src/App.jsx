@@ -80,7 +80,7 @@ function App() {
         setCodigo('');
         setEstado('');
         setEstudiante({});
-      }, 2500);
+      }, 10000);
     }
   }
 
