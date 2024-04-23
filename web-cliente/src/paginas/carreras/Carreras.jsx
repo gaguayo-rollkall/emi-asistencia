@@ -25,7 +25,7 @@ export default function Carreras() {
     mode: 'Dialog',
     headerTemplate: 'Registro de Carrera',
     footerTemplate: () => <></>,
-    // template,
+    template,
   };
 
   const toolbarClick = (args) => {
