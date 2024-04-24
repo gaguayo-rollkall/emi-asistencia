@@ -114,12 +114,14 @@ const HomeScreen = () => {
     AsyncStorage.removeItem('estudiante');
   }
 
+  const foto = estudiante.foto?.startsWith('/images') ? `http://192.248.161.19${estudiante.foto}` : estudiante.foto;
+
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
       {codigo && estudiante ? (
         <>
           <Avatar source={{
-            uri: estudiante.foto || 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
+            uri: foto || 'https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg'
           }} size="giant" width={300} height={300} />
           <Text category='h6' style={{ color: 'black' }}>
             {estudiante.grado}. {estudiante.nombre}

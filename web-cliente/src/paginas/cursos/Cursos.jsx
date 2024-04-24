@@ -32,6 +32,7 @@ export default function Cursos() {
     allowEditing: true,
     allowAdding: true,
     allowDeleting: true,
+    showDeleteConfirmDialog: true,
     mode: 'Dialog',
     headerTemplate: 'Registro de Cursos',
     footerTemplate: () => <></>,

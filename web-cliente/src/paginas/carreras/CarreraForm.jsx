@@ -35,15 +35,15 @@ export default function CarreaForm(props) {
           form.id = uuidv4();
         }
 
-        const carreraId = sessionStorage.getItem('carrera');
-        const periodoId = sessionStorage.getItem('periodo');
+        var action = props.isAdd ? 'post' : 'put';
+        var url = props.isAdd ? '/carreras' : `/carreras/${form.id}`;
   
-        await apiService.post('/cursos', { carreraId, periodoId, ...form });
+        await apiService[action](url, { ...form });
 
         onEditComplete();
       }
     } catch (apiError) {
-      console.error('Error al guardar el usuario', apiError);
+      console.error('Error al guardar la carrera', apiError);
       setError(apiError);
     }
   }

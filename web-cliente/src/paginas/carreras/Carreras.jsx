@@ -6,7 +6,6 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Edit, T
 import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
-import { upperCase } from '../../utiles';
 import CarreaForm from './CarreraForm';
 
 const URL = '/carreras';
@@ -17,11 +16,15 @@ export default function Carreras() {
   const [carreras, setCarreras] = useState([]);
 
   const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
-  const template = (props) => <CarreaForm {...props} />
+  const template = (props) => <CarreaForm {...props}
+    onEditComplete={() => {
+      gridRef.current.endEdit();
+    }} />
   const editSettings = {
     allowEditing: true,
     allowAdding: true,
     allowDeleting: true,
+    showDeleteConfirmDialog: true,
     mode: 'Dialog',
     headerTemplate: 'Registro de Carrera',
     footerTemplate: () => <></>,
@@ -34,34 +37,9 @@ export default function Carreras() {
     }
   }
 
-
-  const guardar = async (seleccionado) => {
-    try {
-      if (!seleccionado.nombre?.trim()) {
-        return;
-      }
-
-      var url = seleccionado.id ? `${URL}/${seleccionado.id}` : URL;
-      var action = seleccionado.id ? 'put' : 'post';
-
-      await apiService[action](url, seleccionado);
-      await cargarCarreras();
-    } catch (error) {
-      const { response: { data: { errors } } } = error;
-      gridRef.current.dataSource = carreras;
-
-      if (errors) {
-        setErrors(errors);
-      }
-
-      console.error('Guardar', error);
-    }
-  }
-
   const borrar = async (seleccionado) => {
     try {
       await apiService.delete(`${URL}/${seleccionado.id}`);
-      await cargarCarreras();
     } catch (error) {
       console.error('Borrar', error);
       gridRef.current.dataSource = carreras;
@@ -80,11 +58,11 @@ export default function Carreras() {
   }, []);
 
   const dataSourceChanged = async (state) => {
-    if (state.action === 'add' || state.action === 'edit') {
-      await guardar(state.data);
-    } else if (state.requestType === 'delete') {
+    if (state.requestType === 'delete') {
       await borrar(state.data[0]);
     }
+
+    await cargarCarreras();
   }
 
   useEffect(() => {
@@ -99,26 +77,26 @@ export default function Carreras() {
         <div className="card w-full bg-base-100 shadow-xl my-5">
           <div className="card-body">
             <GridComponent id="GridCarreras"
-                           dataSource={carreras}
-                           toolbar={toolbarOptions}
-                           allowPaging={true}
-                           editSettings={editSettings}
-                           actionComplete={dataSourceChanged}
-                           ref={gridRef}
-                           enableImmutableMode={true}
-                           allowPdfExport={true}
-                           toolbarClick={toolbarClick}>
+              dataSource={carreras}
+              toolbar={toolbarOptions}
+              allowPaging={true}
+              editSettings={editSettings}
+              actionComplete={dataSourceChanged}
+              ref={gridRef}
+              enableImmutableMode={true}
+              allowPdfExport={true}
+              toolbarClick={toolbarClick}>
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} width={100} />
                 <ColumnDirective field='nombre' headerText='Nombre' width='100' />
               </ColumnsDirective>
-              <Inject services={[Page, Toolbar, Edit, PdfExport]}/>
+              <Inject services={[Page, Toolbar, Edit, PdfExport]} />
             </GridComponent>
           </div>
         </div>
       </div>
 
-      <Errores errors={errors} cleanErrors={() => setErrors([])}/>
+      <Errores errors={errors} cleanErrors={() => setErrors([])} />
     </main>
   )
 }

@@ -21,6 +21,7 @@ export default function Usuarios() {
     allowEditing: true,
     allowAdding: true,
     allowDeleting: true,
+    showDeleteConfirmDialog: true,
     mode: 'Dialog',
     headerTemplate: 'Registro de Usuarios',
     footerTemplate: () => <></>,
