@@ -19,6 +19,7 @@ import EventoIcon from './icons/evento.svg?react';
 import UsuariosIcon from './icons/usuarios.svg?react';
 import ScreenIcon from './icons/screen.svg?react';
 import LogoutIcon from './icons/logout.svg?react';
+import LicenciaIcon from './icons/licencia.svg?react';
 
 // eslint-disable-next-line react/prop-types
 const Sidebar = ({ setExpand }) => {
@@ -102,6 +103,7 @@ const Sidebar = ({ setExpand }) => {
     icons_map["usuarios"] = <UsuariosIcon className="h-5 w-5 text-current" />
     icons_map["control"] = <ScreenIcon className="h-5 w-5 text-current" />
     icons_map["logout"] = <LogoutIcon className="h-5 w-5 text-current" />
+    icons_map["licencias"] = <LicenciaIcon className="h-5 w-5 text-current" />
     return icons_map[icon];
   };
 

@@ -29,6 +29,7 @@ import RegistrosCarrera from './paginas/reportes/RegistrosCarrera';
 import RegistrosEvento from './paginas/reportes/RegistrosEvento';
 import Usuarios from './paginas/usuarios/Usuarios';
 import Control from './paginas/control/Control';
+import Licencias from './paginas/licencias/Licencias';
 
 function App() {
   useEffect(() => {
@@ -69,6 +70,7 @@ function App() {
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="control" element={<Control />} />
             <Route path="detalles-evento" element={<DetallesEvento />} />
+            <Route path="licencias" element={<Licencias />} />
           </Route>
         </Routes>
       </AuthProvider>

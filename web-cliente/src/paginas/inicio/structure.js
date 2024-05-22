@@ -82,6 +82,14 @@ const sidebarStructure = [
     link: "/estudiantes"
   },
   {
+    id: 'licencias',
+    title: 'Licencias',
+    name: 'licencias',
+    parent: true,
+    icon: 'licencias',
+    link: "/licencias"
+  },
+  {
     id: 'control',
     title: 'Control',
     name: 'control',
