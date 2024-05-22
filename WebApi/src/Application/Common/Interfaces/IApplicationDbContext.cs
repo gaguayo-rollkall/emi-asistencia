@@ -20,6 +20,7 @@ public interface IApplicationDbContext
     DbSet<PersonalPermiso> PersonalPermisos { get; }
     public DbSet<Control> Controles { get; }
     DbSet<UsuarioInformacion> UsuarioInformaciones { get; }
+    DbSet<Licencia> Licencias { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
