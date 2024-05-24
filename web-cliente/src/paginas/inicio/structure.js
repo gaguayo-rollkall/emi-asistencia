@@ -7,6 +7,7 @@ const sidebarStructure = [
     icon: 'usuarios',
     link: "/usuarios",
     isAdmin: true,
+    permiso: 'usuariosSistema',
   },
   {
     id: 'permisos',
@@ -16,6 +17,7 @@ const sidebarStructure = [
     icon: 'permiso',
     link: "/permisos",
     isAdmin: true,
+    permiso: 'permisos',
   },
   {
     id: "reportes",
@@ -23,6 +25,7 @@ const sidebarStructure = [
     name: "dashboard",
     parent: true,
     icon: "dasbor",
+    permiso: 'reportes',
     child: [
       {
         id: "dashboard",
@@ -55,6 +58,7 @@ const sidebarStructure = [
     icon: 'carreras',
     link: "/carreras",
     isAdmin: true,
+    permiso: 'carreras',
   },
   {
     id: 'periodo',
@@ -64,6 +68,7 @@ const sidebarStructure = [
     icon: 'periodo',
     link: "/periodos",
     isAdmin: true,
+    permiso: 'periodosAcademicos',
   },
   {
     id: 'cursos',
@@ -73,6 +78,7 @@ const sidebarStructure = [
     icon: 'cursos',
     link: "/cursos",
     isAdmin: false,
+    permiso: 'cursos',
   },
   {
     id: 'calendario',
@@ -80,7 +86,8 @@ const sidebarStructure = [
     name: 'calendario',
     parent: true,
     icon: 'calendario',
-    link: "/calendario"
+    link: "/calendario",
+    permiso: 'calendario',
   },
   {
     id: 'estudiantes',
@@ -88,7 +95,8 @@ const sidebarStructure = [
     name: 'estudiantes',
     parent: true,
     icon: 'estudiantes',
-    link: "/estudiantes"
+    link: "/estudiantes",
+    permiso: 'estudiantes',
   },
   {
     id: 'licencias',
@@ -96,7 +104,8 @@ const sidebarStructure = [
     name: 'licencias',
     parent: true,
     icon: 'licencias',
-    link: "/licencias"
+    link: "/licencias",
+    permiso: 'licencias'
   },
   {
     id: 'control',
@@ -106,6 +115,7 @@ const sidebarStructure = [
     icon: 'control',
     link: "/control",
     isAdmin: true,
+    permiso: 'control',
   },
   {
     id: 'logout',
@@ -114,6 +124,7 @@ const sidebarStructure = [
     logout: true,
     parent: true,
     icon: 'logout',
+    permiso: 'logout',
   },
 ]
 

@@ -5,7 +5,7 @@ using WebApi.Application.PermisosSeguridad.Queries;
 namespace Microsoft.Extensions.DependencyInjection.Controles.Queries;
 
 [Authorize]
-public record GetInformacionUsuariosQuery : IRequest<IList<UsuarioInformacionDto>>;
+public record GetInformacionUsuariosQuery(string? email) : IRequest<IList<UsuarioInformacionDto>>;
 
 public class GetInformacionUsuariosQueryHandler : IRequestHandler<GetInformacionUsuariosQuery, IList<UsuarioInformacionDto>>
 {
@@ -20,6 +20,7 @@ public class GetInformacionUsuariosQueryHandler : IRequestHandler<GetInformacion
     {
         var informaciones = await _context.UsuarioInformaciones
             .AsNoTracking()
+            .Where(u => string.IsNullOrEmpty(request.email) || u.UserId == request.email)
             .Select(c => new
             {
                 c.Id,

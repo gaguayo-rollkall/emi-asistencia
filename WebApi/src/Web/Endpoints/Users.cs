@@ -17,8 +17,8 @@ public class Users : EndpointGroupBase
             .MapIdentityApi<ApplicationUser>();
     }
 
-    public async Task<IList<UsuarioInformacionDto>> GetInformacionUsuarios(ISender sender) =>
-        await sender.Send(new GetInformacionUsuariosQuery());
+    public async Task<IList<UsuarioInformacionDto>> GetInformacionUsuarios(ISender sender, string? email = "") =>
+        await sender.Send(new GetInformacionUsuariosQuery(email));
     
     public async Task<IResult> ActualizarInformacionUsuario(ISender sender, Guid id, ActualizarInformacionUsuarioCommand command)
     {

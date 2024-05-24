@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import SimpleBar from "simplebar-react";
 import { useNavigate } from 'react-router-dom';
 
 import "simplebar-react/dist/simplebar.min.css";
 import { sidebarStructure } from "./structure";
 import { useAuth } from "../../hooks/useAuth";
+import apiService from '../../servicios/api-service';
 
 import DashboardIcon  from './icons/dashboard.svg?react';
 import CarrerasIcon  from './icons/carreras.svg?react';
@@ -26,6 +27,7 @@ import PermisoIcon from './icons/permiso.svg?react';
 const Sidebar = ({ setExpand }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [permisos, setPermisos] = useState(null);
   const isAdmin = user?.username === 'administrator@emi.com';
 
   const username = "Escuela Militar de Ingenieria";
@@ -110,14 +112,12 @@ const Sidebar = ({ setExpand }) => {
   };
 
   const generateMenu = (item, index, recursive = 0) => {
+    if (!permisos[item.permiso] && !item.logout) return null;
+
     if (activeName === "" && activeLink.includes(item.link)) {
       setActiveName(item.name);
     }
     const classesActive = activeName === item.name ? "active" : "";
-
-    if (item.isAdmin && !isAdmin) {
-      return null;
-    }
 
     return (
       <li key={index}>
@@ -224,6 +224,46 @@ const Sidebar = ({ setExpand }) => {
       </li>
     );
   };
+
+  const cargarPermisos = useCallback(async() => {
+    try {
+      if (!isAdmin) {
+        const data = await apiService.get('/users/informacion-usuarios', { email: user.username });
+        const [usuario = {}] = data || [];
+
+        if (usuario.permisoSeguridad) {
+          setPermisos({
+            ...usuario.permisoSeguridad,
+            logout: true,
+          });
+        }
+      } else {
+        setPermisos({
+          "usuariosSistema": true,
+          "permisos": true,
+          "reportes": true,
+          "carreras": true,
+          "cursos": true,
+          "periodosAcademicos": true,
+          "calendario": true,
+          "estudiantes": true,
+          "licencias": true,
+          "logout": true,
+          "control": true,
+        });
+      }
+    } catch (error) {
+      console.error('Hubo un problema al cargar los permisos', error);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    cargarPermisos();
+  }, [user, cargarPermisos])
+
+  console.log(permisos);
+
+  if (permisos === null) return null;
 
   return (
     <nav
