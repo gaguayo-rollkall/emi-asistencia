@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { FormValidator } from '@syncfusion/ej2-inputs';
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs';
+import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import apiService from '../../servicios/api-service';
 import { uuidv4 } from '../../utiles'
@@ -14,6 +15,7 @@ export default function UsuariosForm(props) {
   const { onEditComplete } = props;
   const [form, setForm] = useState(props);
   const [error, setError] = useState(null);
+  const [permisos, setPermisos] = useState([]);
 
   const update = (field, toUpperCase = false) => ({ value }) => {
     setForm({ ...form, [field]: toUpperCase ? value.toUpperCase() : value });
@@ -54,8 +56,16 @@ export default function UsuariosForm(props) {
     }
   }
 
+  const cargarPermisos = async () => {
+    const URL = '/permisosseguridad';
+    const data = await apiService.get(URL);
+
+    setPermisos(data);
+  }
+
   useEffect(() => {
     formObject = new FormValidator(`#usuarioForm1`, options);
+    cargarPermisos();
   }, []);
 
   return (
@@ -75,6 +85,17 @@ export default function UsuariosForm(props) {
       <div className="form-group">
         <TextBoxComponent type="text" name="detalles" value={form.detalles} change={update('detalles', true)} placeholder="Detalles" floatLabelType="Auto" data-msg-containerid="errorForDetails" />
         <div id="errorForDetails" />
+      </div>
+
+      <div className="form-group">
+        <ComboBoxComponent
+              dataSource={permisos}
+              fields={{ text: 'nombre', value: 'id' }}
+              change={update('permisoId')}
+              placeholder="Permiso"
+              value={form.permisoId}
+              popupHeight="220px"
+              floatLabelType="Auto" />
       </div>
 
       <div className="form-group">

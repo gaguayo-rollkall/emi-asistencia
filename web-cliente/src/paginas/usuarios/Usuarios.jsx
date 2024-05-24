@@ -83,6 +83,7 @@ export default function Usuarios() {
                   <ColumnDirective field='userId' headerText='Email' />
                   <ColumnDirective field='nombre' headerText='Nombre' />
                   <ColumnDirective field='detalles' headerText='Detalles' />
+                  <ColumnDirective field='permisoSeguridad.nombre' headerText='Permiso' />
                 </ColumnsDirective>
                 <Inject services={[Page, Toolbar, Edit, CommandColumn, Filter]} />
               </GridComponent>
