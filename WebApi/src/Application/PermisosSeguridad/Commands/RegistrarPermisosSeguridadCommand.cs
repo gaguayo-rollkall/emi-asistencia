@@ -41,7 +41,8 @@ public class RegistrarPermisosSeguridadHandler : IRequestHandler<RegistrarPermis
 
             _context.PermisoSeguridades.Add(permisoDb);
         }
-        
+
+        permisoDb.Nombre = request.Nombre;
         permisoDb.UsuariosSistema = request.UsuariosSistema;
         permisoDb.Reportes = request.Reportes;
         permisoDb.Carreras = request.Carreras;

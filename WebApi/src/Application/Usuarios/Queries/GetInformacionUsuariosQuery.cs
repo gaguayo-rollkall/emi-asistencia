@@ -1,5 +1,6 @@
 ﻿using WebApi.Application.Common.Interfaces;
 using WebApi.Application.Common.Security;
+using WebApi.Application.PermisosSeguridad.Queries;
 
 namespace Microsoft.Extensions.DependencyInjection.Controles.Queries;
 
@@ -17,16 +18,41 @@ public class GetInformacionUsuariosQueryHandler : IRequestHandler<GetInformacion
 
     public async Task<IList<UsuarioInformacionDto>> Handle(GetInformacionUsuariosQuery request, CancellationToken cancellationToken)
     {
-        return await _context.UsuarioInformaciones
+        var informaciones = await _context.UsuarioInformaciones
             .AsNoTracking()
-            .Select(c => new UsuarioInformacionDto
+            .Select(c => new
             {
-                Id = c.Id,
-                UserId = c.UserId,
-                Nombre = c.Nombre,
-                Detalles = c.Detalles,
+                c.Id,
+                c.UserId,
+                c.Nombre,
+                c.Detalles,
+                c.PermisoId,
+                c.Permiso,
             })
             .OrderBy(c => c.Nombre)
             .ToListAsync(cancellationToken);
+        
+        return informaciones.Select(c => new UsuarioInformacionDto
+        {
+            Id = c.Id,
+            UserId = c.UserId,
+            Nombre = c.Nombre,
+            Detalles = c.Detalles,
+            PermisoId = c.PermisoId,
+            PermisoSeguridad = new PermisoSeguridadDto
+            {
+                Id = c.Permiso?.Id ?? Guid.Empty,
+                Nombre = c.Permiso?.Nombre ?? string.Empty,
+                UsuariosSistema = c.Permiso?.UsuariosSistema ?? true,
+                Reportes = c.Permiso?.Reportes ?? true,
+                Carreras = c.Permiso?.Carreras ?? true,
+                PeriodosAcademicos = c.Permiso?.PeriodosAcademicos ?? true,
+                Cursos = c.Permiso?.Cursos ?? true,
+                Calendario = c.Permiso?.Calendario ?? true,
+                Estudiantes = c.Permiso?.Estudiantes ?? true,
+                Licencias = c.Permiso?.Licencias ?? true,
+                Control = c.Permiso?.Control ?? true,
+            }
+        }).ToList();
     }
 }

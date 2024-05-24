@@ -22,6 +22,7 @@ public class GetPermisosSeguridadQueryHandler : IRequestHandler<GetPermisosSegur
             .Select(e => new PermisoSeguridadDto
             {
                 Id = e.Id,
+                Nombre = e.Nombre,
                 UsuariosSistema = e.UsuariosSistema,
                 Reportes = e.Reportes,
                 Carreras = e.Carreras,

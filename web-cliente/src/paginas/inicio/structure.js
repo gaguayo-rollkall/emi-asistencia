@@ -9,6 +9,15 @@ const sidebarStructure = [
     isAdmin: true,
   },
   {
+    id: 'permisos',
+    title: 'Permisos',
+    name: 'permisos',
+    parent: true,
+    icon: 'permiso',
+    link: "/permisos",
+    isAdmin: true,
+  },
+  {
     id: "reportes",
     title: "Reportes",
     name: "dashboard",

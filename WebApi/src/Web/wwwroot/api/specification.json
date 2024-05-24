@@ -3110,6 +3110,19 @@
           "password": {
             "type": "string",
             "nullable": true
+          },
+          "permisoId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "permisoSeguridad": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PermisoSeguridadDto"
+              }
+            ]
           }
         }
       },

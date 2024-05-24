@@ -30,6 +30,7 @@ import RegistrosEvento from './paginas/reportes/RegistrosEvento';
 import Usuarios from './paginas/usuarios/Usuarios';
 import Control from './paginas/control/Control';
 import Licencias from './paginas/licencias/Licencias';
+import Permisos from './paginas/permisos/Permisos';
 
 function App() {
   useEffect(() => {
@@ -71,6 +72,7 @@ function App() {
             <Route path="control" element={<Control />} />
             <Route path="detalles-evento" element={<DetallesEvento />} />
             <Route path="licencias" element={<Licencias />} />
+            <Route path="permisos" element={<Permisos />} />
           </Route>
         </Routes>
       </AuthProvider>
