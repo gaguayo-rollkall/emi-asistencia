@@ -33,6 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Control> Controles => Set<Control>();
     public DbSet<UsuarioInformacion> UsuarioInformaciones => Set<UsuarioInformacion>();
     public DbSet<Licencia> Licencias => Set<Licencia>();
+    public DbSet<PermisoSeguridad> PermisoSeguridades => Set<PermisoSeguridad>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -53,6 +54,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         Control.Map(builder);
         UsuarioInformacion.Map(builder);
         Licencia.Map(builder);
+        PermisoSeguridad.Map(builder);
 
         base.OnModelCreating(builder);
     }

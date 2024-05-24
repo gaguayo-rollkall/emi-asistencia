@@ -21,6 +21,7 @@ public interface IApplicationDbContext
     public DbSet<Control> Controles { get; }
     DbSet<UsuarioInformacion> UsuarioInformaciones { get; }
     DbSet<Licencia> Licencias { get; }
+    DbSet<PermisoSeguridad> PermisoSeguridades { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

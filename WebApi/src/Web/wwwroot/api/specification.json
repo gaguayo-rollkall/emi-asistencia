@@ -919,6 +919,84 @@
         }
       }
     },
+    "/api/PermisosSeguridad": {
+      "get": {
+        "tags": [
+          "PermisosSeguridad"
+        ],
+        "operationId": "GetPermisos",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermisoSeguridadDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "PermisosSeguridad"
+        ],
+        "operationId": "RegistrarPermisos",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrarPermisosSeguridadCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PermisosSeguridad/{id}": {
+      "delete": {
+        "tags": [
+          "PermisosSeguridad"
+        ],
+        "operationId": "RemoverPermiso",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Reportes/registros-carrera": {
       "get": {
         "tags": [
@@ -2517,6 +2595,144 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "PermisoSeguridadDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PermisoSeguridad"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "PermisoSeguridad": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "nombre": {
+                "type": "string"
+              },
+              "usuariosSistema": {
+                "type": "boolean"
+              },
+              "reportes": {
+                "type": "boolean"
+              },
+              "carreras": {
+                "type": "boolean"
+              },
+              "periodosAcademicos": {
+                "type": "boolean"
+              },
+              "cursos": {
+                "type": "boolean"
+              },
+              "calendario": {
+                "type": "boolean"
+              },
+              "estudiantes": {
+                "type": "boolean"
+              },
+              "licencias": {
+                "type": "boolean"
+              },
+              "control": {
+                "type": "boolean"
+              },
+              "usuarios": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UsuarioInformacion"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UsuarioInformacion": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseAuditableEntity"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "userId": {
+                "type": "string",
+                "nullable": true
+              },
+              "nombre": {
+                "type": "string",
+                "nullable": true
+              },
+              "detalles": {
+                "type": "string",
+                "nullable": true
+              },
+              "permisoId": {
+                "type": "string",
+                "format": "guid",
+                "nullable": true
+              },
+              "permiso": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PermisoSeguridad"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "RegistrarPermisosSeguridadCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "nombre": {
+            "type": "string"
+          },
+          "usuariosSistema": {
+            "type": "boolean"
+          },
+          "reportes": {
+            "type": "boolean"
+          },
+          "carreras": {
+            "type": "boolean"
+          },
+          "periodosAcademicos": {
+            "type": "boolean"
+          },
+          "cursos": {
+            "type": "boolean"
+          },
+          "calendario": {
+            "type": "boolean"
+          },
+          "estudiantes": {
+            "type": "boolean"
+          },
+          "licencias": {
+            "type": "boolean"
+          },
+          "control": {
+            "type": "boolean"
           }
         }
       },

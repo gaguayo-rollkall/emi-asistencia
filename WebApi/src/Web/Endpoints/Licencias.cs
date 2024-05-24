@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Microsoft.Extensions.DependencyInjection.Licencias.Commands;
+﻿using Microsoft.Extensions.DependencyInjection.Licencias.Commands;
 using Microsoft.Extensions.DependencyInjection.Licencias.Queries;
 
 namespace WebApi.Web.Endpoints;

@@ -44,6 +44,8 @@ services:
 
   servidor-mysql:
     image: mysql:latest
+    ports:
+      - "3666:3306"
     environment:
       MYSQL_ROOT_PASSWORD: acceso2023
     restart: always

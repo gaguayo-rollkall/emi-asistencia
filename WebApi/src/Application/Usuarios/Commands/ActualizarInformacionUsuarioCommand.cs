@@ -33,6 +33,7 @@ public class ActualizarInformacionUsuarioCommandHandler : IRequestHandler<Actual
         entity.UserId = request.UserId;
         entity.Nombre = request.Nombre;
         entity.Detalles = request.Detalles;
+        entity.PermisoId = request.PermisoId;
 
         if (!isAdd && !string.IsNullOrEmpty(request.Password))
         {
