@@ -208,6 +208,7 @@ export default function RegistrosEvento() {
             <ColumnDirective field='fecha' headerText='Fecha' />
             <ColumnDirective field='ingreso' headerText='Hora' />
             <ColumnDirective field='observacion' headerText='Observacion' />
+            <ColumnDirective field='licencia' headerText='Licencia' />
           </ColumnsDirective>
           <Inject services={[Page, Toolbar, Group, PdfExport]} />
         </GridComponent>

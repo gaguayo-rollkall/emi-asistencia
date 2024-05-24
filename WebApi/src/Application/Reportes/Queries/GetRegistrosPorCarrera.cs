@@ -71,6 +71,11 @@ public class
             .Where(a => a.Evento == null)
             .ToListAsync(cancellationToken);
             
+        var licencias = await _context.Licencias
+            .AsNoTracking()
+            .Where(l => l.Fecha == fechaInicio.Date)
+            .ToListAsync(cancellationToken);
+        
         foreach (var carrera in carreras)
         {
             var registro = new RegistroCarreraDto { IdCarrera = carrera.Id, Carrera = carrera.Nombre, };
@@ -91,9 +96,11 @@ public class
                         .Where(a => a.CodigoEstudiante == estudiante.Codigo || a.RFID == estudiante.RFID)
                         .OrderBy(a => a.Fecha)
                         .ToList();
+                    var licencia = licencias.FirstOrDefault(l => l.CodigoEstudiante == estudiante.Codigo);
 
                     registroEstudiante.Fecha = request.fechaInicio.ToString("dd/MM/yyyy");
-
+                    registroEstudiante.Licencia = licencia?.Estatus ?? string.Empty;
+                    
                     if (asistenciasPorEstudiante.Any())
                     {
                         registroEstudiante.Ingreso = asistenciasPorEstudiante.First().Fecha.ToLocalTime().ToString("HH:mm:ss");

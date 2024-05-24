@@ -185,7 +185,9 @@ export default function RegistrosCarrera() {
             <ColumnDirective field='fecha' headerText='Fecha' />
             <ColumnDirective field='ingreso' headerText='Ingreso' />
             <ColumnDirective field='salida' headerText='Salida' />
+            <ColumnDirective field='observacion' headerText='Observacion' />
             <ColumnDirective field='registros' headerText='Registros' />
+            <ColumnDirective field='licencia' headerText='Licencia' />
           </ColumnsDirective>
           <Inject services={[Page, Toolbar, Group, PdfExport]} />
         </GridComponent>

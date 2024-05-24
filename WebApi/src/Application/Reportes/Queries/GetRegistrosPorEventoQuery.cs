@@ -69,6 +69,11 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
             .AsNoTracking()
             .Where(a => a.Evento == request.evento)
             .ToListAsync(cancellationToken);
+        
+        var licencias = await _context.Licencias
+            .AsNoTracking()
+            .Where(l => l.Fecha == evento.StartTime!.Value.Date)
+            .ToListAsync(cancellationToken);
             
         foreach (var carrera in carreras)
         {
@@ -91,6 +96,9 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
                         .OrderBy(a => a.Fecha)
                         .ToList();
 
+                    var licencia = licencias.FirstOrDefault(l => l.CodigoEstudiante == estudiante.Codigo);
+                    registroEstudiante.Licencia = licencia?.Estatus ?? string.Empty;
+                    
                     if (asistenciasPorEstudiante.Any())
                     {
                         var fecha = asistenciasPorEstudiante.First().Fecha.ToLocalTime();

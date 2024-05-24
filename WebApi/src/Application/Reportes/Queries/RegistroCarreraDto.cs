@@ -24,4 +24,5 @@ public class RegistroEstudiante
     public string Fecha { get; internal set; } = string.Empty;
     public bool Atraso { get; internal set; }
     public string Observacion { get; set; } = "Sin Registro";
+    public string Licencia { get; set; } = string.Empty;
 }
