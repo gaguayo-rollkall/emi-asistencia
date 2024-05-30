@@ -8,6 +8,7 @@ import ImageUploader from '../../components/ImageUploader';
 import apiService from '../../servicios/api-service';
 import { uuidv4 } from '../../utiles'
 import APIErrors from '../../components/APIErrors';
+import Permiso from './Permiso';
 
 let formObject;
 
@@ -37,8 +38,9 @@ export default function LicenciaForm(props) {
     estatus: 'PENDIENTE',
     ...existingForm,
   });
+
   const [error, setError] = useState(null);
-  console.log(form);
+  const [showPermiso, setShowPermiso] = useState(false);
 
   const update = (field, toUpperCase = false) => ({ value }) => {
     setForm({ ...form, [field]: toUpperCase ? value.toUpperCase().trim() : value });
@@ -69,7 +71,7 @@ export default function LicenciaForm(props) {
         if (props.isAdd) {
           form.id = uuidv4();
         }
-  
+
         await apiService.post('licencias', { ...form });
 
         onEditComplete();
@@ -85,56 +87,63 @@ export default function LicenciaForm(props) {
   }, []);
 
   return (
-    <form id="licenciaForm1" method="post" onSubmit={(e) => e.preventDefault()}>
-      <APIErrors error={error} />
+    <>
+      <form id="licenciaForm1" method="post" onSubmit={(e) => e.preventDefault()}>
+        <APIErrors error={error} />
 
-      <ImageUploader value={form.foto} change={update('foto')} />
+        <ImageUploader value={form.foto} change={update('foto')} />
 
-      <div className="form-group">
-        <TextBoxComponent type="text" name="titulo" value={form.titulo} change={update('titulo', true)} placeholder="Titulo" floatLabelType="Auto" data-msg-containerid="errorForTitulo" />
-        <div id="errorForTitulo" />
-      </div>
+        <div className="form-group">
+          <TextBoxComponent type="text" name="titulo" value={form.titulo} change={update('titulo', true)} placeholder="Titulo" floatLabelType="Auto" data-msg-containerid="errorForTitulo" />
+          <div id="errorForTitulo" />
+        </div>
 
-      <div className="form-group">
-        <TextBoxComponent type="date" name="fecha" value={form.fecha} change={update('fecha')} placeholder="Fecha" floatLabelType="Auto" data-msg-containerid="errorForFecha" format="dd/MM/yyyy" />
-        <div id="errorForFecha" />
-      </div>
+        <div className="form-group">
+          <TextBoxComponent type="date" name="fecha" value={form.fecha} change={update('fecha')} placeholder="Fecha" floatLabelType="Auto" data-msg-containerid="errorForFecha" format="dd/MM/yyyy" />
+          <div id="errorForFecha" />
+        </div>
 
-      <div className="form-group">
-        <ComboBoxComponent
-              dataSource={['PERSONAL', 'EMERGENCIA', 'SALUD', 'OTRO']}
-              change={update('motivo', true)}
-              placeholder="Motivo"
-              value={form.motivo}
-              popupHeight="220px"
-              floatLabelType="Auto" />
-      </div>
+        <div className="form-group">
+          <ComboBoxComponent
+            dataSource={['PERSONAL', 'EMERGENCIA', 'SALUD', 'OTRO']}
+            change={update('motivo', true)}
+            placeholder="Motivo"
+            value={form.motivo}
+            popupHeight="220px"
+            floatLabelType="Auto" />
+        </div>
 
-      <div className="form-group">
-        <TextBoxComponent type="text" name="justificacion" value={form.justificacion} change={update('justificacion', true)} placeholder="Justificacion" floatLabelType="Auto" data-msg-containerid="errorForJustificacion"  />
-        <div id="errorForJustificacion" />
-      </div>
+        <div className="form-group">
+          <TextBoxComponent type="text" name="justificacion" value={form.justificacion} change={update('justificacion', true)} placeholder="Justificacion" floatLabelType="Auto" data-msg-containerid="errorForJustificacion" />
+          <div id="errorForJustificacion" />
+        </div>
 
-      <div className="form-group">
-        <TextBoxComponent type="text" name="codigoEstudiante" value={form.codigoEstudiante} change={update('codigoEstudiante', true)} placeholder="Codigo de Estudiante" floatLabelType="Auto" data-msg-containerid="errorForCodigo" />
-        <div id="errorForCodigo" />
-      </div>
+        <div className="form-group">
+          <TextBoxComponent type="text" name="codigoEstudiante" value={form.codigoEstudiante} change={update('codigoEstudiante', true)} placeholder="Codigo de Estudiante" floatLabelType="Auto" data-msg-containerid="errorForCodigo" />
+          <div id="errorForCodigo" />
+        </div>
 
-      <div className="form-group">
-        <ComboBoxComponent
-              dataSource={['RECHAZADO', 'PENDIENTE', 'APROVADO']}
-              change={update('estatus', true)}
-              placeholder="Estatus"
-              value={form.estatus}
-              popupHeight="220px"
-              floatLabelType="Auto" />
-      </div>
+        <div className="form-group">
+          <ComboBoxComponent
+            dataSource={['RECHAZADO', 'PENDIENTE', 'APROVADO']}
+            change={update('estatus', true)}
+            placeholder="Estatus"
+            value={form.estatus}
+            popupHeight="220px"
+            floatLabelType="Auto" />
+        </div>
 
-      <div className="mt-4" style={{ textAlign: 'right' }}>
-        <button type="submit" className="btn btn-sm btn-primary" onClick={onSaveForm}>
-          Guardar
-        </button>
-      </div>
-    </form>
+        <div className="mt-4" style={{ textAlign: 'right' }}>
+          <button type="button" className="btn btn-sm btn-warning mr-4" onClick={() => setShowPermiso(true)}>
+            Papeleta de Permiso
+          </button>
+          <button type="submit" className="btn btn-sm btn-primary" onClick={onSaveForm}>
+            Guardar
+          </button>
+        </div>
+      </form>
+
+      <Permiso visible={showPermiso} close={() => setShowPermiso(false)} form={form}/>
+    </>
   )
 }

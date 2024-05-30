@@ -76,7 +76,7 @@ export default function Licencias() {
   }, [cargarLicencias]);
 
   return (
-    <main className="w-full h-full flex-grow p-6 relative">
+    <main className="w-full h-full flex-grow p-6 relative" id="licenciasPage">
       <Breadcrumbs items={['Inicio', 'Licencias']} />
 
       <div className="w-full">

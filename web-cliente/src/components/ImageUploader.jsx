@@ -39,7 +39,7 @@ export default function ImageUploader({
     <div className='upload_wrapper'>
       {!hidePreview &&
         <div className="avatar">
-          <div className="w-24 rounded">
+          <div className="w-48 rounded">
             <img src={value || "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg"} />
           </div>
         </div>}

@@ -32,21 +32,24 @@ const sidebarStructure = [
         title: "Estadisticas",
         name: "reportes.dashboard",
         link: "/reportes-dashboard",
-        icon: "chart"
+        icon: "chart",
+        permiso: 'reportes',
       },
       {
         id: "ingresos-carrera",
         title: "Detalle por Carrera",
         name: "reportes.ingresos-carrera",
         link: "/reportes-registros-carrera",
-        icon: "carrera"
+        icon: "carrera",
+        permiso: 'reportes',
       },
       {
         id: "ingresos-eventos",
         title: "Detalle por Evento",
         name: "reportes.ingresos-eventos",
         link: "/reportes-registros-evento",
-        icon: "evento"
+        icon: "evento",
+        permiso: 'reportes',
       }
     ]
   },
