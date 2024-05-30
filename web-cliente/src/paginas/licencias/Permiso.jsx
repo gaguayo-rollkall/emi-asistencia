@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from 'react';
 import { DialogComponent } from '@syncfusion/ej2-react-popups';
-// import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
+import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
 // import { usePDF } from 'react-to-pdf';
 import { useReactToPrint } from 'react-to-print';
 
@@ -72,7 +72,7 @@ export default function Permiso({
           <div className="flex justify-between">
             <img src="https://www.emi.edu.bo/images/main1.png" width={140} height={120} style={{ height: 120 }} />
 
-            {/* <QRCodeGeneratorComponent width={"140px"} height={"140px"} value={`${form.id}`} displayText={{ visibility: false }} /> */}
+            <QRCodeGeneratorComponent width={"140px"} height={"140px"} value={`${form.id}`} displayText={{ visibility: false }} />
           </div>
 
           <h1 className="text-xl text-center underline decoration-solid">Papeleta de Permiso</h1>
