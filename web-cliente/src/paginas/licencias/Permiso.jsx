@@ -2,7 +2,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { DialogComponent } from '@syncfusion/ej2-react-popups';
 import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
-// import { usePDF } from 'react-to-pdf';
 import { useReactToPrint } from 'react-to-print';
 
 import apiService from '../../servicios/api-service';
@@ -14,11 +13,32 @@ export default function Permiso({
 }) {
   const animationSettings = { effect: 'None' };
   const [estudiante, setEstudiante] = useState(null);
-  // const { toPDF, targetRef } = usePDF({filename: 'papeleta-de-permiso.pdf'});
+  const [loading, setLoading] = useState(false);
+
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const sendEmail = async () => {
+    try {
+      setLoading(true);
+
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+      const permiso = {
+        permisoId: form.id,
+        email: '',
+        userId: user.username,
+      };
+  
+      await apiService.post(`/estudiantes/enviar-permiso`, permiso);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const buttons = [
     {
@@ -29,7 +49,7 @@ export default function Permiso({
       }
     },
     {
-      click: console.log,
+      click: sendEmail,
       buttonModel: {
         content: 'Enviar por Correo',
         isPrimary: true,
@@ -94,12 +114,14 @@ export default function Permiso({
             <p className="text-base font-bold">FECHA:</p> <p className="text-base">{form.fecha}</p>
             <p className="text-base font-bold">ESTATUS:</p> <p className="text-base">{form.estatus}</p>
           </div>
-        </div>
 
-        {/* <div className="e-footer-content">
-          <button className="e-control e-btn e-lib e-flat" type="button" onClick={() => console.log('!!!!!!')}>Imprimir Papeleta</button>
-          <button className="e-control e-btn e-lib e-primary e-flat" type="button">Enviar por Correo</button>
-        </div> */}
+          {loading && (
+            <div className="text-center mt-4">
+              <span className="loading loading-spinner loading-lg"></span>
+              Enviando Correo...
+            </div>
+          )}
+        </div>
       </>
     </DialogComponent>
   )

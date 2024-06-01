@@ -26,6 +26,12 @@
     <PackageReference Include="ZymLabs.NSwag.FluentValidation.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="emi.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
   <!-- Auto-generated Open API specification and Angular TypeScript clients -->
   <PropertyGroup>

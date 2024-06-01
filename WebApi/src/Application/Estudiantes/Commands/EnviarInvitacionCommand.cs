@@ -1,12 +1,7 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using System.Net;
-using System.Net.Mail;
-using System.Threading;
+﻿using System.Net.Mail;
 using WebApi.Application.Common.Interfaces;
-using WebApi.Domain.Entities;
 
-namespace Microsoft.Extensions.DependencyInjection.Estudiantes.Commands;
+namespace WebApi.Application.Estudiantes.Commands;
 
 public class EnviarInvitacionCommand : IRequest<bool>
 {

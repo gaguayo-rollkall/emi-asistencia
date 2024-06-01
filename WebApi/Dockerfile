@@ -7,6 +7,8 @@ COPY . ./
 RUN dotnet restore
 # Build and publish a release
 RUN dotnet publish -c Release -o out
+# QuestPDF
+RUN apt-get install libgdiplus -yq
 
 EXPOSE 8080
 

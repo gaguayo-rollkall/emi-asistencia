@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Estudiantes.Commands;
 using Microsoft.Extensions.DependencyInjection.Eventos.Command;
 using Microsoft.Extensions.DependencyInjection.Eventos.Queries;
+using WebApi.Application.Estudiantes.Commands;
 using WebApi.Application.Eventos.Queries;
 
 namespace WebApi.Web.Endpoints;

@@ -14,6 +14,7 @@ public class Estudiantes : EndpointGroupBase
             .MapGet(GetEstudiante, "/{codigo}")
             .MapPost(RegistrarEstudiantes)
             .MapPost(EnviarInvitacion, "/enviar-invitacion")
+            .MapPost(EnviarPermiso, "/enviar-permiso")
             .MapPost(RegistrarEstudiante, "/registrar-estudiante")
             .MapPost(RemoverEstudiante, "/remover-estudiante")
             .MapPost(BorrarEstudiante, "/borrar-estudiante/{id}");
@@ -36,6 +37,9 @@ public class Estudiantes : EndpointGroupBase
         await sender.Send(command);
 
     public async Task<bool> EnviarInvitacion(ISender sender, EnviarInvitacionCommand command) =>
+        await sender.Send(command);
+
+    public async Task<bool> EnviarPermiso(ISender sender, EnviarPermisoCommand command) =>
         await sender.Send(command);
 
     public async Task BorrarEstudiante(ISender sender, Guid id) =>

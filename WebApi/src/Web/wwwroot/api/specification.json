@@ -507,6 +507,38 @@
         }
       }
     },
+    "/api/Estudiantes/enviar-permiso": {
+      "post": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "operationId": "EnviarPermiso",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnviarPermisoCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Estudiantes/registrar-estudiante": {
       "post": {
         "tags": [
@@ -2302,6 +2334,24 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "EnviarPermisoCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "permisoId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

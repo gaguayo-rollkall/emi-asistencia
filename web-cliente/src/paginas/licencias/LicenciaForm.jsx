@@ -134,7 +134,7 @@ export default function LicenciaForm(props) {
         </div>
 
         <div className="mt-4" style={{ textAlign: 'right' }}>
-          <button type="button" className="btn btn-sm btn-warning mr-4" onClick={() => setShowPermiso(true)}>
+          <button type="button" className="btn btn-sm btn-warning mr-4" onClick={() => setShowPermiso(true)} disabled={!form.id}>
             Papeleta de Permiso
           </button>
           <button type="submit" className="btn btn-sm btn-primary" onClick={onSaveForm}>
