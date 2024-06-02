@@ -8,7 +8,9 @@ RUN dotnet restore
 # Build and publish a release
 RUN dotnet publish -c Release -o out
 # QuestPDF
-RUN apt-get install libgdiplus -yq
+RUN apt-get update
+RUN apt-get -y install curl
+RUN apt-get install libfontconfig1 libgdiplus -yq
 
 EXPOSE 8080
 
