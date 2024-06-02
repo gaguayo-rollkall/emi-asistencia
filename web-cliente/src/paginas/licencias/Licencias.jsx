@@ -7,6 +7,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import apiService from '../../servicios/api-service';
 import Errores from '../../components/Errores';
 import LicenciaForm from './LicenciaForm';
+import Permiso from './Permiso'
 
 const URL = '/licencias';
 
@@ -14,8 +15,10 @@ export default function Licencias() {
   const gridRef = useRef();
   const [errors, setErrors] = useState({});
   const [licencias, setLicencias] = useState([]);
+  const [showPermiso, setShowPermiso] = useState(false);
+  const [form, setForm] = useState({});
 
-  const toolbarOptions = ['Add', 'Edit', 'Delete', 'PdfExport']
+  const toolbarOptions = ['Add', 'Edit', { text: 'Papeleta de Permiso', id: 'papeleta' } , 'Delete', 'PdfExport']
   const template = (props) => <LicenciaForm {...props}
     onEditComplete={() => {
       gridRef.current.endEdit();
@@ -37,6 +40,10 @@ export default function Licencias() {
   const toolbarClick = (args) => {
     if (gridRef.current && args.item.id === 'GridLicencias_pdfexport') {
       gridRef.current.pdfExport();
+    }
+
+    if (gridRef.current && args.item.id === 'papeleta') {
+      setShowPermiso(true);
     }
   }
 
@@ -93,7 +100,8 @@ export default function Licencias() {
               allowFiltering={true}
               filterSettings={FilterOptions}
               allowPdfExport={true}
-              toolbarClick={toolbarClick}>
+              toolbarClick={toolbarClick}
+              rowSelected={({ data }) => setForm({ ...data })}>
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} width={100} />
                 <ColumnDirective field='titulo' headerText='Titulo' width={100} />
@@ -108,6 +116,7 @@ export default function Licencias() {
         </div>
       </div>
 
+      <Permiso visible={showPermiso} close={() => setShowPermiso(false)} form={form} target="#licenciasPage"/>
       <Errores errors={errors} cleanErrors={() => setErrors([])} />
     </main>
   )
