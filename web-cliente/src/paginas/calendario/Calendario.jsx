@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject, Resize, DragAndDrop } from '@syncfusion/ej2-react-schedule';
 import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
@@ -8,8 +9,42 @@ import apiService from '../../servicios/api-service';
 import './Calendario.css';
 import toast from 'react-hot-toast';
 
+const getFormattedString = (eventData) => {
+  function formatDate(date) {
+    const options = {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    };
+    return date.toLocaleDateString('es-ES', options);
+  }
+
+  // Function to format time in HH:MM format
+  function formatTime(date) {
+    return date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  // Convert StartTime and EndTime to Date objects
+  const startTime = new Date(eventData.StartTime);
+  const endTime = new Date(eventData.EndTime);
+
+  // Format dates and times
+  const formattedDate = formatDate(startTime);
+  const formattedStartTime = formatTime(startTime);
+  const formattedEndTime = formatTime(endTime);
+
+  // Construct the title string
+  return `${formattedDate} (${formattedStartTime} - ${formattedEndTime})`;
+}
+
 // eslint-disable-next-line react/prop-types
-const QR = ({ id }) => {
+const QR = (props) => {
+  console.log(props);
+  const { Id } = props;
   const [visible, setVisible] = useState(false);
   const [usuarios, setUsuarios] = useState([]);
   const [emails, setEmails] = useState([]);
@@ -20,7 +55,7 @@ const QR = ({ id }) => {
       setSendingEmail(true);
 
       await apiService.post('/eventos/enviar-invitacion-evento', {
-        eventoId: id,
+        eventoId: Id,
         emails,
       });
 
@@ -52,18 +87,50 @@ const QR = ({ id }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${id}`} />}
       <div style={{
         marginTop: '1rem',
         textAlign: 'left',
       }}>
-        <p className="text-sm">Seleccione los usuarios para mandar la informacion del evento.</p>
+        <div className="e-popup-content">
+          <div className="e-date-time">
+            <div className="e-date-time-icon e-icons"></div>
+            <div className="e-date-time-wrapper e-text-ellipsis">
+              <div className="e-date-time-details e-text-ellipsis">
+                {getFormattedString(props)}
+              </div>
+            </div>
+          </div>
+
+          {props.Location && (
+            <div className="e-location">
+              <div className="e-location-icon e-icons" />
+              <div className="e-location-details e-text-ellipsis">
+                {props.Location}
+              </div>
+            </div>
+          )}
+
+          {props.Description && (
+            <div className="e-description">
+              <div className="e-description-icon e-icons" />
+              <div className="e-location-details e-text-ellipsis">
+                {props.Description}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col items-center" style={{ height: 250, width: '100%' }}>
+          {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${Id}`} />}
+        </div>
+
+        <p className="text-sm mb-4">Seleccione los usuarios para mandar la informacion del evento.</p>
 
         <ListBoxComponent dataSource={usuarios} selectionSettings={{ showSelectAll: true, showCheckbox: true }} onChange={({ value }) => setEmails(value)}>
           <InjectDropDown services={[CheckBoxSelection]} />
         </ListBoxComponent>
 
-        <button className="btn btn-primary" disabled={emails.length === 0} onClick={sendEmail}>
+        <button className="btn btn-outline btn-primary w-full mt-2" disabled={emails.length === 0} onClick={sendEmail}>
           {sendingEmail && <span className="loading loading-spinner"></span>}
           Enviar Correo
         </button>
@@ -148,9 +215,9 @@ export default function Calendario() {
         eventRendered={onEventRendered}
         actionComplete={actionComplete}
         quickInfoTemplates={{
-          templateType: 'Event',
+          templateType: 'Both',
           // eslint-disable-next-line react/prop-types
-          footer: (props) => props.Id && <QR id={props.Id} />
+          content: (props) => props.Id && <QR {...props} />
         }}
       >
         <Inject services={[Day, Week, WorkWeek, Month, Agenda, Resize, DragAndDrop]} />
