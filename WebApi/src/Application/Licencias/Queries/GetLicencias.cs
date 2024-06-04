@@ -29,6 +29,7 @@ public class GetLicenciasQueryHandler : IRequestHandler<GetLicenciasQuery, IList
                 Estatus = e.Estatus,
                 Justificacion = e.Justificacion,
                 CodigoEstudiante = e.CodigoEstudiante,
+                Nombre = _context.Estudiantes.FirstOrDefault(x => x.Codigo == e.CodigoEstudiante)!.Nombre,
                 Titulo = e.Titulo,
                 Created = e.Created,
                 Autorizado = e.Autorizado,

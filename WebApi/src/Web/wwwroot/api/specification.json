@@ -2470,7 +2470,13 @@
           },
           {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "properties": {
+              "nombre": {
+                "type": "string",
+                "nullable": true
+              }
+            }
           }
         ]
       },

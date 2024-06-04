@@ -105,12 +105,13 @@ export default function Licencias() {
               rowSelected={({ data }) => setForm({ ...data })}>
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} width={100} />
-                <ColumnDirective field='titulo' headerText='Titulo' width={100} />
+                <ColumnDirective field='carrera' headerText='Carrera' width={100} />
+                <ColumnDirective field='nombre' headerText='Nombre' width={100} />
+                <ColumnDirective field='codigoEstudiante' headerText='Codigo' width={100} />
+                <ColumnDirective field='motivo' headerText='Motivo' width={100} />
+                <ColumnDirective field='estatus' headerText='Estatus' width={100} />
                 <ColumnDirective field='fechaInicio' headerText='Fecha' width={100} format="dd/MM/yyyy" />
                 <ColumnDirective field='fechaFin' headerText='Hasta' width={100} format="dd/MM/yyyy" />
-                <ColumnDirective field='motivo' headerText='Motivo' width={100} />
-                <ColumnDirective field='codigoEstudiante' headerText='Codigo' width={100} />
-                <ColumnDirective field='estatus' headerText='Estatus' width={100} />
               </ColumnsDirective>
               <Inject services={[Page, Toolbar, Edit, PdfExport, Filter]} />
             </GridComponent>

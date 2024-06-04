@@ -137,7 +137,14 @@ export default function Permiso({
             <p className="text-base font-bold ml-4">HASTA:</p> <p className="text-base">{formatDateToYYYYMMDD(form.fechaFin)}</p>
           </div>
           <div className="mt-4 flex gap-1.5">
+            <p className="text-base font-bold">ESTATUS :</p> <p className="text-base">{form.estatus}</p>
+          </div>
+          <div className="mt-4 flex gap-1.5">
             <p className="text-base font-bold">AUTORIZADO POR :</p> <p className="text-base">{form.autorizado}</p>
+          </div>
+
+          <div className="mt-4 font-sm font-bold" style={{ fontSize: 12 }}>
+            NOTA.- La presente papeleta de permiso es el justificativo para la no asistencia a clases, tomado en cuenta en la Sección de Disciplina NO CONTEMPLA materia militar, prácticas o exámenes de las diferentes  materias. El estudiante tiene derecho a 5 ausencias justificadas  durante el  semestre, pasado este número se considera como falta injustificada.
           </div>
 
           {loading && (

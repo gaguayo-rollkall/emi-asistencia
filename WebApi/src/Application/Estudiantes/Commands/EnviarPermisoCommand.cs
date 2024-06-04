@@ -267,6 +267,7 @@ public class EnviarPermisoCommandHandler : IRequestHandler<EnviarPermisoCommand,
                         x.Item().Row(row =>
                         {
                             row.RelativeItem().Text("NOTA.- La presente papeleta de permiso es el justificativo para la no asistencia a clases, tomado en cuenta en la Sección de Disciplina NO CONTEMPLA materia militar, prácticas o exámenes de las diferentes  materias. El estudiante tiene derecho a 5 ausencias justificadas  durante el  semestre, pasado este número se considera como falta injustificada.")
+                                .Bold()
                                 .FontSize(10);
                         });
                     });
