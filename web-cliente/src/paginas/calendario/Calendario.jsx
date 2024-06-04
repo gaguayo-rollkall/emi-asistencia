@@ -120,13 +120,13 @@ const QR = (props) => {
           )}
         </div>
 
-        <div className="flex flex-col items-center" style={{ height: 250, width: '100%' }}>
-          {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${Id}`} />}
-        </div>
+        <div style={{ height: 400, overflow: 'auto' }}>
+          <div className="flex flex-col items-center" style={{ height: 250, width: '100%' }}>
+            {visible && <QRCodeGeneratorComponent width={"200px"} height={"250px"} value={`${Id}`} />}
+          </div>
 
-        <p className="text-sm mb-4">Seleccione los usuarios para mandar la informacion del evento.</p>
+          <p className="text-sm mb-4">Seleccione los usuarios para mandar la informacion del evento.</p>
 
-        <div style={{ minHeight: 200, overflow: 'auto' }}>
           <ListBoxComponent dataSource={usuarios} selectionSettings={{ showSelectAll: true, showCheckbox: true }} onChange={({ value }) => setEmails(value)}>
             <InjectDropDown services={[CheckBoxSelection]} />
           </ListBoxComponent>
