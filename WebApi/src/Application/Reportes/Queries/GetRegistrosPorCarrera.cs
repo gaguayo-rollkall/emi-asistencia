@@ -73,7 +73,7 @@ public class
             
         var licencias = await _context.Licencias
             .AsNoTracking()
-            .Where(l => l.Fecha == fechaInicio.Date)
+            .Where(l => l.FechaInicio >= fechaInicio.Date && l.FechaFin <= fechaFin.Date)
             .ToListAsync(cancellationToken);
         
         foreach (var carrera in carreras)

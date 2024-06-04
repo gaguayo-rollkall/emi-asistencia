@@ -222,13 +222,17 @@ public class EnviarPermisoCommandHandler : IRequestHandler<EnviarPermisoCommand,
                             row.AutoItem().Text("CODIGO: ").Bold();
                             row.Spacing(10);
                             row.AutoItem().Text(estudiante.Codigo);
+                            row.Spacing(20);
+                            row.AutoItem().Text("CARRERA: ").Bold();
+                            row.Spacing(10);
+                            row.AutoItem().Text(licencia.Carrera);
                         });
                         
                         x.Item().Row(row =>
                         {
-                            row.AutoItem().Text("PERMISO: ").Bold();
+                            row.AutoItem().Text("SEMESTRE: ").Bold();
                             row.Spacing(10);
-                            row.AutoItem().Text(licencia.Titulo);
+                            row.AutoItem().Text(licencia.Semestre);
                         });
                         
                         x.Item().Row(row =>
@@ -237,20 +241,33 @@ public class EnviarPermisoCommandHandler : IRequestHandler<EnviarPermisoCommand,
                             row.Spacing(10);
                             row.AutoItem().Text(licencia.Motivo);
                             row.Spacing(20);
-                            row.AutoItem().Text("JUSTIFICACION: ").Bold();
+                            row.AutoItem().Text("FECHA: ").Bold();
                             row.Spacing(10);
-                            row.AutoItem().Text(licencia.Justificacion);
+                            row.AutoItem().Text(licencia.FechaInicio.ToString("yyyy-MM-dd"));
+                            row.Spacing(20);
+                            row.AutoItem().Text("HASTA: ").Bold();
+                            row.Spacing(10);
+                            row.AutoItem().Text(licencia.FechaFin.ToString("yyyy-MM-dd"));
                         });
                         
                         x.Item().Row(row =>
                         {
-                            row.AutoItem().Text("FECHA: ").Bold();
-                            row.Spacing(10);
-                            row.AutoItem().Text(licencia.Fecha.ToString("yyyy-MM-dd"));
-                            row.Spacing(20);
                             row.AutoItem().Text("ESTATUS: ").Bold();
                             row.Spacing(10);
                             row.AutoItem().Text(licencia.Estatus);
+                        });
+                        
+                        x.Item().Row(row =>
+                        {
+                            row.AutoItem().Text("AUTORIZADO POR: ").Bold();
+                            row.Spacing(10);
+                            row.AutoItem().Text(licencia.Autorizado);
+                        });
+                        
+                        x.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("NOTA.- La presente papeleta de permiso es el justificativo para la no asistencia a clases, tomado en cuenta en la Sección de Disciplina NO CONTEMPLA materia militar, prácticas o exámenes de las diferentes  materias. El estudiante tiene derecho a 5 ausencias justificadas  durante el  semestre, pasado este número se considera como falta injustificada.")
+                                .FontSize(10);
                         });
                     });
             });

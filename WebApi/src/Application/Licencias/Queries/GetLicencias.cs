@@ -22,7 +22,8 @@ public class GetLicenciasQueryHandler : IRequestHandler<GetLicenciasQuery, IList
             .Select(e => new LicenciaDto
             {
                 Id = e.Id,
-                Fecha = e.Fecha,
+                FechaInicio = e.FechaInicio,
+                FechaFin = e.FechaFin,
                 Motivo = e.Motivo,
                 Foto = e.Foto,
                 Estatus = e.Estatus,
@@ -30,6 +31,9 @@ public class GetLicenciasQueryHandler : IRequestHandler<GetLicenciasQuery, IList
                 CodigoEstudiante = e.CodigoEstudiante,
                 Titulo = e.Titulo,
                 Created = e.Created,
+                Autorizado = e.Autorizado,
+                Carrera = e.Carrera,
+                Semestre = e.Semestre,
             })
             .OrderBy(e => e.Created)
             .ToListAsync(cancellationToken);

@@ -26,21 +26,28 @@ export default function LicenciaForm(props) {
   const { onEditComplete } = props;
   const existingForm = props.isAdd ? {} : {
     ...props,
-    fecha: formatDateToDDMMYYYY(props.fecha),
+    fechaInicio: formatDateToDDMMYYYY(props.fechaInicio),
+    fechaFin: formatDateToDDMMYYYY(props.fechaFin),
   };
   const [form, setForm] = useState({
     titulo: '',
-    fecha: formatDateToDDMMYYYY(new Date()),
+    fechaInicio: formatDateToDDMMYYYY(new Date()),
+    fechaFin: formatDateToDDMMYYYY(new Date()),
     motivo: 'Personal',
     foto: 'https://st4.depositphotos.com/16537446/25274/v/450/depositphotos_252749160-stock-illustration-contract-document-with-signature-vector.jpg',
     justificacion: '',
     codigoEstudiante: '',
     estatus: 'PENDIENTE',
+    carrera: '',
+    semestre: '',
+    autorizado: '',
     ...existingForm,
   });
 
   const [error, setError] = useState(null);
   const [showPermiso, setShowPermiso] = useState(false);
+  const [carreras, setCarreras] = useState([]);
+  const [semestres, setSemestres] = useState([]);
 
   const update = (field, toUpperCase = false) => ({ value }) => {
     setForm({ ...form, [field]: toUpperCase ? value.toUpperCase().trim() : value });
@@ -54,11 +61,17 @@ export default function LicenciaForm(props) {
       'justificacion': {
         required: [true, '* Ingrese la Justificacion']
       },
-      'fecha': {
+      'fechaInicio': {
+        required: [true, '* Ingrese la Fecha']
+      },
+      'fechaFin': {
         required: [true, '* Ingrese la Fecha']
       },
       'codigoEstudiante': {
         required: [true, '* Ingrese el Codigo del Estudiante']
+      },
+      'autorizado': {
+        required: [true, '* Ingrese Autorizado Por']
       }
     }
   }
@@ -82,6 +95,27 @@ export default function LicenciaForm(props) {
     }
   }
 
+  const loadEstudiante = async () => {
+    try {
+      if (!form?.codigoEstudiante) {
+        setCarreras([]);
+        setSemestres([]);
+      }
+
+      const data = await apiService.get(`/estudiantes/${form.codigoEstudiante}`);
+      setCarreras(data.carreras || []);
+      setSemestres(data.semestres || [])
+   
+      setForm({ ...form, carrera: (data.carreras || [])[0] || '', semestre: (data.semestres || [])[0] || '' })
+    } catch (error) {
+      console.error('Error al cargar el estudiante', error);
+    }
+  }
+
+  useEffect(() => {
+    loadEstudiante();
+  }, [form?.codigoEstudiante])
+
   useEffect(() => {
     formObject = new FormValidator(`#licenciaForm1`, options);
   }, []);
@@ -99,8 +133,13 @@ export default function LicenciaForm(props) {
         </div>
 
         <div className="form-group">
-          <TextBoxComponent type="date" name="fecha" value={form.fecha} change={update('fecha')} placeholder="Fecha" floatLabelType="Auto" data-msg-containerid="errorForFecha" format="dd/MM/yyyy" />
+          <TextBoxComponent type="date" name="fechaInicio" value={form.fechaInicio} change={update('fechaInicio')} placeholder="Fecha" floatLabelType="Auto" data-msg-containerid="errorForFecha" format="dd/MM/yyyy" />
           <div id="errorForFecha" />
+        </div>
+
+        <div className="form-group">
+          <TextBoxComponent type="date" name="fechaFin" value={form.fechaFin} change={update('fechaFin')} placeholder="Hasta" floatLabelType="Auto" data-msg-containerid="errorForFechaFin" format="dd/MM/yyyy" />
+          <div id="errorForFechaFin" />
         </div>
 
         <div className="form-group">
@@ -121,6 +160,31 @@ export default function LicenciaForm(props) {
         <div className="form-group">
           <TextBoxComponent type="text" name="codigoEstudiante" value={form.codigoEstudiante} change={update('codigoEstudiante', true)} placeholder="Codigo de Estudiante" floatLabelType="Auto" data-msg-containerid="errorForCodigo" />
           <div id="errorForCodigo" />
+        </div>
+
+        <div className="form-group">
+          <ComboBoxComponent
+            dataSource={carreras}
+            change={update('carrera', true)}
+            placeholder="Carrera"
+            value={form.carrera}
+            popupHeight="220px"
+            floatLabelType="Auto" />
+        </div>
+
+        <div className="form-group">
+          <ComboBoxComponent
+            dataSource={semestres}
+            change={update('semestre', true)}
+            placeholder="Semestre"
+            value={form.semestre}
+            popupHeight="220px"
+            floatLabelType="Auto" />
+        </div>
+
+        <div className="form-group">
+          <TextBoxComponent type="text" name="autorizado" value={form.autorizado} change={update('autorizado', true)} placeholder="Autorizado Por" floatLabelType="Auto" data-msg-containerid="errorForAutorizado" />
+          <div id="errorForAutorizado" />
         </div>
 
         <div className="form-group">

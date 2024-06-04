@@ -62,7 +62,8 @@ export default function Licencias() {
       const data = await apiService.get(URL);
       setLicencias(data.map((licencia) => ({
         ...licencia,
-        fecha: new Date(licencia.fecha)
+        fechaInicio: new Date(licencia.fechaInicio),
+        fechaFin: new Date(licencia.fechaFin),
       })));
     } catch (error) {
       console.error('Cargar Licencias', error);
@@ -105,7 +106,8 @@ export default function Licencias() {
               <ColumnsDirective>
                 <ColumnDirective field='id' visible={false} isPrimaryKey={true} width={100} />
                 <ColumnDirective field='titulo' headerText='Titulo' width={100} />
-                <ColumnDirective field='fecha' headerText='Fecha' width={100} format="dd/MM/yyyy" />
+                <ColumnDirective field='fechaInicio' headerText='Fecha' width={100} format="dd/MM/yyyy" />
+                <ColumnDirective field='fechaFin' headerText='Hasta' width={100} format="dd/MM/yyyy" />
                 <ColumnDirective field='motivo' headerText='Motivo' width={100} />
                 <ColumnDirective field='codigoEstudiante' headerText='Codigo' width={100} />
                 <ColumnDirective field='estatus' headerText='Estatus' width={100} />

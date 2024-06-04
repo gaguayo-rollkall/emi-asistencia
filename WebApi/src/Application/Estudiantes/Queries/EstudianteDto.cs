@@ -10,4 +10,6 @@ public class EstudianteDto
     public string RFID { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string? Foto { get; set; }
+    public IEnumerable<string> Carreras { get; set; } = new List<string>();
+    public IEnumerable<string> Semestres { get; set; } = new List<string>();
 }

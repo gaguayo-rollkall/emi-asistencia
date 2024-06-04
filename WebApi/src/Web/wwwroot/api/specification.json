@@ -2296,6 +2296,18 @@
           "foto": {
             "type": "string",
             "nullable": true
+          },
+          "carreras": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "semestres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
@@ -2474,7 +2486,11 @@
               "titulo": {
                 "type": "string"
               },
-              "fecha": {
+              "fechaInicio": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "fechaFin": {
                 "type": "string",
                 "format": "date-time"
               },
@@ -2495,6 +2511,18 @@
                 "nullable": true
               },
               "estatus": {
+                "type": "string",
+                "nullable": true
+              },
+              "carrera": {
+                "type": "string",
+                "nullable": true
+              },
+              "semestre": {
+                "type": "string",
+                "nullable": true
+              },
+              "autorizado": {
                 "type": "string",
                 "nullable": true
               }
@@ -2565,7 +2593,11 @@
           "titulo": {
             "type": "string"
           },
-          "fecha": {
+          "fechaInicio": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fechaFin": {
             "type": "string",
             "format": "date-time"
           },
@@ -2586,6 +2618,18 @@
             "nullable": true
           },
           "estatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "carrera": {
+            "type": "string",
+            "nullable": true
+          },
+          "semestre": {
+            "type": "string",
+            "nullable": true
+          },
+          "autorizado": {
             "type": "string",
             "nullable": true
           }

@@ -72,7 +72,7 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
         
         var licencias = await _context.Licencias
             .AsNoTracking()
-            .Where(l => l.Fecha == evento.StartTime!.Value.Date)
+            .Where(l => l.FechaInicio <= evento.StartTime!.Value.Date && l.FechaFin >= evento.EndTime!.Value.Date)
             .ToListAsync(cancellationToken);
             
         foreach (var carrera in carreras)

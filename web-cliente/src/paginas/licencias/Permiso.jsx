@@ -1,12 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from 'react';
 import { DialogComponent } from '@syncfusion/ej2-react-popups';
-import { QRCodeGeneratorComponent } from '@syncfusion/ej2-react-barcode-generator';
 import { useReactToPrint } from 'react-to-print';
 import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import apiService from '../../servicios/api-service';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+function formatDateToYYYYMMDD(dateText) {
+  if (!dateText) return '';
+
+  const date = new Date(dateText);
+  // Extract the year, month, and day from the date object
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-indexed
+  const day = date.getDate().toString().padStart(2, '0');
+
+  // Construct the formatted date string
+  return `${year}-${month}-${day}`;
+}
 
 export default function Permiso({
   visible,
@@ -37,7 +49,7 @@ export default function Permiso({
         email,
         userId: user.username,
       };
-  
+
       await apiService.post(`/estudiantes/enviar-permiso`, permiso);
     } catch (error) {
       console.error(error);
@@ -114,17 +126,18 @@ export default function Permiso({
           </div>
           <div className="mt-4 flex gap-1.5">
             <p className="text-base font-bold">CODIGO:</p> <p className="text-base">{form.codigoEstudiante}</p>
+            <p className="ml-4 text-base font-bold">CARRERA:</p> <p className="text-base">{form.carrera}</p>
           </div>
           <div className="mt-4 flex gap-1.5">
-            <p className="text-base font-bold">PERMISO:</p> <p className="text-base">{form.titulo}</p>
+            <p className="text-base font-bold">SEMESTRE:</p> <p className="text-base">{form.semestre}</p>
           </div>
           <div className="mt-4 flex gap-1.5">
             <p className="text-base font-bold">MOTIVO:</p> <p className="text-base">{form.motivo}</p>
-            <p className="text-base font-bold ml-4">JUSTIFICACION:</p> <p className="text-base">{form.justificacion}</p>
+            <p className="text-base font-bold ml-4">FECHA:</p> <p className="text-base">{formatDateToYYYYMMDD(form.fechaInicio)}</p>
+            <p className="text-base font-bold ml-4">HASTA:</p> <p className="text-base">{formatDateToYYYYMMDD(form.fechaFin)}</p>
           </div>
           <div className="mt-4 flex gap-1.5">
-            {/* <p className="text-base font-bold">FECHA:</p> <p className="text-base">{form.fecha}</p> */}
-            <p className="text-base font-bold">ESTATUS:</p> <p className="text-base">{form.estatus}</p>
+            <p className="text-base font-bold">AUTORIZADO POR :</p> <p className="text-base">{form.autorizado}</p>
           </div>
 
           {loading && (
@@ -141,7 +154,7 @@ export default function Permiso({
         }}>
           <h1 className="text-sl text-center underline">Envio por Correo</h1>
           <div className="flex gap-1.5">
-            <p className="text-sm font-bold">Para:</p> <p className="text-sm"> {user?.username}</p> 
+            <p className="text-sm font-bold">Para:</p> <p className="text-sm"> {user?.username}</p>
           </div>
           <div className="flex gap-1.5">
             <p className="text-sm font-bold">Con Copia (Estudiante):</p> <p className="text-sm">{estudiante?.email}</p>
@@ -150,12 +163,12 @@ export default function Permiso({
             <p className="text-sm font-bold">Con Copia: </p>
             <p>
               <ComboBoxComponent
-                fields={{text: 'nombre', value: 'userId'}}
+                fields={{ text: 'nombre', value: 'userId' }}
                 dataSource={usuarios}
                 allowCustom={false}
                 placeholder="Seleccione un Usuario"
                 value={email}
-                onChange={(e) => setEmail(e.value)}/>
+                onChange={(e) => setEmail(e.value)} />
             </p>
             <p className="text-sm">{email}</p>
           </div>

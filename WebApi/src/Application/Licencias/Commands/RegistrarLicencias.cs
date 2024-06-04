@@ -7,12 +7,16 @@ public class RegistrarLicenciasCommand : IRequest<bool>
 {
     public Guid Id { get; set; }
     public string Titulo { get; set; } = string.Empty;
-    public DateTime Fecha { get; set; }
+    public DateTime FechaInicio { get; set; }
+    public DateTime FechaFin { get; set; }
     public string? Motivo { get; set; }
     public string? Foto { get; set; }
     public string? Justificacion { get; set; }
     public string? CodigoEstudiante { get; set; }
     public string? Estatus { get; set; } = "Pendiente";
+    public string? Carrera { get; set; }
+    public string? Semestre { get; set; }
+    public string? Autorizado { get; set; }
 }
 
 public class RegistrarLicenciasCommandHandler : IRequestHandler<RegistrarLicenciasCommand, bool>
@@ -40,12 +44,16 @@ public class RegistrarLicenciasCommandHandler : IRequestHandler<RegistrarLicenci
         }
         
         licenciaDb.Titulo = request.Titulo;
-        licenciaDb.Fecha = request.Fecha;
+        licenciaDb.FechaInicio = request.FechaInicio;
+        licenciaDb.FechaFin = request.FechaFin;
         licenciaDb.Motivo = request.Motivo;
         licenciaDb.Foto = request.Foto;
         licenciaDb.Justificacion = request.Justificacion;
         licenciaDb.CodigoEstudiante = request.CodigoEstudiante;
         licenciaDb.Estatus = request.Estatus;
+        licenciaDb.Carrera = request.Carrera;
+        licenciaDb.Semestre = request.Semestre;
+        licenciaDb.Autorizado = request.Autorizado;
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -19,18 +19,34 @@ public class GetEstudianteQueryHandler : IRequestHandler<GetEstudianteQuery, Est
             .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Codigo == request.codigo, cancellationToken);
 
-        return entity is null
-            ? null
-            : new EstudianteDto
+        if (entity is null)
+        {
+            return null;
+        }
+
+        var cursoEstudiantes = await _context.CursoEstudiantes
+            .Where(x => x.EstudianteId == entity.Id)
+            .Select(x => new
             {
-                Id = entity.Id,
-                Codigo = entity.Codigo.ToUpper(),
-                Grado = entity.Grado,
-                Nombre = entity.Nombre.ToUpper(),
-                Email = entity.Email,
-                RFID = entity.RFID,
-                Foto = entity.Foto,
-            };
+                Carrera = x.Curso!.Carrera!.Nombre,
+                Semestre = x.Curso!.Nombre,
+            })
+            .ToListAsync(cancellationToken);
+
+        return new EstudianteDto
+        {
+            Id = entity.Id,
+            Codigo = entity.Codigo.ToUpper(),
+            Grado = entity.Grado,
+            Nombre = entity.Nombre.ToUpper(),
+            Email = entity.Email,
+            RFID = entity.RFID,
+            Foto = entity.Foto,
+            Carreras = cursoEstudiantes.Select(x => x.Carrera)
+                .ToHashSet(),
+            Semestres = cursoEstudiantes.Select(x => x.Semestre)
+                .ToHashSet(),
+        };
     }
 }
 

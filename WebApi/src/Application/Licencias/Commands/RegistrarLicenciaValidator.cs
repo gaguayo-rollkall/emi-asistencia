@@ -30,11 +30,26 @@ public class RegistrarLicenciaValidator : AbstractValidator<RegistrarLicenciasCo
                     failures.Add("Justificacion no debe ser vacio.");
                 }
 
-                if (model.Fecha == DateTime.MinValue)
+                if (model.FechaInicio == DateTime.MinValue)
                 {
-                    failures.Add("Fecha no debe ser vacio.");
+                    failures.Add("Fecha Inicio no debe ser vacio.");
                 }
                 
+                if (model.FechaFin == DateTime.MinValue)
+                {
+                    failures.Add("Fecha Fin no debe ser vacio.");
+                }
+                
+                if (model.FechaInicio > model.FechaFin)
+                {
+                    failures.Add("Fecha Inicio no debe ser mayor a Fecha Fin.");
+                }
+
+                if (string.IsNullOrEmpty(model.Autorizado))
+                {
+                    failures.Add("Autorizado Por es Requerido.");
+                }
+
                 if (failures.Any())
                 {
                     failures.ForEach(validationContext.AddFailure);
