@@ -126,14 +126,15 @@ const QR = (props) => {
 
         <p className="text-sm mb-4">Seleccione los usuarios para mandar la informacion del evento.</p>
 
-        <ListBoxComponent dataSource={usuarios} selectionSettings={{ showSelectAll: true, showCheckbox: true }} onChange={({ value }) => setEmails(value)}>
-          <InjectDropDown services={[CheckBoxSelection]} />
-        </ListBoxComponent>
-
-        <button className="btn btn-outline btn-primary w-full mt-2" disabled={emails.length === 0} onClick={sendEmail}>
-          {sendingEmail && <span className="loading loading-spinner"></span>}
-          Enviar Correo
-        </button>
+        <div style={{ minHeight: 200, overflow: 'auto' }}>
+          <ListBoxComponent dataSource={usuarios} selectionSettings={{ showSelectAll: true, showCheckbox: true }} onChange={({ value }) => setEmails(value)}>
+            <InjectDropDown services={[CheckBoxSelection]} />
+          </ListBoxComponent>
+          <button className="btn btn-outline btn-primary w-full mt-2" disabled={emails.length === 0} onClick={sendEmail}>
+            {sendingEmail && <span className="loading loading-spinner"></span>}
+            Enviar Correo
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -215,7 +216,7 @@ export default function Calendario() {
         eventRendered={onEventRendered}
         actionComplete={actionComplete}
         quickInfoTemplates={{
-          templateType: 'Both',
+          templateType: 'Event',
           // eslint-disable-next-line react/prop-types
           content: (props) => props.Id && <QR {...props} />
         }}
