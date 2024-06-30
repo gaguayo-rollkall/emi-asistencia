@@ -15,7 +15,7 @@ export default function Estudiantes() {
   const [errors, setErrors] = useState({});
   const [estudiantes, setEstudiantes] = useState([]);
   const [modalEstudiante, setModalEstudiante] = useState(false);
-  const [estudiante, setEstudiante] = useState({ nombre: ''});
+  const [estudiante, setEstudiante] = useState({ nombre: '' });
 
   const cargarEstudiantes = useCallback(async () => {
     try {
@@ -47,8 +47,14 @@ export default function Estudiantes() {
     }
 
     try {
-      await apiService.post('/estudiantes/enviar-invitacion', { codigo });
-      toast.success('Se envio la invitacion al estudiante.');
+      toast.promise(
+        apiService.post('/estudiantes/enviar-invitacion', { codigo }),
+        {
+          loading: 'Enviando invitacion...',
+          success: <b>Invitacion enviada</b>,
+          error: <b>Error al mandar la invitacion</b>,
+        }
+      )
     } catch (error) {
       console.error('Invitar', error);
       toast.error('Hubo un problema al enviar la invitacion.')

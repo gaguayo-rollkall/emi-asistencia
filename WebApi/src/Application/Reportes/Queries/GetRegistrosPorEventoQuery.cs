@@ -102,7 +102,7 @@ public class GetRegistrosPorEventoQueryHandler : IRequestHandler<GetRegistrosPor
                     if (asistenciasPorEstudiante.Any())
                     {
                         var fecha = asistenciasPorEstudiante.First().Fecha.ToLocalTime();
-                        var minutos = evento.EndTime!.Value.Subtract(asistenciasPorEstudiante.First().Fecha).TotalMinutes;
+                        var minutos = evento.EndTime!.Value.Subtract(fecha).TotalMinutes;
 
                         registroEstudiante.Fecha = fecha.ToString("dd/MM/yyyy");
                         registroEstudiante.Ingreso = fecha.ToString("HH:mm:ss");

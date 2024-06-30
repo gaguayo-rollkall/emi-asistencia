@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity, Alert } from 'react-native';
 import * as eva from '@eva-design/eva';
 import { Avatar, Button, ApplicationProvider, Layout, Text } from '@ui-kitten/components';
 import { Camera, CameraType } from 'expo-camera';
@@ -109,9 +109,18 @@ const HomeScreen = () => {
   };
 
   const salir = () => {
-    setCodigo('')
-    AsyncStorage.removeItem('codigo');
-    AsyncStorage.removeItem('estudiante');
+    Alert.alert('Salir', 'Desea cerrar la sesion?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {
+        setCodigo('')
+        AsyncStorage.removeItem('codigo');
+        AsyncStorage.removeItem('estudiante');
+      }},
+    ])
   }
 
   const foto = estudiante.foto?.startsWith('/images') ? `http://192.248.161.19${estudiante.foto}` : estudiante.foto;

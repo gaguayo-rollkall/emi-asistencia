@@ -24,6 +24,7 @@ public class EnviarInvitacionCommandHandler : IRequestHandler<EnviarInvitacionCo
         if (!string.IsNullOrEmpty(request.Codigo))
         {
             await EnviarInvitacionEstudiante(request, cancellationToken);
+            return true;
         }
 
         await EnviarInvitacionEvento(request, cancellationToken);
