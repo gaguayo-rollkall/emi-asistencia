@@ -30,6 +30,7 @@ public class RegistrarEstudianteCommandHandler : IRequestHandler<RegistrarEstudi
             _context.Estudiantes.Add(estudianteDb);
         }
         
+        estudianteDb.Grado = request.Grado;
         estudianteDb.Codigo = request.Codigo;
         estudianteDb.Nombre = request.Nombre;
         estudianteDb.Email = request.Email;

@@ -111,11 +111,11 @@ const HomeScreen = () => {
   const salir = () => {
     Alert.alert('Salir', 'Desea cerrar la sesion?', [
       {
-        text: 'Cancel',
+        text: 'No',
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => {
+      {text: 'Si', onPress: () => {
         setCodigo('')
         AsyncStorage.removeItem('codigo');
         AsyncStorage.removeItem('estudiante');
@@ -123,7 +123,77 @@ const HomeScreen = () => {
     ])
   }
 
-  const foto = estudiante.foto?.startsWith('/images') ? `http://192.248.161.19${estudiante.foto}` : estudiante.foto;
+  const foto = estudiante?.foto?.startsWith('/images') ? `http://192.248.161.19${estudiante.foto}` : estudiante?.foto;
+
+  if (!scanned) {
+    // return (
+    //   <BarCodeScanner
+    //     barCodeScannerSettings={{
+    //       barCodeTypes: [256],
+    //     }}
+    //     onBarCodeScanned={handleBarCodeScanned}
+    //     style={{
+    //     }} type={type}>
+    //     <View style={{
+    //       flex: 1,
+    //       backgroundColor: "transparent",
+    //       flexDirection: "row",
+    //       justifyContent: "center",
+    //       alignItems: "center"
+    //     }}>
+    //       <TouchableOpacity style={{
+    //         flex: 0.2,
+    //         alignSelf: 'flex-end',
+    //         alignItems: 'center',
+    //       }} onPress={() => setScanned(true)}>
+    //         <Text style={{
+    //           fontSize: 24,
+    //           fontWeight: 'bold',
+    //           color: 'white',
+    //         }}>Salir</Text>
+    //       </TouchableOpacity>
+    //     </View>
+    //   </BarCodeScanner>
+    // )
+    return (
+      <BarCodeScanner barCodeScannerSettings={{ barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr] }} onBarCodeScanned={handleBarCodeScanned} style={{ flex: 1 }} type={type}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "transparent",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <View style={{
+            width: '50%',
+            height: '30%',
+            marginLeft: '25%',
+            borderColor: '#fff',
+            borderWidth: 2,
+            alignSelf: 'center',
+            position: 'absolute'
+          }}></View>
+
+          <TouchableOpacity
+            style={{
+              flex: 0.2,
+              alignSelf: "flex-end",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#666",
+              marginBottom: 40,
+              marginLeft: 20,
+            }}
+            onPress={() => setOpenCamera(false)}
+          >
+            <Text style={{ fontSize: 30, padding: 10, color: "white" }}>❌</Text>
+          </TouchableOpacity>
+        </View>
+      </BarCodeScanner>
+    )
+  }
 
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
@@ -180,35 +250,6 @@ const HomeScreen = () => {
       )}
 
       {codigo && <Button onPress={() => salir()} style={{ backgroundColor: '#fdd000', margin: 24, position: 'absolute', bottom: 12 }}>Salir</Button>}
-
-      {!scanned && <BarCodeScanner
-        barCodeScannerSettings={{
-          barCodeTypes: [256],
-        }}
-        onBarCodeScanned={handleBarCodeScanned}
-        style={{
-          flex: 1,
-        }} type={type}>
-        <View style={{
-          width: '100%',
-          height: '30%',
-          flexDirection: 'row',
-          backgroundColor: 'transparent',
-          margin: 64,
-        }}>
-          <TouchableOpacity style={{
-            flex: 1,
-            alignSelf: 'flex-end',
-            alignItems: 'center',
-          }} onPress={() => setScanned(true)}>
-            <Text style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: 'white',
-            }}>Salir</Text>
-          </TouchableOpacity>
-        </View>
-      </BarCodeScanner>}
     </Layout >
   )
 };
